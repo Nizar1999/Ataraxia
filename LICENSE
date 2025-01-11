@@ -22,15 +22,3 @@
    IN THE SOFTWARE.
 */
 
-#include <application.h>
-
-#include <iostream>
-
-namespace demo {
-class Game : public ata::Application {
- public:
-  auto Init() -> void override { std::cout << "Hello from demo!\n"; }
-};
-}  // namespace demo
-
-ata::Application* app = new demo::Game();

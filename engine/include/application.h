@@ -22,15 +22,12 @@
    IN THE SOFTWARE.
 */
 
-#include <application.h>
+#pragma once
 
-#include <iostream>
-
-namespace demo {
-class Game : public ata::Application {
+namespace ata {
+class Application {
  public:
-  auto Init() -> void override { std::cout << "Hello from demo!\n"; }
+  virtual auto Init() -> void = 0;
+  virtual ~Application() {}
 };
-}  // namespace demo
-
-ata::Application* app = new demo::Game();
+}  // namespace ata
