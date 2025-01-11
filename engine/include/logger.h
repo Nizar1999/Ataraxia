@@ -22,16 +22,18 @@
    IN THE SOFTWARE.
 */
 
-#include <application.h>
-#include <logger.h>
+#pragma once
+#include <config.h>
 
-int main() {
-  namespace lg = ata::logger;
-  lg::Log(lg::LogLevel::INFO, "Hi from main");
+#include <string_view>
 
-  app->Init();
-  while (true) {
-  }
+// TODO(nizar): Color output based on level
+// TODO(nizar): Turn to class and add names for loggers so I can have a logger
+// for the game and a logger for the engine
+// TODO(nizar): Name + Timestamps in format
 
-  delete app;
-}
+namespace ata::logger {
+enum class LogLevel { TRACE, DEBUG, INFO, WARN, ERROR, FATAL };
+
+auto ATA Log(LogLevel level, std::string_view msg) -> void;
+}  // namespace ata::logger

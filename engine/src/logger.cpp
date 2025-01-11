@@ -22,16 +22,12 @@
    IN THE SOFTWARE.
 */
 
-#include <application.h>
 #include <logger.h>
 
-int main() {
-  namespace lg = ata::logger;
-  lg::Log(lg::LogLevel::INFO, "Hi from main");
+#include <iostream>
 
-  app->Init();
-  while (true) {
-  }
-
-  delete app;
+namespace ata::logger {
+auto Log(LogLevel level, std::string_view msg) -> void {
+  std::cout << msg << '\n';
 }
+}  // namespace ata::logger
