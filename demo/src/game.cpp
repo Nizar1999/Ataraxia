@@ -23,6 +23,7 @@
 */
 
 #include <application.h>
+#include <entrypoint.h>
 
 #include <iostream>
 

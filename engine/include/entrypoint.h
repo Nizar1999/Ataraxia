@@ -22,16 +22,12 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
+#include <application.h>
 
-#include <config.h>
+int main() {
+  app->Init();
+  while (true) {
+  }
 
-namespace ata {
-class ATA Application {
- public:
-  virtual auto Init() -> void = 0;
-  virtual ~Application() {}
-};
-}  // namespace ata
-
-extern ata::Application* app;
+  delete app;
+}
