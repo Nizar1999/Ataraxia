@@ -28,10 +28,6 @@
 #include <source_location>
 #include <string_view>
 
-// TODO(nizar): Turn to class and add names for loggers so I can have a logger
-// for the game and a logger for the engine
-// TODO(nizar): Name + Timestamps in format
-
 namespace ata::logger {
 enum class LogLevel { TRACE, DEBUG, INFO, WARN, ERROR, FATAL };
 
