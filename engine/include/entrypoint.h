@@ -27,7 +27,12 @@
 
 int main() {
   namespace lg = ata::logger;
-  lg::Log(lg::LogLevel::INFO, "Hi from main");
+  lg::Log(lg::LogLevel::TRACE, "Trace");
+  lg::Log(lg::LogLevel::DEBUG, "Debug");
+  lg::Log(lg::LogLevel::INFO, "Info");
+  lg::Log(lg::LogLevel::WARN, "Warn");
+  lg::Log(lg::LogLevel::ERROR, "Error");
+  lg::Log(lg::LogLevel::FATAL, "Fatal");
 
   app->Init();
   while (true) {
