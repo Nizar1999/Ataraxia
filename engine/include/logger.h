@@ -22,21 +22,17 @@
    IN THE SOFTWARE.
 */
 
-#include <application.h>
-#include <logger.h>
+#pragma once
+#include <config.h>
 
-int main() {
-  namespace lg = ata::logger;
-  lg::Log(lg::LogLevel::TRACE, "Trace");
-  lg::Log(lg::LogLevel::DEBUG, "Debug");
-  lg::Log(lg::LogLevel::INFO, "Info");
-  lg::Log(lg::LogLevel::WARN, "Warn");
-  lg::Log(lg::LogLevel::ERROR, "Error");
-  lg::Log(lg::LogLevel::FATAL, "Fatal");
+#include <source_location>
+#include <string_view>
 
-  app->Init();
-  while (true) {
-  }
+namespace ata::logger {
+enum class LogLevel { TRACE, DEBUG, INFO, WARN, ERROR, FATAL };
 
-  delete app;
-}
+auto ATA Log(LogLevel level, std::string_view msg,
+             const std::source_location location =
+                 std::source_location::current()) -> void;
+
+}  // namespace ata::logger
