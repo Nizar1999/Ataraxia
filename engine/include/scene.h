@@ -24,12 +24,24 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef ENGINE
-#define ATA __declspec(dllexport)
-#else
-#define ATA __declspec(dllimport)
-#endif
-#elif __linux__
-#define ATA __attribute__((visibility("default")))
-#endif
+#include <actor.h>
+
+#include <filesystem>
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace ata {
+class Scene {
+ public:
+  explicit Scene(std::filesystem::path path);
+
+ private:
+  static auto LoadScene() -> void;
+
+  std::string m_name;
+  std::filesystem::path m_path;
+
+  std::vector<std::unique_ptr<Actor>> m_actors;
+};
+}  // namespace ata

@@ -22,14 +22,9 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
+#include <scene.h>
 
-#ifdef _WIN32
-#ifdef ENGINE
-#define ATA __declspec(dllexport)
-#else
-#define ATA __declspec(dllimport)
-#endif
-#elif __linux__
-#define ATA __attribute__((visibility("default")))
-#endif
+namespace ata {
+Scene::Scene(std::filesystem::path path) : m_path(path) {}
+auto Scene::LoadScene() -> void {}
+}  // namespace ata

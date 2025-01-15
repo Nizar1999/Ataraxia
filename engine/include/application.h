@@ -25,12 +25,20 @@
 #pragma once
 
 #include <config.h>
+#include <scene.h>
 
 namespace ata {
 class ATA Application {
  public:
+  auto PreInit() -> int;
   virtual auto Init() -> void = 0;
-  virtual ~Application() {}
+  virtual ~Application();
+
+ protected:
+  const char* m_initialScenePath;
+
+ private:
+  Scene* m_initialScene;
 };
 }  // namespace ata
 

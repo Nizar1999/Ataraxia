@@ -2,7 +2,9 @@ project(Engine)
 
 set(SOURCES
 src/logger.cpp
-src/application.cpp)
+src/application.cpp
+src/scene.cpp
+)
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 

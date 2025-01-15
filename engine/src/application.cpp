@@ -23,5 +23,21 @@
 */
 
 #include <application.h>
+#include <logger.h>
 
-namespace ata {}  // namespace ata
+#include <filesystem>
+
+namespace ata {
+auto Application::PreInit() -> int {
+  if (!m_initialScenePath) {
+    logger::Log(logger::LogLevel::FATAL, "Initial scene is not set!");
+    return 0;
+  }
+
+  m_initialScene = new Scene(m_initialScenePath);
+
+  return 1;
+}
+
+Application::~Application() { delete m_initialScene; }
+}  // namespace ata

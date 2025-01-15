@@ -22,17 +22,12 @@
    IN THE SOFTWARE.
 */
 
+#pragma once
+
 #include <application.h>
-#include <logger.h>
 
 int main() {
-  namespace lg = ata::logger;
-  lg::Log(lg::LogLevel::TRACE, "Trace");
-  lg::Log(lg::LogLevel::DEBUG, "Debug");
-  lg::Log(lg::LogLevel::INFO, "Info");
-  lg::Log(lg::LogLevel::WARN, "Warn");
-  lg::Log(lg::LogLevel::ERROR, "Error");
-  lg::Log(lg::LogLevel::FATAL, "Fatal");
+  if (!app->PreInit()) return -1;
 
   app->Init();
   while (true) {

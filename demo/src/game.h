@@ -24,12 +24,12 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef ENGINE
-#define ATA __declspec(dllexport)
-#else
-#define ATA __declspec(dllimport)
-#endif
-#elif __linux__
-#define ATA __attribute__((visibility("default")))
-#endif
+#include <application.h>
+#include <entrypoint.h>
+
+namespace demo {
+class Game : public ata::Application {
+ public:
+  auto Init() -> void override;
+};
+}  // namespace demo
