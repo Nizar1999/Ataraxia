@@ -22,16 +22,12 @@
    IN THE SOFTWARE.
 */
 
-#include <application.h>
-#include <entrypoint.h>
+#include <game.h>
 
 #include <iostream>
 
-namespace demo {
-class Game : public ata::Application {
- public:
-  auto Init() -> void override { std::cout << "Hello from demo!\n"; }
-};
-}  // namespace demo
-
 ata::Application* app = new demo::Game();
+
+namespace demo {
+auto Game::Init() -> void { std::cout << "Hello from demo!\n"; }
+}  // namespace demo
