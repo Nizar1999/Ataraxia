@@ -22,9 +22,54 @@
    IN THE SOFTWARE.
 */
 
+#include <logger.h>
 #include <scene.h>
 
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <utility>
+#include <vector>
+
 namespace ata {
+namespace {
+std::vector<std::string> Split(const std::string& s, char delim) {
+  std::vector<std::string> result;
+  std::stringstream ss(s);
+  std::string item;
+
+  while (getline(ss, item, delim)) {
+    result.push_back(item);
+  }
+
+  return result;
+}
+
+std::pair<std::string, std::string> ParseProperty(std::string property) {
+  std::vector<std::string> v = Split(property, ':');
+  return {v[0], v[1]};
+}
+}  // namespace
+
 Scene::Scene(std::filesystem::path path) : m_path(path) {}
-auto Scene::LoadScene() -> void {}
+auto Scene::Load() -> void {
+  std::ifstream sceneFile(m_path);
+  if (!sceneFile.is_open()) {
+    ata::logger::Log(ata::logger::LogLevel::ERROR, "Could not read scene file");
+    return;
+  }
+
+  std::string sceneObject;
+  while (std::getline(sceneFile, sceneObject)) {
+    std::stringstream ss(sceneObject);
+    std::string property;
+    while (std::getline(ss, property, '-')) {
+      auto [key, value] = ParseProperty(property);
+      ata::logger::Log(ata::logger::LogLevel::INFO,
+                       "Key: " + key + " Value: " + value);
+    }
+  }
+
+  sceneFile.close();
+}
 }  // namespace ata

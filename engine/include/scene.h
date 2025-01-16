@@ -35,10 +35,9 @@ namespace ata {
 class Scene {
  public:
   explicit Scene(std::filesystem::path path);
+  auto Load() -> void;
 
  private:
-  static auto LoadScene() -> void;
-
   std::string m_name;
   std::filesystem::path m_path;
 

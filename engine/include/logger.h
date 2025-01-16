@@ -28,6 +28,8 @@
 #include <source_location>
 #include <string_view>
 
+// TODO(nizar): Create shortcuts for level-based logging
+
 namespace ata::logger {
 enum class LogLevel { TRACE, DEBUG, INFO, WARN, ERROR, FATAL };
 
