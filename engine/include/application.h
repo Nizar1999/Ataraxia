@@ -42,4 +42,4 @@ class ATA Application {
 };
 }  // namespace ata
 
-extern ata::Application* app;
+extern ata::Application* g_app;

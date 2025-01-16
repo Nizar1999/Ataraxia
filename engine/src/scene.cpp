@@ -22,9 +22,73 @@
    IN THE SOFTWARE.
 */
 
+#include <logger.h>
 #include <scene.h>
+
+#include <fstream>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <utility>
+#include <vector>
+
+namespace {
+std::vector<std::string> Split(const std::string& s, char delim) {
+  std::vector<std::string> result;
+  std::stringstream ss(s);
+  std::string item;
+
+  while (getline(ss, item, delim)) {
+    result.push_back(item);
+  }
+
+  return result;
+}
+
+std::pair<std::string, std::string> ParseProperty(std::string property) {
+  std::vector<std::string> v = Split(property, ':');
+  return {v[0], v[1]};
+}
+
+}  // namespace
 
 namespace ata {
 Scene::Scene(std::filesystem::path path) : m_path(path) {}
-auto Scene::LoadScene() -> void {}
+auto Scene::Load() -> void {
+  // Open the file for reading
+  std::ifstream sceneFile(m_path);
+  if (!sceneFile.is_open()) {
+    ata::logger::Log(ata::logger::LogLevel::ERROR, "Could not read scene file");
+    return;
+  }
+
+  // Read each actor
+  std::string actorInfo;
+  std::unique_ptr<Actor> actor;
+  while (std::getline(sceneFile, actorInfo)) {
+    std::stringstream ss(actorInfo);
+    std::string property;
+    while (std::getline(ss, property, '-')) {
+      auto [key, value] = ParseProperty(property);
+      if (key == "Type") {
+        if (!g_actorRegistry.contains(value)) break;
+        actor = g_actorRegistry[value]();
+      }
+      ata::logger::Log(ata::logger::LogLevel::INFO, key + " " + value);
+    }
+    if (actor) {
+      m_actors.push_back(std::move(actor));
+    }
+  }
+
+  ata::logger::Log(ata::logger::LogLevel::INFO,
+                   "Loaded Actors: " + std::to_string(m_actors.size()));
+  sceneFile.close();
+}
+
+auto Scene::Render() -> void {
+  for (auto& actor : m_actors) {
+    actor->Render();
+  }
+}
 }  // namespace ata

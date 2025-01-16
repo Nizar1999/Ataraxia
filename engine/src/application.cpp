@@ -35,6 +35,7 @@ auto Application::PreInit() -> int {
   }
 
   m_initialScene = new Scene(m_initialScenePath);
+  m_initialScene->Load();
 
   return 1;
 }

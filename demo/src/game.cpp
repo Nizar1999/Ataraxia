@@ -22,12 +22,13 @@
    IN THE SOFTWARE.
 */
 
+#include <actor.h>
 #include <game.h>
 
-#include <iostream>
-
-ata::Application* app = new demo::Game();
+ata::Application* g_app = new demo::Game();
 
 namespace demo {
-auto Game::Init() -> void { std::cout << "Hello from demo!\n"; }
+
+Game::Game() { m_initialScenePath = "mainmenu.scene"; }
+auto Game::Init() -> void {}
 }  // namespace demo

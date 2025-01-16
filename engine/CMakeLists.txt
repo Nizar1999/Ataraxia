@@ -4,6 +4,7 @@ set(SOURCES
 src/logger.cpp
 src/application.cpp
 src/scene.cpp
+src/actor.cpp
 )
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)

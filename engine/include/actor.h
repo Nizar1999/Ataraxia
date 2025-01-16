@@ -24,6 +24,36 @@
 
 #pragma once
 
+#include <config.h>
+
+#include <functional>
+#include <memory>
+#include <string>
+#include <unordered_map>
+
 namespace ata {
-class Actor {};
+class ATA Actor {
+ public:
+  virtual auto Render() -> void = 0;
+  virtual ~Actor() = default;
+};
+
+using registrationFn = std::function<std::unique_ptr<Actor>()>;
+
+ATA extern std::unordered_map<std::string, registrationFn> g_actorRegistry;
+
+inline auto RegisterClass(const std::string& className, registrationFn fn)
+    -> void {
+  g_actorRegistry[className] = fn;
+}
+
+#define REGISTER_ACTOR(className)                                          \
+  struct className##Registrar {                                            \
+    className##Registrar() {                                               \
+      ata::RegisterClass(#className, []() -> std::unique_ptr<ata::Actor> { \
+        return std::make_unique<className>();                              \
+      });                                                                  \
+    }                                                                      \
+  };                                                                       \
+  static className##Registrar g_##className##StaticClass;
 }  // namespace ata

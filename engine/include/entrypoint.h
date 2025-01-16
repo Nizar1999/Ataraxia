@@ -27,11 +27,11 @@
 #include <application.h>
 
 int main() {
-  if (!app->PreInit()) return -1;
+  if (!g_app->PreInit()) return -1;
 
-  app->Init();
+  g_app->Init();
   while (true) {
   }
 
-  delete app;
+  delete g_app;
 }

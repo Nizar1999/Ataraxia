@@ -22,19 +22,12 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
-#include <config.h>
+#include <actor.h>
 
-#include <source_location>
-#include <string_view>
-
-// TODO(nizar): Create shortcuts for level-based logging
-
-namespace ata::logger {
-enum class LogLevel { TRACE, DEBUG, INFO, WARN, ERROR, FATAL };
-
-auto ATA Log(LogLevel level, std::string_view msg,
-             const std::source_location location =
-                 std::source_location::current()) -> void;
-
-}  // namespace ata::logger
+namespace demo {
+class Player : public ata::Actor {
+ public:
+  auto Render() -> void override;
+};
+REGISTER_ACTOR(Player)
+};  // namespace demo

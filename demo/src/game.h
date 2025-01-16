@@ -30,6 +30,7 @@
 namespace demo {
 class Game : public ata::Application {
  public:
+  Game();
   auto Init() -> void override;
 };
 }  // namespace demo
