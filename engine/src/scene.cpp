@@ -50,12 +50,28 @@ std::pair<std::string, std::string> ParseProperty(std::string property) {
   return {v[0], v[1]};
 }
 
+std::unique_ptr<ata::Actor> ParseActor(const std::string& actorInfo) {
+  std::stringstream ss(actorInfo);
+  std::string property;
+  std::unique_ptr<ata::Actor> actor;
+
+  while (std::getline(ss, property, '-')) {
+    auto [key, value] = ParseProperty(property);
+    if (key == "Type") {
+      if (!ata::g_actorRegistry.contains(value)) return nullptr;
+      actor = ata::g_actorRegistry[value]();
+    }
+    // TODO(nizar): Parse additional properties
+    ata::logger::Log(ata::logger::LogLevel::INFO, key + " " + value);
+  }
+
+  return actor;
+}
 }  // namespace
 
 namespace ata {
 Scene::Scene(std::filesystem::path path) : m_path(path) {}
 auto Scene::Load() -> void {
-  // Open the file for reading
   std::ifstream sceneFile(m_path);
   if (!sceneFile.is_open()) {
     ata::logger::Log(ata::logger::LogLevel::ERROR, "Could not read scene file");
@@ -64,19 +80,8 @@ auto Scene::Load() -> void {
 
   // Read each actor
   std::string actorInfo;
-  std::unique_ptr<Actor> actor;
   while (std::getline(sceneFile, actorInfo)) {
-    std::stringstream ss(actorInfo);
-    std::string property;
-    while (std::getline(ss, property, '-')) {
-      auto [key, value] = ParseProperty(property);
-      if (key == "Type") {
-        if (!g_actorRegistry.contains(value)) break;
-        actor = g_actorRegistry[value]();
-      }
-      ata::logger::Log(ata::logger::LogLevel::INFO, key + " " + value);
-    }
-    if (actor) {
+    if (auto actor = ParseActor(actorInfo)) {
       m_actors.push_back(std::move(actor));
     }
   }
