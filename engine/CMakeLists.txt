@@ -5,6 +5,7 @@ src/logger.cpp
 src/application.cpp
 src/scene.cpp
 src/actor.cpp
+src/console_renderer.cpp
 )
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -12,6 +13,7 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 add_library(Engine SHARED ${SOURCES})
 
 target_include_directories(Engine PUBLIC "${PROJECT_SOURCE_DIR}/include")
+target_include_directories(Engine PUBLIC "${PROJECT_SOURCE_DIR}/src")
 target_compile_definitions(Engine PRIVATE ENGINE)
 
 add_custom_command(TARGET Engine POST_BUILD

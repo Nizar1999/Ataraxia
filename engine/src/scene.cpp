@@ -91,9 +91,4 @@ auto Scene::Load() -> void {
   sceneFile.close();
 }
 
-auto Scene::Render() -> void {
-  for (auto& actor : m_actors) {
-    actor->Render();
-  }
-}
 }  // namespace ata

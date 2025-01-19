@@ -36,7 +36,10 @@ class Scene {
  public:
   explicit Scene(std::filesystem::path path);
   auto Load() -> void;
-  auto Render() -> void;
+
+  auto GetActors() const -> const std::vector<std::unique_ptr<Actor>>& {
+    return m_actors;
+  }
 
  private:
   std::string m_name;

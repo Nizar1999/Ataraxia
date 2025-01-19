@@ -23,22 +23,32 @@
 */
 
 #include <application.h>
+#include <console_renderer.h>
 #include <logger.h>
 
 #include <filesystem>
 
 namespace ata {
+Application::~Application() {
+  delete m_currentScene;
+  delete m_renderer;
+}
+
 auto Application::PreInit() -> int {
   if (!m_initialScenePath) {
     logger::Log(logger::LogLevel::FATAL, "Initial scene is not set!");
     return 0;
   }
 
-  m_initialScene = new Scene(m_initialScenePath);
-  m_initialScene->Load();
+  m_renderer = new ConsoleRenderer();
+  m_currentScene = new Scene(m_initialScenePath);
+  m_currentScene->Load();
 
   return 1;
 }
 
-Application::~Application() { delete m_initialScene; }
+auto Application::Update() -> void {
+  m_renderer->ClearBuffer();
+  m_renderer->Display(*m_currentScene);
+}
 }  // namespace ata

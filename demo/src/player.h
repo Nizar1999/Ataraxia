@@ -27,7 +27,7 @@
 namespace demo {
 class Player : public ata::Actor {
  public:
-  auto Render() -> void override;
+  Player();
 };
 REGISTER_ACTOR(Player)
 };  // namespace demo

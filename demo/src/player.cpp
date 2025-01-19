@@ -24,8 +24,6 @@
 
 #include <player.h>
 
-#include <iostream>
-
 namespace demo {
-auto Player::Render() -> void { std::cout << "P"; }
+Player::Player() { m_renderData = {'P'}; }
 }  // namespace demo

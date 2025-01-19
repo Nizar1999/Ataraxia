@@ -25,6 +25,7 @@
 #pragma once
 
 #include <config.h>
+#include <renderer.h>
 #include <scene.h>
 
 namespace ata {
@@ -32,13 +33,15 @@ class ATA Application {
  public:
   auto PreInit() -> int;
   virtual auto Init() -> void = 0;
+  auto Update() -> void;
   virtual ~Application();
 
  protected:
   const char* m_initialScenePath;
 
  private:
-  Scene* m_initialScene;
+  Scene* m_currentScene;
+  Renderer* m_renderer;
 };
 }  // namespace ata
 

@@ -22,17 +22,31 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
+#include <console_renderer.h>
 
-#include <application.h>
+#include <iostream>
+#include <thread>
 
-int main() {
-  if (!g_app->PreInit()) return -1;
-
-  g_app->Init();
-  while (true) {
-    g_app->Update();
-  }
-
-  delete g_app;
+namespace ata {
+int i = 0;
+int j = 0;
+auto ConsoleRenderer::ClearBuffer() -> void {
+  for (auto& row : m_buffer) row.fill(' ');
 }
+
+auto ConsoleRenderer::Display(const Scene& scene) -> void {
+  system("clear");
+  for (auto& actor : scene.GetActors()) {
+    m_buffer[i][j] = actor->GetRenderData().symbol;
+  }
+  i = ++i % s_bufferH;
+  j = ++j % s_bufferW;
+  for (auto& row : m_buffer) {
+    for (auto ele : row) {
+      std::cout << ele;
+    }
+    std::cout << '\n';
+  }
+  std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30fps
+}
+}  // namespace ata

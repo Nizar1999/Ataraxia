@@ -24,15 +24,21 @@
 
 #pragma once
 
-#include <application.h>
+#include <renderer.h>
 
-int main() {
-  if (!g_app->PreInit()) return -1;
+#include <array>
 
-  g_app->Init();
-  while (true) {
-    g_app->Update();
-  }
+// TODO(nizar): Double buffering
 
-  delete g_app;
-}
+namespace ata {
+class ConsoleRenderer : public Renderer {
+ public:
+  auto ClearBuffer() -> void override;
+  auto Display(const Scene& scene) -> void override;
+
+ private:
+  static constexpr std::size_t s_bufferW = 60;
+  static constexpr std::size_t s_bufferH = 30;
+  std::array<std::array<char, s_bufferW>, s_bufferH> m_buffer;
+};
+}  // namespace ata

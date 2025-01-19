@@ -32,10 +32,18 @@
 #include <unordered_map>
 
 namespace ata {
+struct RenderData {
+  char symbol;
+};
+
 class ATA Actor {
  public:
-  virtual auto Render() -> void = 0;
   virtual ~Actor() = default;
+
+  auto GetRenderData() const -> const RenderData { return m_renderData; };
+
+ protected:
+  RenderData m_renderData;
 };
 
 using registrationFn = std::function<std::unique_ptr<Actor>()>;
