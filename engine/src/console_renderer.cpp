@@ -28,25 +28,32 @@
 #include <thread>
 
 namespace ata {
-int i = 0;
-int j = 0;
 auto ConsoleRenderer::ClearBuffer() -> void {
-  for (auto& row : m_buffer) row.fill(' ');
+  for (auto& row : m_buffer) {
+    row.fill('O');
+  }
 }
 
 auto ConsoleRenderer::Display(const Scene& scene) -> void {
+#ifdef _WIN32
+  system("cls");
+#else
   system("clear");
+#endif
+
   for (auto& actor : scene.GetActors()) {
-    m_buffer[i][j] = actor->GetRenderData().symbol;
+    auto [x, y, _] = actor->GetPosition();
+    if (x >= 0 && x < s_rows && y >= 0 && y < s_cols)
+      m_buffer[x][y] = actor->GetRenderData().symbol;
   }
-  i = ++i % s_bufferH;
-  j = ++j % s_bufferW;
+
   for (auto& row : m_buffer) {
     for (auto ele : row) {
       std::cout << ele;
     }
     std::cout << '\n';
   }
+
   std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30fps
 }
 }  // namespace ata

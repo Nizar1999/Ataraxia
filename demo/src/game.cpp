@@ -31,4 +31,9 @@ namespace demo {
 
 Game::Game() { m_initialScenePath = "mainmenu.scene"; }
 auto Game::Init() -> void {}
+auto Game::OnTick() -> void {
+  auto& player = m_currentScene->GetActors()[0];
+  auto [x, y, _] = player->GetPosition();
+  player->SetPosition({x, y + 1, 0});
+}
 }  // namespace demo

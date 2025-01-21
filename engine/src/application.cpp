@@ -49,6 +49,7 @@ auto Application::PreInit() -> int {
 
 auto Application::Update() -> void {
   m_renderer->ClearBuffer();
+  OnTick();
   m_renderer->Display(*m_currentScene);
 }
 }  // namespace ata

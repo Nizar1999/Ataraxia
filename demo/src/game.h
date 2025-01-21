@@ -32,5 +32,6 @@ class Game : public ata::Application {
  public:
   Game();
   auto Init() -> void override;
+  auto OnTick() -> void override;
 };
 }  // namespace demo

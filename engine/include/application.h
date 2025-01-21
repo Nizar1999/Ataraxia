@@ -31,16 +31,18 @@
 namespace ata {
 class ATA Application {
  public:
-  auto PreInit() -> int;
   virtual auto Init() -> void = 0;
-  auto Update() -> void;
+  virtual auto OnTick() -> void = 0;
   virtual ~Application();
+
+  auto PreInit() -> int;
+  auto Update() -> void;
 
  protected:
   const char* m_initialScenePath;
+  Scene* m_currentScene;
 
  private:
-  Scene* m_currentScene;
   Renderer* m_renderer;
 };
 }  // namespace ata

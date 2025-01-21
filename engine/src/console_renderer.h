@@ -37,8 +37,8 @@ class ConsoleRenderer : public Renderer {
   auto Display(const Scene& scene) -> void override;
 
  private:
-  static constexpr std::size_t s_bufferW = 60;
-  static constexpr std::size_t s_bufferH = 30;
-  std::array<std::array<char, s_bufferW>, s_bufferH> m_buffer;
+  static constexpr std::size_t s_rows = 30;
+  static constexpr std::size_t s_cols = 60;
+  std::array<std::array<char, s_cols>, s_rows> m_buffer;
 };
 }  // namespace ata
