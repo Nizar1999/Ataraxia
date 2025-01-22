@@ -25,6 +25,7 @@
 #pragma once
 
 #include <actor.h>
+#include <camera.h>
 
 #include <filesystem>
 #include <memory>
@@ -37,6 +38,8 @@ class Scene {
   explicit Scene(std::filesystem::path path);
   auto Load() -> void;
 
+  // TODO(nizar): handle no cam set
+  auto GetActiveCam() const -> const Camera& { return m_activeCam; }
   auto GetActors() const -> const std::vector<std::unique_ptr<Actor>>& {
     return m_actors;
   }
@@ -45,6 +48,8 @@ class Scene {
   std::string m_name;
   std::filesystem::path m_path;
 
+  // TODO(nizar): reconcile actors and cameras?
   std::vector<std::unique_ptr<Actor>> m_actors;
+  Camera m_activeCam;
 };
 }  // namespace ata

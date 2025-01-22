@@ -6,6 +6,7 @@ src/application.cpp
 src/scene.cpp
 src/actor.cpp
 src/console_renderer.cpp
+src/camera.cpp
 )
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)

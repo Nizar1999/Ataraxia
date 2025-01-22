@@ -23,8 +23,8 @@
 */
 
 #pragma once
-namespace ata {
 
+namespace ata {
 template <typename T>
 struct V3 {
   T x{};

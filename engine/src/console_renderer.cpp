@@ -41,8 +41,13 @@ auto ConsoleRenderer::Display(const Scene& scene) -> void {
   system("clear");
 #endif
 
+  auto& cam = scene.GetActiveCam();
+
   for (auto& actor : scene.GetActors()) {
-    auto [x, y, _] = actor->GetPosition();
+    auto [worldX, worldY, _] = actor->GetPosition();
+    V2<int> v(worldX, worldY);
+
+    auto [x, y] = cam.GetViewMatrix() * v;
     if (x >= 0 && x < s_rows && y >= 0 && y < s_cols)
       m_buffer[x][y] = actor->GetRenderData().symbol;
   }
