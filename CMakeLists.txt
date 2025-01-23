@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 20)
 project(Ataraxia)
 
 add_subdirectory(engine)
+add_subdirectory(engine/tests)
 add_subdirectory(demo)
