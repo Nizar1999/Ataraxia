@@ -26,6 +26,6 @@
 
 namespace ata {
 auto Camera::GetViewMatrix() const -> M3 {
-  return Translate(V2{-m_position.x, -m_position.y});
+  return Translate(Vec2{-m_position.x, -m_position.y});
 }
 }  // namespace ata

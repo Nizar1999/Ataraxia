@@ -41,12 +41,12 @@ class ATA Actor {
  public:
   virtual ~Actor() = default;
 
-  auto SetPosition(V3<float> position) -> void { m_position = position; };
-  auto GetPosition() const -> const V3<float> { return m_position; };
+  auto SetPosition(Vec3 position) -> void { m_position = position; };
+  auto GetPosition() const -> const Vec3 { return m_position; };
   auto GetRenderData() const -> const RenderData { return m_renderData; };
 
  protected:
-  V3<float> m_position;
+  Vec3 m_position;
   RenderData m_renderData;
 };
 

@@ -34,31 +34,39 @@ auto ConsoleRenderer::ClearBuffer() -> void {
   }
 }
 
-auto ConsoleRenderer::Display(const Scene& scene) -> void {
+namespace {
+auto ClearDisplay() -> void {
 #ifdef _WIN32
   system("cls");
 #else
   system("clear");
 #endif
+}
+}  // namespace
 
-  auto& cam = scene.GetActiveCam();
+auto ConsoleRenderer::Display(const Scene& scene) -> void {
+  ClearDisplay();
+  UpdateBuffer(scene);
+  PrintBuffer();
+  std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30fps
+}
 
-  for (auto& actor : scene.GetActors()) {
-    auto [worldX, worldY, _] = actor->GetPosition();
-    V2<int> v(worldX, worldY);
-
-    auto [x, y] = cam.GetViewMatrix() * v;
-    if (x >= 0 && x < s_rows && y >= 0 && y < s_cols)
-      m_buffer[x][y] = actor->GetRenderData().symbol;
-  }
-
+auto ConsoleRenderer::PrintBuffer() -> void {
   for (auto& row : m_buffer) {
     for (auto ele : row) {
       std::cout << ele;
     }
     std::cout << '\n';
   }
+}
 
-  std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30fps
+auto ConsoleRenderer::UpdateBuffer(const Scene& scene) -> void {
+  const Camera& activeCam = scene.GetActiveCam();
+  for (auto& actor : scene.GetActors()) {
+    IVec2 worldPos = actor->GetPosition();
+    auto [x, y] = activeCam.GetViewMatrix() * worldPos;
+    if (x >= 0 && x < s_rows && y >= 0 && y < s_cols)
+      m_buffer[x][y] = actor->GetRenderData().symbol;
+  }
 }
 }  // namespace ata

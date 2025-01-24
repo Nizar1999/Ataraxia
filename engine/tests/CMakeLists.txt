@@ -15,7 +15,7 @@ enable_testing()
 
 add_executable(
   EngineTests
-  test.cc
+  vector.cc
 )
 
 target_link_libraries(

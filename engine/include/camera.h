@@ -30,10 +30,10 @@
 namespace ata {
 class Camera {
  public:
-  auto GetPosition() const -> V2<float> { return m_position; }
+  auto GetPosition() const -> Vec2 { return m_position; }
   auto GetViewMatrix() const -> M3;
 
  private:
-  V2<float> m_position{0, -5};
+  Vec2 m_position{0, -5};
 };
 }  // namespace ata

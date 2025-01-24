@@ -40,5 +40,8 @@ class ConsoleRenderer : public Renderer {
   static constexpr std::size_t s_rows = 30;
   static constexpr std::size_t s_cols = 60;
   std::array<std::array<char, s_cols>, s_rows> m_buffer;
+
+  auto PrintBuffer() -> void;
+  auto UpdateBuffer(const Scene& scene) -> void;
 };
 }  // namespace ata

@@ -26,41 +26,36 @@
 
 #include <vector.h>
 
-#include <array>
-
 namespace ata {
-
-template <typename T, std::size_t m>
-struct Tmat {
-  Tmat(T val) {
-    for (std::size_t i = 0; i < m; ++i) m_mat[i][i] = val;
-  }
-
-  // TODO(nizar): return a vector instead and fix vector representation to be
-  // using arrays
-  std::array<T, m>& operator[](std::size_t i) { return m_mat[i]; }
-
-  auto operator*(const Tvec2<T> v) -> decltype(v) {
-    Tvec2<T> res;
-    res.x = m_mat[0][0] * v.x + m_mat[0][1] * v.y + m_mat[0][2];
-    res.y = m_mat[1][0] * v.x + m_mat[1][1] * v.y + m_mat[1][2];
-    return res;
-  }
-
- private:
-  std::array<std::array<T, m>, m> m_mat{};
-};
-
-using M2 = Tmat<int, 2>;
-using M3 = Tmat<int, 3>;
-using M4 = Tmat<int, 4>;
+// Constructor
+template <typename T>
+Tvec3<T>::Tvec3(T i, T j, T k) : x(i), y(j), z(k) {}
 
 template <typename T>
-auto Translate(Tvec2<T> v) -> M3 {
-  M3 m(1.0);
-  m[0][2] = v.x;
-  m[1][2] = v.y;
-  return m;
+Tvec2<T>::Tvec2(T i, T j) : x(i), y(j) {}
+
+template <typename T>
+template <typename U>
+Tvec3<T>::Tvec3(const Tvec2<U>& v)
+    : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
+
+template <typename T>
+template <typename U>
+Tvec2<T>::Tvec2(const Tvec3<U>& v)
+    : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
+
+// Assignment
+template <typename T>
+template <typename U>
+auto Tvec3<T>::operator=(const Tvec2<U>& v) -> void {
+  x = static_cast<T>(v.x);
+  y = static_cast<T>(v.y);
 }
 
+template <typename T>
+template <typename U>
+auto Tvec2<T>::operator=(const Tvec3<U>& v) -> void {
+  x = static_cast<T>(v.x);
+  y = static_cast<T>(v.y);
+}
 }  // namespace ata
