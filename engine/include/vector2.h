@@ -22,8 +22,42 @@
    IN THE SOFTWARE.
 */
 
-#include <camera.h>
+#pragma once
+#include <type_traits>
 
 namespace ata {
-auto Camera::GetViewMatrix() const -> M3 { return Translate(-m_position); }
+template <typename T>
+struct Tvec3;
+
+template <typename T>
+struct Tvec2 {
+  T x{};
+  T y{};
+
+  // Constructor
+  Tvec2() = default;
+  Tvec2(T x, T y);
+
+  template <typename U>
+  Tvec2(const Tvec3<U>& v);
+
+  // Assignment
+  template <typename U>
+  auto operator=(const Tvec3<U>& v) -> void;
+
+  // Unary Operators
+  auto operator-() const -> const Tvec2;
+
+  // Binary Scalar Arithmetic
+  template <typename U>
+  auto operator*(U s) const -> const Tvec2;
+};
+
+// Binary Scalar Arithmetic
+template <typename T, typename U>
+auto operator*(U s, const Tvec2<T>& v)
+    -> std::remove_reference<decltype(v)>::type;
+
 }  // namespace ata
+
+#include <vector2_inl.h>

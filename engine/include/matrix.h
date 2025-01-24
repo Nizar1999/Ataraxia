@@ -36,8 +36,6 @@ struct Tmat {
     for (std::size_t i = 0; i < m; ++i) m_mat[i][i] = val;
   }
 
-  // TODO(nizar): return a vector instead and fix vector representation to be
-  // using arrays
   std::array<T, m>& operator[](std::size_t i) { return m_mat[i]; }
 
   auto operator*(const Tvec2<T> v) -> decltype(v) {
@@ -51,12 +49,10 @@ struct Tmat {
   std::array<std::array<T, m>, m> m_mat{};
 };
 
-using M2 = Tmat<int, 2>;
 using M3 = Tmat<int, 3>;
-using M4 = Tmat<int, 4>;
 
 template <typename T>
-auto Translate(Tvec2<T> v) -> M3 {
+auto Translate(const Tvec2<T>& v) -> M3 {
   M3 m(1.0);
   m[0][2] = v.x;
   m[1][2] = v.y;

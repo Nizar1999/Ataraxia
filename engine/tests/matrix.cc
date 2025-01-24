@@ -22,8 +22,6 @@
    IN THE SOFTWARE.
 */
 
-#include <camera.h>
+#include <gtest/gtest.h>
 
-namespace ata {
-auto Camera::GetViewMatrix() const -> M3 { return Translate(-m_position); }
-}  // namespace ata
+TEST(MatrixTest, Test1) {}

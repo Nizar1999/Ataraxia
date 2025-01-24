@@ -22,51 +22,12 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
+#include <vector2.h>
+#include <vector3.h>
 
 namespace ata {
-template <typename T>
-struct Tvec2;
-
-template <typename T>
-struct Tvec3 {
-  T x{};
-  T y{};
-  T z{};
-
-  // Constructor
-  Tvec3() = default;
-  Tvec3(T x, T y, T z);
-
-  template <typename U>
-  Tvec3(const Tvec2<U>& v);
-
-  // Assignment
-  template <typename U>
-  auto operator=(const Tvec2<U>& v) -> void;
-};
-
-template <typename T>
-struct Tvec2 {
-  T x{};
-  T y{};
-
-  // Constructor
-  Tvec2() = default;
-  Tvec2(T x, T y);
-
-  template <typename U>
-  Tvec2(const Tvec3<U>& v);
-
-  // Assignment
-  template <typename U>
-  auto operator=(const Tvec3<U>& v) -> void;
-};
-
 using Vec2 = Tvec2<float>;
 using Vec3 = Tvec3<float>;
 using IVec2 = Tvec2<int>;
 using IVec3 = Tvec3<int>;
-}  // namespace ata
-
-#include <vector_inl.h>
+};  // namespace ata

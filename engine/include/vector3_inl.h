@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <vector.h>
+#include <vector3.h>
 
 namespace ata {
 // Constructor
@@ -32,16 +32,8 @@ template <typename T>
 Tvec3<T>::Tvec3(T i, T j, T k) : x(i), y(j), z(k) {}
 
 template <typename T>
-Tvec2<T>::Tvec2(T i, T j) : x(i), y(j) {}
-
-template <typename T>
 template <typename U>
 Tvec3<T>::Tvec3(const Tvec2<U>& v)
-    : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
-
-template <typename T>
-template <typename U>
-Tvec2<T>::Tvec2(const Tvec3<U>& v)
     : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
 
 // Assignment
@@ -52,10 +44,23 @@ auto Tvec3<T>::operator=(const Tvec2<U>& v) -> void {
   y = static_cast<T>(v.y);
 }
 
+// Unary Operators
+template <typename T>
+auto Tvec3<T>::operator-() const -> const Tvec3 {
+  return -1 * *this;
+}
+
+// Binary Scalar Arithmetic
 template <typename T>
 template <typename U>
-auto Tvec2<T>::operator=(const Tvec3<U>& v) -> void {
-  x = static_cast<T>(v.x);
-  y = static_cast<T>(v.y);
+auto Tvec3<T>::operator*(U s) const -> const Tvec3 {
+  return {static_cast<T>(s * x), static_cast<T>(s * y), static_cast<T>(s * z)};
+}
+
+template <typename T, typename U>
+auto operator*(U s, const Tvec3<T>& v)
+    -> std::remove_reference<decltype(v)>::type {
+  return {static_cast<T>(s * v.x), static_cast<T>(s * v.y),
+          static_cast<T>(s * v.z)};
 }
 }  // namespace ata
