@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <assert.h>
 #include <vector2.h>
 
 namespace ata {
@@ -39,22 +40,47 @@ Tvec2<T>::Tvec2(const Tvec3<U>& v)
 // Assignment
 template <typename T>
 template <typename U>
-auto Tvec2<T>::operator=(const Tvec3<U>& v) -> void {
+auto Tvec2<T>::operator=(const Tvec2<U>& v) -> const Tvec2<T>& {
   x = static_cast<T>(v.x);
   y = static_cast<T>(v.y);
+  return *this;
 }
 
 // Unary Operators
 template <typename T>
-auto Tvec2<T>::operator-() const -> const Tvec2 {
-  return -1 * *this;
+auto Tvec2<T>::operator[](std::size_t i) -> T& {
+  assert(i >= 0 && i < 2);
+  switch (i) {
+    default:
+    case 0:
+      return x;
+    case 1:
+      return y;
+  }
 }
 
-// Binary Scalar Arithmetic
 template <typename T>
-template <typename U>
-auto Tvec2<T>::operator*(U s) const -> const Tvec2 {
-  return {static_cast<T>(s * x), static_cast<T>(s * y)};
+auto Tvec2<T>::operator[](std::size_t i) const -> const T& {
+  assert(i >= 0 && i < 2);
+  switch (i) {
+    default:
+    case 0:
+      return x;
+    case 1:
+      return y;
+  }
+}
+
+template <typename T>
+auto operator-(const Tvec2<T>& v) -> std::remove_reference_t<decltype(v)> {
+  return -1 * v;
+}
+
+// Binary Operators
+template <typename T, typename U>
+auto operator*(const Tvec2<T>& v, U s)
+    -> std::remove_reference<decltype(v)>::type {
+  return s * v;
 }
 
 template <typename T, typename U>

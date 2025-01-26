@@ -31,7 +31,7 @@ namespace ata {
 class Camera {
  public:
   auto GetPosition() const -> Vec2 { return m_position; }
-  auto GetViewMatrix() const -> M3;
+  auto GetViewMatrix() const -> Mat3;
 
  private:
   Vec2 m_position{0, -5};

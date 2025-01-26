@@ -34,7 +34,7 @@ struct Tvec2 {
   T x{};
   T y{};
 
-  // Constructor
+  // Constructors
   Tvec2() = default;
   Tvec2(T x, T y);
 
@@ -43,20 +43,23 @@ struct Tvec2 {
 
   // Assignment
   template <typename U>
-  auto operator=(const Tvec3<U>& v) -> void;
+  auto operator=(const Tvec2<U>& v) -> const Tvec2<T>&;
 
   // Unary Operators
-  auto operator-() const -> const Tvec2;
-
-  // Binary Scalar Arithmetic
-  template <typename U>
-  auto operator*(U s) const -> const Tvec2;
+  auto operator[](std::size_t i) -> T&;
+  auto operator[](std::size_t i) const -> const T&;
 };
 
-// Binary Scalar Arithmetic
+// Unary Operators
+template <typename T>
+auto operator-(const Tvec2<T>& v) -> std::remove_reference_t<decltype(v)>;
+
+// Binary Operators
 template <typename T, typename U>
-auto operator*(U s, const Tvec2<T>& v)
-    -> std::remove_reference<decltype(v)>::type;
+auto operator*(const Tvec2<T>& v, U s) -> std::remove_reference_t<decltype(v)>;
+
+template <typename T, typename U>
+auto operator*(U s, const Tvec2<T>& v) -> std::remove_reference_t<decltype(v)>;
 
 }  // namespace ata
 

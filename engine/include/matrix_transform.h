@@ -23,44 +23,15 @@
 */
 
 #pragma once
-#include <type_traits>
+
+#include <matrix.h>
 
 namespace ata {
 template <typename T>
-struct Tvec2;
-
-template <typename T>
-struct Tvec3 {
-  T x{};
-  T y{};
-  T z{};
-
-  // Constructors
-  Tvec3() = default;
-  Tvec3(T x, T y, T z);
-
-  template <typename U>
-  Tvec3(const Tvec2<U>& v);
-
-  // Assignment
-  template <typename U>
-  auto operator=(const Tvec3<U>& v) -> const Tvec3<T>&;
-
-  // Unary Operators
-  auto operator[](std::size_t i) -> T&;
-  auto operator[](std::size_t i) const -> const T&;
-};
-
-// Unary Operators
-template <typename T>
-auto operator-(const Tvec3<T>& v) -> std::remove_reference_t<decltype(v)>;
-
-// Binary Operators
-template <typename T, typename U>
-auto operator*(const Tvec3<T>& v, U s) -> std::remove_reference_t<decltype(v)>;
-
-template <typename T, typename U>
-auto operator*(U s, const Tvec3<T>& v) -> std::remove_reference_t<decltype(v)>;
+auto Translate(const Tvec2<T>& v) -> Tmat<T, 3, 3> {
+  Tmat<T, 3, 3> m;
+  m[0][2] = v.x;
+  m[1][2] = v.y;
+  return m;
+}
 }  // namespace ata
-
-#include <vector3_inl.h>

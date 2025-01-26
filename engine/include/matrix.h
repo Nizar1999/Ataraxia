@@ -29,34 +29,40 @@
 #include <array>
 
 namespace ata {
+#define MAT_T_DEC template <typename T, std::size_t m, std::size_t n>
 
-template <typename T, std::size_t m>
+MAT_T_DEC
+using RowType = std::conditional_t<m == 2, Vec2, Vec3>;
+MAT_T_DEC
+using ColType = std::conditional_t<n == 2, Vec2, Vec3>;
+
+MAT_T_DEC
 struct Tmat {
-  Tmat(T val) {
-    for (std::size_t i = 0; i < m; ++i) m_mat[i][i] = val;
-  }
+  Tmat() = default;
+  Tmat(T val);
 
-  std::array<T, m>& operator[](std::size_t i) { return m_mat[i]; }
-
-  auto operator*(const Tvec2<T> v) -> decltype(v) {
-    Tvec2<T> res;
-    res.x = m_mat[0][0] * v.x + m_mat[0][1] * v.y + m_mat[0][2];
-    res.y = m_mat[1][0] * v.x + m_mat[1][1] * v.y + m_mat[1][2];
-    return res;
-  }
+  // Unary Operators
+  auto operator[](std::size_t i) const -> const ColType<T, m, n>&;
+  auto operator[](std::size_t i) -> ColType<T, m, n>&;
 
  private:
-  std::array<std::array<T, m>, m> m_mat{};
+  std::array<ColType<T, m, n>, m> m_mat;
 };
 
-using M3 = Tmat<int, 3>;
+// Binary Operators
+#define MAT_T_BINARY_DEC \
+  template <typename T, std::size_t m, std::size_t n, typename U>
 
-template <typename T>
-auto Translate(const Tvec2<T>& v) -> M3 {
-  M3 m(1.0);
-  m[0][2] = v.x;
-  m[1][2] = v.y;
-  return m;
-}
+MAT_T_BINARY_DEC
+auto operator*(Tmat<T, m, n> mat, U scalar)
+    -> std::remove_reference_t<decltype(mat)>;
 
+MAT_T_BINARY_DEC
+auto operator*(Tmat<T, m, n> mat, const ColType<U, m, n>& vec)
+    -> std::remove_reference_t<decltype(vec)>;
+
+// Aliasing
+using Mat3 = Tmat<float, 3, 3>;
 }  // namespace ata
+
+#include <matrix_inl.h>

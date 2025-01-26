@@ -23,7 +23,8 @@
 */
 
 #include <camera.h>
+#include <matrix_transform.h>
 
 namespace ata {
-auto Camera::GetViewMatrix() const -> M3 { return Translate(-m_position); }
+auto Camera::GetViewMatrix() const -> Mat3 { return Translate(-m_position); }
 }  // namespace ata

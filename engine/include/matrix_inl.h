@@ -23,44 +23,47 @@
 */
 
 #pragma once
-#include <type_traits>
+
+#include <matrix.h>
 
 namespace ata {
-template <typename T>
-struct Tvec2;
 
-template <typename T>
-struct Tvec3 {
-  T x{};
-  T y{};
-  T z{};
-
-  // Constructors
-  Tvec3() = default;
-  Tvec3(T x, T y, T z);
-
-  template <typename U>
-  Tvec3(const Tvec2<U>& v);
-
-  // Assignment
-  template <typename U>
-  auto operator=(const Tvec3<U>& v) -> const Tvec3<T>&;
-
-  // Unary Operators
-  auto operator[](std::size_t i) -> T&;
-  auto operator[](std::size_t i) const -> const T&;
-};
+MAT_T_DEC
+Tmat<T, m, n>::Tmat(T val) {
+  for (std::size_t i = 0; i < m; ++i) m_mat[i][i] = val;
+}
 
 // Unary Operators
-template <typename T>
-auto operator-(const Tvec3<T>& v) -> std::remove_reference_t<decltype(v)>;
+MAT_T_DEC
+auto Tmat<T, m, n>::operator[](std::size_t i) const -> const ColType<T, m, n>& {
+  return m_mat[i];
+}
+
+MAT_T_DEC
+auto Tmat<T, m, n>::operator[](std::size_t i) -> ColType<T, m, n>& {
+  return m_mat[i];
+}
 
 // Binary Operators
-template <typename T, typename U>
-auto operator*(const Tvec3<T>& v, U s) -> std::remove_reference_t<decltype(v)>;
+MAT_T_BINARY_DEC
+auto operator*(Tmat<T, m, n> mat, U s)
+    -> std::remove_reference_t<decltype(mat)> {
+  for (auto& row : mat.m_mat) {
+    for (auto& ele : row) {
+      ele = static_cast<T>(ele * s);
+    }
+  }
+  return mat;
+}
 
-template <typename T, typename U>
-auto operator*(U s, const Tvec3<T>& v) -> std::remove_reference_t<decltype(v)>;
+MAT_T_BINARY_DEC
+auto operator*(Tmat<T, m, n> mat, const Tvec2<U>& v)
+    -> std::remove_reference_t<decltype(v)> {
+  Tvec2<U> res;
+  res.x = static_cast<U>(mat[0][0] * v.x) + static_cast<U>(mat[0][1] * v.y) +
+          mat[0][2];
+  res.y = static_cast<U>(mat[1][0] * v.x) + static_cast<U>(mat[1][1] * v.y) +
+          mat[1][2];
+  return res;
+}
 }  // namespace ata
-
-#include <vector3_inl.h>
