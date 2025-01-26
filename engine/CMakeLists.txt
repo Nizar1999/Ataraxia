@@ -17,6 +17,8 @@ target_include_directories(Engine PUBLIC "${PROJECT_SOURCE_DIR}/include")
 target_include_directories(Engine PUBLIC "${PROJECT_SOURCE_DIR}/src")
 target_compile_definitions(Engine PRIVATE ENGINE)
 
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
+
 add_custom_command(TARGET Engine POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:Engine> ${CMAKE_BINARY_DIR}/bin/
 )
