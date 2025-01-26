@@ -30,7 +30,9 @@ namespace ata {
 class Renderer {
  public:
   virtual auto ClearBuffer() -> void = 0;
-  virtual auto Display(const Scene& scene) -> void = 0;
+  virtual auto DrawScene(const Scene& scene) -> void = 0;
+  virtual auto SwapBuffers() -> void = 0;
+
   virtual ~Renderer() = default;
 };
 }  // namespace ata

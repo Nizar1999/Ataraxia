@@ -27,21 +27,34 @@
 #include <renderer.h>
 
 #include <array>
-
-// TODO(nizar): Double buffering
+#include <mutex>
+#include <thread>
 
 namespace ata {
 class ConsoleRenderer : public Renderer {
  public:
+  ConsoleRenderer();
+  ~ConsoleRenderer();
+
+  ConsoleRenderer(const ConsoleRenderer& other) = delete;
+  auto operator=(const ConsoleRenderer& other) -> ConsoleRenderer& = delete;
+
   auto ClearBuffer() -> void override;
-  auto Display(const Scene& scene) -> void override;
+  auto DrawScene(const Scene& scene) -> void override;
+  auto SwapBuffers() -> void override;
 
  private:
   static constexpr std::size_t s_rows = 30;
   static constexpr std::size_t s_cols = 60;
-  std::array<std::array<char, s_cols>, s_rows> m_buffer;
 
-  auto PrintBuffer() -> void;
-  auto UpdateBuffer(const Scene& scene) -> void;
+  using FrameBuffer = std::array<std::array<char, s_cols>, s_rows>;
+  FrameBuffer m_backBuffer;
+  FrameBuffer m_frontBuffer;
+  std::thread m_framePresenter;
+  mutable std::mutex m_frontBufferMtx;
+
+  auto Init() -> void;
+  auto PresentFrame() const -> void;
+  auto PrintBuffer() const -> void;
 };
 }  // namespace ata

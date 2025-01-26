@@ -25,11 +25,21 @@
 #include <console_renderer.h>
 
 #include <iostream>
-#include <thread>
 
 namespace ata {
+ConsoleRenderer::ConsoleRenderer() { Init(); }
+
+auto ConsoleRenderer::Init() -> void {
+  m_framePresenter =
+      std::thread(std::mem_fn(&ConsoleRenderer::PresentFrame), this);
+}
+
+ConsoleRenderer::~ConsoleRenderer() {
+  if (m_framePresenter.joinable()) m_framePresenter.join();
+}
+
 auto ConsoleRenderer::ClearBuffer() -> void {
-  for (auto& row : m_buffer) {
+  for (auto& row : m_backBuffer) {
     row.fill('O');
   }
 }
@@ -44,15 +54,8 @@ auto ClearDisplay() -> void {
 }
 }  // namespace
 
-auto ConsoleRenderer::Display(const Scene& scene) -> void {
-  ClearDisplay();
-  UpdateBuffer(scene);
-  PrintBuffer();
-  std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30fps
-}
-
-auto ConsoleRenderer::PrintBuffer() -> void {
-  for (auto& row : m_buffer) {
+auto ConsoleRenderer::PrintBuffer() const -> void {
+  for (auto& row : m_frontBuffer) {
     for (auto ele : row) {
       std::cout << ele;
     }
@@ -60,13 +63,29 @@ auto ConsoleRenderer::PrintBuffer() -> void {
   }
 }
 
-auto ConsoleRenderer::UpdateBuffer(const Scene& scene) -> void {
+auto ConsoleRenderer::PresentFrame() const -> void {
+  while (true) {
+    ClearDisplay();
+    {
+      std::lock_guard<std::mutex> lock(m_frontBufferMtx);
+      PrintBuffer();
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30Hz
+  }
+}
+
+auto ConsoleRenderer::DrawScene(const Scene& scene) -> void {
   const Camera& activeCam = scene.GetActiveCam();
   for (auto& actor : scene.GetActors()) {
     IVec2 worldPos = actor->GetPosition();
     auto [x, y] = activeCam.GetViewMatrix() * worldPos;
     if (x >= 0 && x < s_rows && y >= 0 && y < s_cols)
-      m_buffer[x][y] = actor->GetRenderData().symbol;
+      m_backBuffer[x][y] = actor->GetRenderData().symbol;
   }
+}
+
+auto ConsoleRenderer::SwapBuffers() -> void {
+  std::lock_guard<std::mutex> lock(m_frontBufferMtx);
+  m_frontBuffer = m_backBuffer;
 }
 }  // namespace ata

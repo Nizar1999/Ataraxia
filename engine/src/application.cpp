@@ -49,7 +49,10 @@ auto Application::PreInit() -> int {
 
 auto Application::Update() -> void {
   m_renderer->ClearBuffer();
+
   OnTick();
-  m_renderer->Display(*m_currentScene);
+
+  m_renderer->DrawScene(*m_currentScene);
+  m_renderer->SwapBuffers();
 }
 }  // namespace ata
