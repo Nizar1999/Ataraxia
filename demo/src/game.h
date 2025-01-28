@@ -33,5 +33,11 @@ class Game : public ata::Application {
   Game();
   auto Init() -> void override;
   auto OnTick() -> void override;
+
+ private:
+  auto OnW() -> void;
+  auto OnS() -> void;
+  auto OnA() -> void;
+  auto OnD() -> void;
 };
 }  // namespace demo

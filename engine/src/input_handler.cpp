@@ -22,19 +22,25 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
+#include <input_handler.h>
 
-#include <matrix.h>
-#include <vector.h>
+#include <functional>
 
 namespace ata {
-class Camera {
- public:
-  auto GetPosition() const -> Vec2 { return m_position; }
-  auto GetViewMatrix() const -> Mat3;
-  auto SetPosition(Vec2 newPos) -> void { m_position = newPos; }
+InputHandler::InputHandler() {
+  m_Poller = std::thread(std::mem_fn(&InputHandler::PollKeyPresses), this);
+}
 
- private:
-  Vec2 m_position{0, -5};
-};
+InputHandler::~InputHandler() {
+  if (m_Poller.joinable()) {
+    m_Poller.join();
+  }
+}
+
+auto InputHandler::GetAsyncKeyState(KeyCode key) -> bool {
+  std::lock_guard lk(m_keyStateMtx);
+  bool res = m_keyStates[static_cast<unsigned int>(key)];
+  if (res) m_keyStates[static_cast<unsigned int>(key)] = 0;
+  return res;
+}
 }  // namespace ata

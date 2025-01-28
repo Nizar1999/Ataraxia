@@ -7,7 +7,21 @@ src/scene.cpp
 src/actor.cpp
 src/console_renderer.cpp
 src/camera.cpp
+src/input.cpp
+src/input_handler.cpp
 )
+
+if(CMAKE_SYSTEM MATCHES Windows)
+list(APPEND SOURCES
+src/input_handler_windows.cpp
+)
+endif()
+
+if(CMAKE_HOST_SYSTEM MATCHES Linux)
+list(APPEND SOURCES
+src/input_handler_linux.cpp
+)
+endif()
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 

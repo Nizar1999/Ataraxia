@@ -25,6 +25,7 @@
 #pragma once
 
 #include <config.h>
+#include <input.h>
 #include <renderer.h>
 #include <scene.h>
 
@@ -41,6 +42,7 @@ class ATA Application {
  protected:
   const char* m_initialScenePath;
   Scene* m_currentScene;
+  Input* m_input;
 
  private:
   Renderer* m_renderer;

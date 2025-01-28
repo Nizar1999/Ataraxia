@@ -22,19 +22,18 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
-
-#include <matrix.h>
-#include <vector.h>
+#include <conio.h>
+#include <input_handler.h>
 
 namespace ata {
-class Camera {
- public:
-  auto GetPosition() const -> Vec2 { return m_position; }
-  auto GetViewMatrix() const -> Mat3;
-  auto SetPosition(Vec2 newPos) -> void { m_position = newPos; }
-
- private:
-  Vec2 m_position{0, -5};
-};
+auto InputHandler::PollKeyPresses() -> void {
+  while (true) {
+    if (_kbhit()) {
+      unsigned int ch = _getch();
+      std::lock_guard lk(m_keyStateMtx);
+      m_keyStates[ch] = true;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+}
 }  // namespace ata

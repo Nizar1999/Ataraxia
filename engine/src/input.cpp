@@ -22,19 +22,27 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
-
-#include <matrix.h>
-#include <vector.h>
+#include <input.h>
+#include <input_handler.h>
 
 namespace ata {
-class Camera {
- public:
-  auto GetPosition() const -> Vec2 { return m_position; }
-  auto GetViewMatrix() const -> Mat3;
-  auto SetPosition(Vec2 newPos) -> void { m_position = newPos; }
+auto Input::BindInputAction(InputAction action, InputActionCallback callback)
+    -> void {
+  m_callbacks[action].push_back(callback);
+}
 
- private:
-  Vec2 m_position{0, -5};
+auto Input::PollActions() -> void {
+  for (auto& [action, callbacks] : m_callbacks) {
+    if (IsPressed(action.m_key)) {
+      for (auto& callback : callbacks) {
+        callback();
+      }
+    }
+  }
+}
+
+auto Input::IsPressed(KeyCode code) -> bool {
+  static InputHandler input;
+  return input.GetAsyncKeyState(code);
 };
 }  // namespace ata

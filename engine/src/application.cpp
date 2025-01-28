@@ -32,6 +32,7 @@ namespace ata {
 Application::~Application() {
   delete m_currentScene;
   delete m_renderer;
+  delete m_input;
 }
 
 auto Application::PreInit() -> int {
@@ -44,11 +45,13 @@ auto Application::PreInit() -> int {
   m_currentScene = new Scene(m_initialScenePath);
   m_currentScene->Load();
 
+  m_input = new Input();
   return 1;
 }
 
 auto Application::Update() -> void {
   m_renderer->ClearBuffer();
+  m_input->PollActions();
 
   OnTick();
 
