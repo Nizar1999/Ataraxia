@@ -24,68 +24,17 @@
 
 #include <console_renderer.h>
 
-#include <iostream>
-
 namespace ata {
-ConsoleRenderer::ConsoleRenderer() { Init(); }
-
-auto ConsoleRenderer::Init() -> void {
-  m_framePresenter =
-      std::thread(std::mem_fn(&ConsoleRenderer::PresentFrame), this);
-}
-
-ConsoleRenderer::~ConsoleRenderer() {
-  if (m_framePresenter.joinable()) m_framePresenter.join();
-}
-
-auto ConsoleRenderer::ClearBuffer() -> void {
-  for (auto& row : m_backBuffer) {
-    row.fill('O');
-  }
-}
-
-namespace {
-auto ClearDisplay() -> void {
-#ifdef _WIN32
-  system("cls");
-#else
-  system("clear");
-#endif
-}
-}  // namespace
-
-auto ConsoleRenderer::PrintBuffer() const -> void {
-  for (auto& row : m_frontBuffer) {
-    for (auto ele : row) {
-      std::cout << ele;
-    }
-    std::cout << '\n';
-  }
-}
-
-auto ConsoleRenderer::PresentFrame() const -> void {
-  while (true) {
-    ClearDisplay();
-    {
-      std::lock_guard<std::mutex> lock(m_frontBufferMtx);
-      PrintBuffer();
-    }
-    std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30Hz
-  }
-}
+auto ConsoleRenderer::ClearBuffer() -> void { m_target.Clear(); }
 
 auto ConsoleRenderer::DrawScene(const Scene& scene) -> void {
   const Camera& activeCam = scene.GetActiveCam();
   for (auto& actor : scene.GetActors()) {
     IVec2 worldPos = actor->GetPosition();
-    auto [x, y] = activeCam.GetViewMatrix() * worldPos;
-    if (x >= 0 && x < s_rows && y >= 0 && y < s_cols)
-      m_backBuffer[x][y] = actor->GetRenderData().symbol;
+    m_target.Draw(activeCam.GetViewMatrix() * worldPos,
+                  actor->GetRenderData().symbol);
   }
 }
 
-auto ConsoleRenderer::SwapBuffers() -> void {
-  std::lock_guard<std::mutex> lock(m_frontBufferMtx);
-  m_frontBuffer = m_backBuffer;
-}
+auto ConsoleRenderer::SwapBuffers() -> void { m_target.SwapBuffers(); }
 }  // namespace ata

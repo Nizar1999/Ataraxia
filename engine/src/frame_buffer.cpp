@@ -22,42 +22,52 @@
    IN THE SOFTWARE.
 */
 
-#include <application.h>
 #include <console.h>
-#include <console_renderer.h>
-#include <logger.h>
+#include <frame_buffer.h>
 
-#include <filesystem>
+#include <functional>
+#include <iostream>
 
 namespace ata {
-Application::~Application() {
-  delete m_currentScene;
-  delete m_renderer;
-  delete m_input;
+FrameBuffer::FrameBuffer() {
+  console::SetCursorVisibility(console::CursorVisibility::HIDE);
+  Clear();
+  m_framePresenter = std::thread(std::mem_fn(&FrameBuffer::PresentFrame), this);
 }
 
-auto Application::PreInit() -> int {
-  if (!m_initialScenePath) {
-    logger::Log(logger::LogLevel::FATAL, "Initial scene is not set!");
-    return 0;
+FrameBuffer::~FrameBuffer() {
+  if (m_framePresenter.joinable()) m_framePresenter.join();
+}
+
+auto FrameBuffer::Clear() -> void {
+  for (auto& row : m_backBuffer) {
+    row.fill('O');
   }
-
-  m_renderer = new ConsoleRenderer();
-  m_currentScene = new Scene(m_initialScenePath);
-  m_currentScene->Load();
-
-  m_input = new Input();
-  console::Clear();  // TEMP UNTIL I ADD NEW WINDOW FOR CONSOLE RENDERING
-  return 1;
 }
 
-auto Application::Update() -> void {
-  m_renderer->ClearBuffer();
-  m_input->PollActions();
+auto FrameBuffer::PresentFrame() -> void {
+  while (true) {
+    console::ResetCursor();
+    {
+      std::lock_guard<std::mutex> lock(m_frontBufferMtx);
+      for (auto& row : m_frontBuffer) {
+        for (auto ele : row) {
+          std::cout << ele;
+        }
+        std::cout << '\n';
+      }
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30Hz
+  }
+}
 
-  OnTick();
+auto FrameBuffer::Draw(IVec2 pos, char symbol) -> void {
+  auto [x, y] = pos;
+  if (x >= 0 && x < s_rows && y >= 0 && y < s_cols) m_backBuffer[x][y] = symbol;
+}
 
-  m_renderer->DrawScene(*m_currentScene);
-  m_renderer->SwapBuffers();
+auto FrameBuffer::SwapBuffers() -> void {
+  std::lock_guard<std::mutex> lock(m_frontBufferMtx);
+  m_frontBuffer = m_backBuffer;
 }
 }  // namespace ata

@@ -9,6 +9,8 @@ src/console_renderer.cpp
 src/camera.cpp
 src/input.cpp
 src/input_handler.cpp
+src/console.cpp
+src/frame_buffer.cpp
 )
 
 if(CMAKE_SYSTEM MATCHES Windows)

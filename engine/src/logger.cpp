@@ -22,6 +22,7 @@
    IN THE SOFTWARE.
 */
 
+#include <console.h>
 #include <logger.h>
 
 #include <chrono>
@@ -29,18 +30,6 @@
 #include <sstream>
 
 namespace ata::logger {
-
-struct ANSIColors {
-  static constexpr const char* black = "\033[30m";
-  static constexpr const char* red = "\033[31m";
-  static constexpr const char* green = "\033[32m";
-  static constexpr const char* yellow = "\033[33m";
-  static constexpr const char* blue = "\033[34m";
-  static constexpr const char* magenta = "\033[35m";
-  static constexpr const char* cyan = "\033[36m";
-  static constexpr const char* white = "\033[37m";
-  static constexpr const char* reset = "\033[0m";
-};
 
 constexpr auto GetLevelStr(LogLevel level) -> const char* {
   switch (level) {
@@ -61,31 +50,28 @@ constexpr auto GetLevelStr(LogLevel level) -> const char* {
   }
 }
 
-constexpr auto GetColor(LogLevel level) -> const char* {
+constexpr auto GetColor(LogLevel level) -> console::Color {
   switch (level) {
     case LogLevel::TRACE:
-      return ANSIColors::white;
+      return console::Color::WHITE;
     case LogLevel::DEBUG:
-      return ANSIColors::blue;
+      return console::Color::BLUE;
     case LogLevel::INFO:
-      return ANSIColors::green;
+      return console::Color::GREEN;
     case LogLevel::WARN:
-      return ANSIColors::yellow;
+      return console::Color::YELLOW;
     case LogLevel::ERROR:
-      return ANSIColors::red;
+      return console::Color::RED;
     case LogLevel::FATAL:
-      return ANSIColors::magenta;
+      return console::Color::MAGENTA;
     default:
-      return ANSIColors::reset;
+      return console::Color::RESET;
   }
 }
 
 auto Log(LogLevel level, std::string_view msg,
          const std::source_location location) -> void {
   std::stringstream output;
-
-  output << GetColor(level);
-
   auto now = std::chrono::system_clock::now();
   auto in_time_t = std::chrono::system_clock::to_time_t(now);
   output << std::put_time(std::localtime(&in_time_t), "[%Y-%m-%d %X]");
@@ -95,10 +81,11 @@ auto Log(LogLevel level, std::string_view msg,
            << location.column() << ") `" << location.function_name() << "`: ";
   }
 
-  output << GetColor(level) << "[" << GetLevelStr(level) << "]: " << msg
-         << ANSIColors::reset << '\n';
+  output << "[" << GetLevelStr(level) << "]: " << msg << '\n';
 
-  std::clog << output.str();
+  console::SetColor(GetColor(level));
+  std::cout << output.str();
+  console::ResetColor();
 }
 
 }  // namespace ata::logger

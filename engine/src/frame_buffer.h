@@ -22,42 +22,35 @@
    IN THE SOFTWARE.
 */
 
-#include <application.h>
-#include <console.h>
-#include <console_renderer.h>
-#include <logger.h>
+#pragma once
 
-#include <filesystem>
+#include <vector.h>
+
+#include <array>
+#include <mutex>
+#include <thread>
 
 namespace ata {
-Application::~Application() {
-  delete m_currentScene;
-  delete m_renderer;
-  delete m_input;
-}
+class FrameBuffer {
+ public:
+  FrameBuffer();
+  ~FrameBuffer();
 
-auto Application::PreInit() -> int {
-  if (!m_initialScenePath) {
-    logger::Log(logger::LogLevel::FATAL, "Initial scene is not set!");
-    return 0;
-  }
+  auto Clear() -> void;
+  auto Draw(IVec2 pos, char symbol) -> void;
+  auto SwapBuffers() -> void;
 
-  m_renderer = new ConsoleRenderer();
-  m_currentScene = new Scene(m_initialScenePath);
-  m_currentScene->Load();
+ private:
+  static constexpr std::size_t s_rows = 30;
+  static constexpr std::size_t s_cols = 60;
 
-  m_input = new Input();
-  console::Clear();  // TEMP UNTIL I ADD NEW WINDOW FOR CONSOLE RENDERING
-  return 1;
-}
+  using Buffer = std::array<std::array<char, s_cols>, s_rows>;
+  Buffer m_backBuffer;
+  Buffer m_frontBuffer;
 
-auto Application::Update() -> void {
-  m_renderer->ClearBuffer();
-  m_input->PollActions();
+  std::thread m_framePresenter;
+  mutable std::mutex m_frontBufferMtx;
 
-  OnTick();
-
-  m_renderer->DrawScene(*m_currentScene);
-  m_renderer->SwapBuffers();
-}
+  auto PresentFrame() -> void;
+};
 }  // namespace ata

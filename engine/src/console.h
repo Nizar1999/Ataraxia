@@ -22,42 +22,40 @@
    IN THE SOFTWARE.
 */
 
-#include <application.h>
-#include <console.h>
-#include <console_renderer.h>
-#include <logger.h>
+namespace ata::console {
 
-#include <filesystem>
+enum class Color {
+  BLACK = 30,
+  RED = 31,
+  GREEN = 32,
+  YELLOW = 33,
+  BLUE = 34,
+  MAGENTA = 35,
+  CYAN = 36,
+  WHITE = 37,
+  RESET = 0,
+};
 
-namespace ata {
-Application::~Application() {
-  delete m_currentScene;
-  delete m_renderer;
-  delete m_input;
-}
+enum class CursorDirection {
+  UP = 'A',
+  DOWN = 'B',
+  FORWARD = 'C',
+  BACKWARD = 'D',
+  NEXT_LINE = 'E',
+  PREVIOUS_LINE = 'F',
+  HORIZONTAL_POS = 'G',
+  VERTICAL_POS = 'd',
+};
 
-auto Application::PreInit() -> int {
-  if (!m_initialScenePath) {
-    logger::Log(logger::LogLevel::FATAL, "Initial scene is not set!");
-    return 0;
-  }
+enum class CursorVisibility { SHOW = 'h', HIDE = 'l' };
 
-  m_renderer = new ConsoleRenderer();
-  m_currentScene = new Scene(m_initialScenePath);
-  m_currentScene->Load();
-
-  m_input = new Input();
-  console::Clear();  // TEMP UNTIL I ADD NEW WINDOW FOR CONSOLE RENDERING
-  return 1;
-}
-
-auto Application::Update() -> void {
-  m_renderer->ClearBuffer();
-  m_input->PollActions();
-
-  OnTick();
-
-  m_renderer->DrawScene(*m_currentScene);
-  m_renderer->SwapBuffers();
-}
-}  // namespace ata
+auto SetColor(Color color) -> void;
+auto ResetColor() -> void;
+auto MoveCursor(int n, CursorDirection direction) -> void;
+auto SetCursorPosition(int x, int y) -> void;
+auto SetCursorVisibility(CursorVisibility visibility) -> void;
+auto Clear() -> void;
+auto ResetCursor() -> void;
+auto UseAlternateBuffer() -> void;
+auto RestorePrimaryBuffer() -> void;
+}  // namespace ata::console

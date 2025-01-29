@@ -24,17 +24,13 @@
 
 #pragma once
 
+#include <frame_buffer.h>
 #include <renderer.h>
-
-#include <array>
-#include <mutex>
-#include <thread>
 
 namespace ata {
 class ConsoleRenderer : public Renderer {
  public:
-  ConsoleRenderer();
-  ~ConsoleRenderer();
+  ConsoleRenderer() = default;
 
   ConsoleRenderer(const ConsoleRenderer& other) = delete;
   auto operator=(const ConsoleRenderer& other) -> ConsoleRenderer& = delete;
@@ -44,17 +40,6 @@ class ConsoleRenderer : public Renderer {
   auto SwapBuffers() -> void override;
 
  private:
-  static constexpr std::size_t s_rows = 30;
-  static constexpr std::size_t s_cols = 60;
-
-  using FrameBuffer = std::array<std::array<char, s_cols>, s_rows>;
-  FrameBuffer m_backBuffer;
-  FrameBuffer m_frontBuffer;
-  std::thread m_framePresenter;
-  mutable std::mutex m_frontBufferMtx;
-
-  auto Init() -> void;
-  auto PresentFrame() const -> void;
-  auto PrintBuffer() const -> void;
+  FrameBuffer m_target;
 };
 }  // namespace ata
