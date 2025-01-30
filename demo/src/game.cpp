@@ -31,42 +31,10 @@ namespace demo {
 Game::Game() { m_initialScenePath = "mainmenu.scene"; }
 
 auto Game::Init() -> void {
-  m_input->BindInputAction<Game>({ata::KeyCode::A}, this, &Game::OnA);
-  m_input->BindInputAction<Game>({ata::KeyCode::D}, this, &Game::OnD);
-  m_input->BindInputAction<Game>({ata::KeyCode::W}, this, &Game::OnW);
-  m_input->BindInputAction<Game>({ata::KeyCode::S}, this, &Game::OnS);
-}
-
-auto Game::OnTick() -> void {
+  auto& cam = m_currentScene->GetActiveCam();
   auto& player = m_currentScene->GetActors()[0];
-  auto [x, y, _] = player->GetPosition();
+  cam.SetTarget(player.get());
 }
 
-auto Game::OnW() -> void {
-  auto& cam = m_currentScene->GetActiveCam();
-  auto pos = cam.GetPosition();
-  ata::Vec2 newP = {pos.x - 1.0f, pos.y};
-  const_cast<ata::Camera&>(cam).SetPosition(newP);
-}
-
-auto Game::OnS() -> void {
-  auto& cam = m_currentScene->GetActiveCam();
-  auto pos = cam.GetPosition();
-  ata::Vec2 newP = {pos.x + 1.0f, pos.y};
-  const_cast<ata::Camera&>(cam).SetPosition(newP);
-}
-
-auto Game::OnD() -> void {
-  auto& cam = m_currentScene->GetActiveCam();
-  auto pos = cam.GetPosition();
-  ata::Vec2 newP = {pos.x, pos.y + 1.0f};
-  const_cast<ata::Camera&>(cam).SetPosition(newP);
-}
-
-auto Game::OnA() -> void {
-  auto& cam = m_currentScene->GetActiveCam();
-  auto pos = cam.GetPosition();
-  ata::Vec2 newP = {pos.x, pos.y - 1.0f};
-  const_cast<ata::Camera&>(cam).SetPosition(newP);
-}
+auto Game::OnTick() -> void {}
 }  // namespace demo

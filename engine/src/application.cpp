@@ -42,11 +42,11 @@ auto Application::PreInit() -> int {
     return 0;
   }
 
+  m_input = new Input();
   m_renderer = new ConsoleRenderer();
   m_currentScene = new Scene(m_initialScenePath);
   m_currentScene->Load();
 
-  m_input = new Input();
   console::Clear();  // TEMP UNTIL I ADD NEW WINDOW FOR CONSOLE RENDERING
   return 1;
 }

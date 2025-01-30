@@ -39,7 +39,7 @@ class Scene {
   auto Load() -> void;
 
   // TODO(nizar): handle no cam set
-  auto GetActiveCam() const -> const Camera& { return m_activeCam; }
+  auto GetActiveCam() -> Camera& { return m_activeCam; }
   auto GetActors() const -> const std::vector<std::unique_ptr<Actor>>& {
     return m_actors;
   }

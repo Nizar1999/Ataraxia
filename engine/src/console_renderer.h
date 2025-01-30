@@ -36,7 +36,7 @@ class ConsoleRenderer : public Renderer {
   auto operator=(const ConsoleRenderer& other) -> ConsoleRenderer& = delete;
 
   auto ClearBuffer() -> void override;
-  auto DrawScene(const Scene& scene) -> void override;
+  auto DrawScene(Scene& scene) -> void override;
   auto SwapBuffers() -> void override;
 
  private:

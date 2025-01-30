@@ -78,6 +78,19 @@ auto operator-(const Tvec2<T>& v) -> std::remove_reference_t<decltype(v)> {
 
 // Binary Operators
 template <typename T, typename U>
+auto operator+=(Tvec2<T>& v, const Tvec2<U>& u)
+    -> std::remove_reference_t<decltype(v)> {
+  v = v + u;
+  return v;
+}
+
+template <typename T, typename U>
+auto operator+(const Tvec2<T>& v, const Tvec2<U>& u)
+    -> std::remove_reference_t<decltype(v)> {
+  return {static_cast<T>(u.x + v.x), static_cast<T>(u.y + v.y)};
+}
+
+template <typename T, typename U>
 auto operator*(const Tvec2<T>& v, U s)
     -> std::remove_reference<decltype(v)>::type {
   return s * v;

@@ -22,17 +22,12 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
+#include <actor.h>
 
-#include <scene.h>
-
-namespace ata {
-class Renderer {
+namespace demo {
+class Enemy : public ata::Actor {
  public:
-  virtual auto ClearBuffer() -> void = 0;
-  virtual auto DrawScene(Scene& scene) -> void = 0;
-  virtual auto SwapBuffers() -> void = 0;
-
-  virtual ~Renderer() = default;
+  Enemy();
 };
-}  // namespace ata
+REGISTER_ACTOR(Enemy)
+};  // namespace demo

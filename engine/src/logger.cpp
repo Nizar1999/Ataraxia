@@ -26,6 +26,7 @@
 #include <logger.h>
 
 #include <chrono>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 
@@ -83,9 +84,13 @@ auto Log(LogLevel level, std::string_view msg,
 
   output << "[" << GetLevelStr(level) << "]: " << msg << '\n';
 
-  console::SetColor(GetColor(level));
-  std::cout << output.str();
-  console::ResetColor();
+  // console::SetColor(GetColor(level));
+  //  std::cout << output.str();
+  // console::ResetColor();
+
+  std::ofstream file("log", std::ios::app);
+  file << output.str();
+  file.close();
 }
 
 }  // namespace ata::logger

@@ -27,8 +27,8 @@
 namespace ata {
 auto ConsoleRenderer::ClearBuffer() -> void { m_target.Clear(); }
 
-auto ConsoleRenderer::DrawScene(const Scene& scene) -> void {
-  const Camera& activeCam = scene.GetActiveCam();
+auto ConsoleRenderer::DrawScene(Scene& scene) -> void {
+  Camera& activeCam = scene.GetActiveCam();
   for (auto& actor : scene.GetActors()) {
     IVec2 worldPos = actor->GetPosition();
     m_target.Draw(activeCam.GetViewMatrix() * worldPos,

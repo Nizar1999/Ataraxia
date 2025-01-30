@@ -28,6 +28,12 @@ namespace demo {
 class Player : public ata::Actor {
  public:
   Player();
+
+ private:
+  auto OnW() -> void;
+  auto OnA() -> void;
+  auto OnS() -> void;
+  auto OnD() -> void;
 };
 REGISTER_ACTOR(Player)
 };  // namespace demo

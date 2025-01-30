@@ -24,17 +24,20 @@
 
 #pragma once
 
+#include <actor.h>
 #include <matrix.h>
 #include <vector.h>
 
 namespace ata {
 class Camera {
  public:
-  auto GetPosition() const -> Vec2 { return m_position; }
+  auto GetPosition() const -> Vec2;
   auto GetViewMatrix() const -> Mat3;
   auto SetPosition(Vec2 newPos) -> void { m_position = newPos; }
+  auto SetTarget(Actor* target) { m_target = target; }
 
  private:
-  Vec2 m_position{0, -5};
+  Vec2 m_position{0, 0};
+  Actor* m_target;
 };
 }  // namespace ata

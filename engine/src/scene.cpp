@@ -33,7 +33,7 @@
 #include <vector>
 
 namespace {
-std::vector<std::string> Split(const std::string& s, char delim) {
+auto Split(const std::string& s, char delim) -> std::vector<std::string> {
   std::vector<std::string> result;
   std::stringstream ss(s);
   std::string item;
@@ -45,12 +45,20 @@ std::vector<std::string> Split(const std::string& s, char delim) {
   return result;
 }
 
-std::pair<std::string, std::string> ParseProperty(std::string property) {
-  std::vector<std::string> v = Split(property, ':');
+auto ParseProperty(std::string property)
+    -> std::pair<std::string, std::string> {
+  auto v = Split(property, ':');
   return {v[0], v[1]};
 }
 
-std::unique_ptr<ata::Actor> ParseActor(const std::string& actorInfo) {
+auto ParseVec(std::string_view s) -> ata::Vec2 {
+  const std::string removeP = std::string(s.substr(1, s.size() - 2));
+  auto v = Split(removeP, ',');
+  ata::Vec2 res(std::stoi(v[0]), std::stoi(v[1]));
+  return res;
+}
+
+auto ParseActor(const std::string& actorInfo) -> std::unique_ptr<ata::Actor> {
   std::stringstream ss(actorInfo);
   std::string property;
   std::unique_ptr<ata::Actor> actor;
@@ -60,6 +68,13 @@ std::unique_ptr<ata::Actor> ParseActor(const std::string& actorInfo) {
     if (key == "Type") {
       if (!ata::g_actorRegistry.contains(value)) return nullptr;
       actor = ata::g_actorRegistry[value]();
+    }
+    if (key == "Pos") {
+      if (!actor)
+        ata::logger::Log(ata::logger::LogLevel::ERROR,
+                         "Failed to parse Pos, no actor set");
+      ata::Vec2 position = ParseVec(value);
+      actor->SetPosition(position);
     }
     // TODO(nizar): Parse additional properties
     ata::logger::Log(ata::logger::LogLevel::INFO, key + " " + value);
@@ -71,6 +86,7 @@ std::unique_ptr<ata::Actor> ParseActor(const std::string& actorInfo) {
 
 namespace ata {
 Scene::Scene(std::filesystem::path path) : m_path(path) {}
+
 auto Scene::Load() -> void {
   std::ifstream sceneFile(m_path);
   if (!sceneFile.is_open()) {

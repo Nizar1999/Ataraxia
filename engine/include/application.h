@@ -39,10 +39,11 @@ class ATA Application {
   auto PreInit() -> int;
   auto Update() -> void;
 
+  Input* m_input;
+
  protected:
   const char* m_initialScenePath;
   Scene* m_currentScene;
-  Input* m_input;
 
  private:
   Renderer* m_renderer;

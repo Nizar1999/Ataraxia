@@ -3,6 +3,7 @@ project(Demo)
 set(SOURCES
 src/game.cpp
 src/player.cpp
+src/enemy.cpp
 )
 add_executable(Demo ${SOURCES})
 

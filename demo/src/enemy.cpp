@@ -22,17 +22,8 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
+#include <enemy.h>
 
-#include <scene.h>
-
-namespace ata {
-class Renderer {
- public:
-  virtual auto ClearBuffer() -> void = 0;
-  virtual auto DrawScene(Scene& scene) -> void = 0;
-  virtual auto SwapBuffers() -> void = 0;
-
-  virtual ~Renderer() = default;
-};
-}  // namespace ata
+namespace demo {
+Enemy::Enemy() { m_renderData = {'E'}; }
+}  // namespace demo
