@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <rect.h>
 #include <scene.h>
 
 namespace ata {
@@ -32,6 +33,7 @@ class Renderer {
   virtual auto ClearBuffer() -> void = 0;
   virtual auto DrawScene(Scene& scene) -> void = 0;
   virtual auto SwapBuffers() -> void = 0;
+  virtual auto AddTarget(Rect bounds) -> void = 0;
 
   virtual ~Renderer() = default;
 };

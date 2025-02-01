@@ -22,6 +22,8 @@
    IN THE SOFTWARE.
 */
 
+#pragma once
+
 #include <vector2.h>
 #include <vector3.h>
 

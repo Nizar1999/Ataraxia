@@ -24,17 +24,35 @@
 
 #include <console_renderer.h>
 
-namespace ata {
-auto ConsoleRenderer::ClearBuffer() -> void { m_target.Clear(); }
+#include <algorithm>
 
-auto ConsoleRenderer::DrawScene(Scene& scene) -> void {
+namespace ata {
+auto ConsoleRenderer::ClearBuffer() -> void {
+  std::ranges::for_each(m_targets, [](auto& target) { target->Clear(); });
+}
+
+namespace {
+auto DrawSceneToTarget(Scene& scene, FrameBuffer& target) -> void {
   Camera& activeCam = scene.GetActiveCam();
   for (auto& actor : scene.GetActors()) {
     IVec2 worldPos = actor->GetPosition();
-    m_target.Draw(activeCam.GetViewMatrix() * worldPos,
-                  actor->GetRenderData().symbol);
+    target.Draw(activeCam.GetViewMatrix() * worldPos,
+                actor->GetRenderData().symbol);
   }
 }
+}  // namespace
 
-auto ConsoleRenderer::SwapBuffers() -> void { m_target.SwapBuffers(); }
+auto ConsoleRenderer::DrawScene(Scene& scene) -> void {
+  std::ranges::for_each(
+      m_targets, [&scene](auto& target) { DrawSceneToTarget(scene, *target); });
+}
+
+auto ConsoleRenderer::SwapBuffers() -> void {
+  std::ranges::for_each(m_targets, [](auto& target) { target->SwapBuffers(); });
+}
+
+auto ConsoleRenderer::AddTarget(Rect bounds) -> void {
+  m_targets.emplace_back(std::make_unique<FrameBuffer>(bounds));
+}
+
 }  // namespace ata

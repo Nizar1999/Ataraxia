@@ -24,27 +24,29 @@
 
 #pragma once
 
+#include <rect.h>
 #include <vector.h>
 
-#include <array>
 #include <mutex>
 #include <thread>
+#include <vector>
 
 namespace ata {
 class FrameBuffer {
  public:
-  FrameBuffer();
+  FrameBuffer(Rect bounds);
   ~FrameBuffer();
 
   auto Clear() -> void;
   auto Draw(IVec2 pos, char symbol) -> void;
   auto SwapBuffers() -> void;
+  auto GetBounds() -> const Rect& { return m_bounds; }
 
  private:
-  static constexpr std::size_t s_rows = 30;
-  static constexpr std::size_t s_cols = 60;
+  using InnerBuffer = std::vector<char>;
+  using Buffer = std::vector<std::vector<char>>;
 
-  using Buffer = std::array<std::array<char, s_cols>, s_rows>;
+  Rect m_bounds;
   Buffer m_backBuffer;
   Buffer m_frontBuffer;
 

@@ -31,9 +31,13 @@ namespace demo {
 Game::Game() { m_initialScenePath = "mainmenu.scene"; }
 
 auto Game::Init() -> void {
+  m_renderer->AddTarget({.x = 0, .y = 0, .w = 60, .h = 30});
+
   auto& cam = m_currentScene->GetActiveCam();
   auto& player = m_currentScene->GetActors()[0];
   cam.SetTarget(player.get());
+
+  // auto [world, minimap] = g_app->m_renderer->VSplit();
 }
 
 auto Game::OnTick() -> void {}

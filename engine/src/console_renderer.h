@@ -25,7 +25,9 @@
 #pragma once
 
 #include <frame_buffer.h>
+#include <memory.h>
 #include <renderer.h>
+#include <vector.h>
 
 namespace ata {
 class ConsoleRenderer : public Renderer {
@@ -38,8 +40,9 @@ class ConsoleRenderer : public Renderer {
   auto ClearBuffer() -> void override;
   auto DrawScene(Scene& scene) -> void override;
   auto SwapBuffers() -> void override;
+  auto AddTarget(Rect bounds) -> void override;
 
  private:
-  FrameBuffer m_target;
+  std::vector<std::unique_ptr<FrameBuffer>> m_targets;
 };
 }  // namespace ata

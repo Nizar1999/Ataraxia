@@ -24,6 +24,12 @@
 
 #pragma once
 
+#include <cstddef>
 namespace ata {
-tempalte T struct P2 {}
+struct Rect {
+  std::size_t x;
+  std::size_t y;
+  std::size_t w;
+  std::size_t h;
+};
 }  // namespace ata

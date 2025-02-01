@@ -29,7 +29,10 @@
 #include <iostream>
 
 namespace ata {
-FrameBuffer::FrameBuffer() {
+FrameBuffer::FrameBuffer(Rect bounds)
+    : m_bounds(bounds),
+      m_frontBuffer(Buffer(m_bounds.h, InnerBuffer(m_bounds.w))),
+      m_backBuffer(Buffer(m_bounds.h, InnerBuffer(m_bounds.w))) {
   console::SetCursorVisibility(console::CursorVisibility::HIDE);
   Clear();
   m_framePresenter = std::thread(std::mem_fn(&FrameBuffer::PresentFrame), this);
@@ -41,29 +44,31 @@ FrameBuffer::~FrameBuffer() {
 
 auto FrameBuffer::Clear() -> void {
   for (auto& row : m_backBuffer) {
-    row.fill('O');
+    std::fill(row.begin(), row.end(), '.');
   }
 }
 
 auto FrameBuffer::PresentFrame() -> void {
   while (true) {
-    console::ResetCursor();
     {
       std::lock_guard<std::mutex> lock(m_frontBufferMtx);
-      for (auto& row : m_frontBuffer) {
-        for (auto ele : row) {
+      console::SetCursorPosition(m_bounds.x, m_bounds.y);
+      for (std::size_t row = 0; row < m_bounds.h; ++row) {
+        for (auto ele : m_frontBuffer[row]) {
           std::cout << ele;
         }
-        std::cout << '\n';
+        console::SetCursorPosition(m_bounds.x + (row + 1), m_bounds.y);
       }
     }
+    console::ResetCursor();
     std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30Hz
   }
 }
 
 auto FrameBuffer::Draw(IVec2 pos, char symbol) -> void {
   auto [x, y] = pos;
-  if (x >= 0 && x < s_rows && y >= 0 && y < s_cols) m_backBuffer[x][y] = symbol;
+  if (x >= 0 && x < m_bounds.h && y >= 0 && y < m_bounds.w)
+    m_backBuffer[x][y] = symbol;
 }
 
 auto FrameBuffer::SwapBuffers() -> void {

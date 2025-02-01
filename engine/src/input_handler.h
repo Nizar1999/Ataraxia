@@ -22,6 +22,8 @@
    IN THE SOFTWARE.
 */
 
+#pragma once
+
 #include <input.h>
 
 #include <mutex>

@@ -55,7 +55,7 @@ auto MoveCursor(int n, CursorDirection direction) -> void {
 }
 
 auto SetCursorPosition(int x, int y) -> void {
-  print(CMD::CSI, y, ';', x, 'H');
+  print(CMD::CSI, x, ';', y, 'H');
 }
 
 auto SetCursorVisibility(CursorVisibility visibility) -> void {

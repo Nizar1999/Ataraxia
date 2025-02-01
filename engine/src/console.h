@@ -22,6 +22,8 @@
    IN THE SOFTWARE.
 */
 
+#pragma once
+
 namespace ata::console {
 
 enum class Color {
@@ -49,6 +51,7 @@ enum class CursorDirection {
 
 enum class CursorVisibility { SHOW = 'h', HIDE = 'l' };
 
+// TODO(nizar): Make threading safe
 auto SetColor(Color color) -> void;
 auto ResetColor() -> void;
 auto MoveCursor(int n, CursorDirection direction) -> void;

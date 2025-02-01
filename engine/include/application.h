@@ -44,8 +44,6 @@ class ATA Application {
  protected:
   const char* m_initialScenePath;
   Scene* m_currentScene;
-
- private:
   Renderer* m_renderer;
 };
 }  // namespace ata
