@@ -24,17 +24,33 @@
 
 #pragma once
 
-#include <rect.h>
+#include <config.h>
+#include <frame_buffer.h>
 #include <scene.h>
 
-namespace ata {
-class Renderer {
- public:
-  virtual auto ClearBuffer() -> void = 0;
-  virtual auto DrawScene(Scene& scene) -> void = 0;
-  virtual auto SwapBuffers() -> void = 0;
-  virtual auto AddTarget(Rect bounds) -> void = 0;
+#include <mutex>
+#include <thread>
 
-  virtual ~Renderer() = default;
+namespace ata {
+class ATA Renderer {
+ public:
+  Renderer();
+  ~Renderer();
+
+  Renderer(const Renderer& other) = delete;
+  auto operator=(const Renderer& other) -> Renderer& = delete;
+
+  auto Clear() -> void;
+  auto Draw(Scene& scene) -> void;
+  auto Display() -> void;
+  auto SetViewport(Rect bounds) -> void { m_viewport = bounds; }
+
+ private:
+  Rect m_viewport;
+  FrameBuffer m_buffer;
+  std::thread m_displayThread;
+  std::mutex m_bufferMtx;
+
+  auto DisplayBuffer() -> void;
 };
 }  // namespace ata

@@ -25,6 +25,7 @@
 #pragma once
 
 #include <cstddef>
+
 namespace ata {
 struct Rect {
   std::size_t x;

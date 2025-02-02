@@ -29,11 +29,10 @@ namespace ata {
 auto Camera::GetViewMatrix() const -> Mat3 { return Translate(-GetPosition()); }
 
 auto Camera::GetPosition() const -> Vec2 {
+  if (!m_target) return m_position;
   Vec2 pos = m_target->GetPosition();
-  if (m_target)
-    return {pos.x - 15,
-            pos.y - 30};  // TODO(nizar): retrieve these from the application
-  return m_position;
+  return {pos.x - 30,
+          pos.y - 15};  // TODO(nizar): retrieve these from the application
 }
 
 }  // namespace ata

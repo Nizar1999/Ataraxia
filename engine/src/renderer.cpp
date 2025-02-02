@@ -22,27 +22,42 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
-
-#include <frame_buffer.h>
-#include <memory.h>
 #include <renderer.h>
-#include <vector.h>
 
 namespace ata {
-class ConsoleRenderer : public Renderer {
- public:
-  ConsoleRenderer() = default;
+Renderer::Renderer() : m_buffer(60, 30), m_viewport(0, 0, 60, 30) {
+  m_displayThread = std::thread(&Renderer::DisplayBuffer, this);
+}
 
-  ConsoleRenderer(const ConsoleRenderer& other) = delete;
-  auto operator=(const ConsoleRenderer& other) -> ConsoleRenderer& = delete;
+Renderer::~Renderer() {
+  if (m_displayThread.joinable()) m_displayThread.join();
+}
 
-  auto ClearBuffer() -> void override;
-  auto DrawScene(Scene& scene) -> void override;
-  auto SwapBuffers() -> void override;
-  auto AddTarget(Rect bounds) -> void override;
+auto Renderer::Clear() -> void { m_buffer.Clear(); }
 
- private:
-  std::vector<std::unique_ptr<FrameBuffer>> m_targets;
-};
+auto Renderer::Draw(Scene& scene) -> void {
+  Camera& activeCam = scene.GetActiveCam();
+  for (auto& actor : scene.GetActors()) {
+    IVec2 worldPos = actor->GetPosition();
+    IVec2 viewPos = activeCam.GetViewMatrix() * worldPos;
+    m_buffer.Write(m_viewport, viewPos, actor->GetRenderData().symbol);
+  }
+}
+
+auto Renderer::Display() -> void {
+  std::lock_guard<std::mutex> lock(m_bufferMtx);
+  m_buffer.Swap();
+}
+
+auto Renderer::DisplayBuffer() -> void {
+  while (true) {
+    {
+      std::lock_guard<std::mutex> lock(m_bufferMtx);
+      m_buffer.Draw();
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30Hz
+  }
+}
+
 }  // namespace ata

@@ -24,7 +24,6 @@
 
 #include <application.h>
 #include <console.h>
-#include <console_renderer.h>
 #include <logger.h>
 
 #include <filesystem>
@@ -43,7 +42,7 @@ auto Application::PreInit() -> int {
   }
 
   m_input = new Input();
-  m_renderer = new ConsoleRenderer();
+  m_renderer = new Renderer();
   m_currentScene = new Scene(m_initialScenePath);
   m_currentScene->Load();
 
@@ -52,12 +51,17 @@ auto Application::PreInit() -> int {
 }
 
 auto Application::Update() -> void {
-  m_renderer->ClearBuffer();
+  m_renderer->Clear();
   m_input->PollActions();
 
   OnTick();
 
-  m_renderer->DrawScene(*m_currentScene);
-  m_renderer->SwapBuffers();
+  m_renderer->SetViewport({0, 0, 30, 30});
+  m_renderer->Draw(*m_currentScene);
+
+  m_renderer->SetViewport({30, 0, 30, 30});
+  m_renderer->Draw(*m_currentScene);
+
+  m_renderer->Display();
 }
 }  // namespace ata

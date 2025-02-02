@@ -38,8 +38,8 @@ Player::Player() {
   input->BindInputAction<Player>({ata::KeyCode::D}, this, &Player::OnD);
 }
 
-auto Player::OnW() -> void { m_position += ata::Vec3(-1, 0, 0); }
-auto Player::OnA() -> void { m_position += ata::Vec3(0, -1, 0); }
-auto Player::OnS() -> void { m_position += ata::Vec3(1, 0, 0); }
-auto Player::OnD() -> void { m_position += ata::Vec3(0, 1, 0); }
+auto Player::OnW() -> void { m_position += ata::Vec3(0, -1, 0); }
+auto Player::OnA() -> void { m_position += ata::Vec3(-1, 0, 0); }
+auto Player::OnS() -> void { m_position += ata::Vec3(0, 1, 0); }
+auto Player::OnD() -> void { m_position += ata::Vec3(1, 0, 0); }
 }  // namespace demo

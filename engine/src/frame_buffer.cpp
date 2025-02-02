@@ -25,54 +25,44 @@
 #include <console.h>
 #include <frame_buffer.h>
 
-#include <functional>
 #include <iostream>
 
 namespace ata {
-FrameBuffer::FrameBuffer(Rect bounds)
-    : m_bounds(bounds),
-      m_frontBuffer(Buffer(m_bounds.h, InnerBuffer(m_bounds.w))),
-      m_backBuffer(Buffer(m_bounds.h, InnerBuffer(m_bounds.w))) {
+FrameBuffer::FrameBuffer(std::size_t width, std::size_t height)
+    : m_width(width),
+      m_height(height),
+      m_frontBuffer(std::vector(m_height, BufferType(m_width))),
+      m_backBuffer(std::vector(m_height, BufferType(m_width))) {
   console::SetCursorVisibility(console::CursorVisibility::HIDE);
   Clear();
-  m_framePresenter = std::thread(std::mem_fn(&FrameBuffer::PresentFrame), this);
-}
-
-FrameBuffer::~FrameBuffer() {
-  if (m_framePresenter.joinable()) m_framePresenter.join();
 }
 
 auto FrameBuffer::Clear() -> void {
   for (auto& row : m_backBuffer) {
-    std::fill(row.begin(), row.end(), '.');
+    std::fill(row.begin(), row.end(), ' ');
   }
 }
 
-auto FrameBuffer::PresentFrame() -> void {
-  while (true) {
-    {
-      std::lock_guard<std::mutex> lock(m_frontBufferMtx);
-      console::SetCursorPosition(m_bounds.x, m_bounds.y);
-      for (std::size_t row = 0; row < m_bounds.h; ++row) {
-        for (auto ele : m_frontBuffer[row]) {
-          std::cout << ele;
-        }
-        console::SetCursorPosition(m_bounds.x + (row + 1), m_bounds.y);
-      }
+auto FrameBuffer::Draw() -> void {
+  for (std::size_t y = 0; y < m_height; ++y) {
+    console::SetCursorPosition(0, y);
+    for (auto symbol : m_frontBuffer[y]) {
+      std::cout << symbol;
     }
-    console::ResetCursor();
-    std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30Hz
   }
+  std::cout << std::flush;
+  console::ResetCursor();
 }
 
-auto FrameBuffer::Draw(IVec2 pos, char symbol) -> void {
+auto FrameBuffer::Write(Rect viewport, IVec2 pos, char symbol) -> void {
   auto [x, y] = pos;
-  if (x >= 0 && x < m_bounds.h && y >= 0 && y < m_bounds.w)
-    m_backBuffer[x][y] = symbol;
+  x += viewport.x;
+  y += viewport.y;
+
+  if (x >= 0 && x < (viewport.x + viewport.w) && y >= 0 &&
+      y < (viewport.y + viewport.h))
+    m_backBuffer[y][x] = symbol;
 }
 
-auto FrameBuffer::SwapBuffers() -> void {
-  std::lock_guard<std::mutex> lock(m_frontBufferMtx);
-  m_frontBuffer = m_backBuffer;
-}
+auto FrameBuffer::Swap() -> void { m_frontBuffer = m_backBuffer; }
 }  // namespace ata

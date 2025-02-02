@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include <rect.h>
+
 namespace ata::console {
 
 enum class Color {
@@ -51,6 +53,20 @@ enum class CursorDirection {
 
 enum class CursorVisibility { SHOW = 'h', HIDE = 'l' };
 
+enum class Border {
+  TopRight = 'k',
+  TopLeft = 'l',
+  BottomRight = 'j',
+  BottomLeft = 'm',
+  Center = 'n',
+  CenterRight = 'u',
+  CenterLeft = 't',
+  CenterTop = 'w',
+  CenterBottom = 'v',
+  Horizontal = 'q',
+  Vertical = 'x',
+};
+
 // TODO(nizar): Make threading safe
 auto SetColor(Color color) -> void;
 auto ResetColor() -> void;
@@ -61,4 +77,9 @@ auto Clear() -> void;
 auto ResetCursor() -> void;
 auto UseAlternateBuffer() -> void;
 auto RestorePrimaryBuffer() -> void;
+auto EnableLineDrawingMode() -> void;
+auto DisableLineDrawingMode() -> void;
+auto DrawBoxBorders(Rect bounds) -> void;
+auto DrawVerticalLines(Rect bounds) -> void;
+auto DrawHorizontalLines(Rect bounds) -> void;
 }  // namespace ata::console

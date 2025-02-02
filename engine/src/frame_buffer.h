@@ -27,32 +27,26 @@
 #include <rect.h>
 #include <vector.h>
 
-#include <mutex>
-#include <thread>
 #include <vector>
 
 namespace ata {
+
 class FrameBuffer {
+  using BufferType = std::vector<char>;
+
  public:
-  FrameBuffer(Rect bounds);
-  ~FrameBuffer();
+  FrameBuffer(std::size_t width, std::size_t height);
 
   auto Clear() -> void;
-  auto Draw(IVec2 pos, char symbol) -> void;
-  auto SwapBuffers() -> void;
-  auto GetBounds() -> const Rect& { return m_bounds; }
+  auto Write(Rect viewport, IVec2 pos, char symbol) -> void;
+  auto Draw() -> void;
+  auto Swap() -> void;
 
  private:
-  using InnerBuffer = std::vector<char>;
-  using Buffer = std::vector<std::vector<char>>;
+  std::size_t m_width;
+  std::size_t m_height;
 
-  Rect m_bounds;
-  Buffer m_backBuffer;
-  Buffer m_frontBuffer;
-
-  std::thread m_framePresenter;
-  mutable std::mutex m_frontBufferMtx;
-
-  auto PresentFrame() -> void;
+  std::vector<BufferType> m_backBuffer;
+  std::vector<BufferType> m_frontBuffer;
 };
 }  // namespace ata

@@ -5,7 +5,7 @@ src/logger.cpp
 src/application.cpp
 src/scene.cpp
 src/actor.cpp
-src/console_renderer.cpp
+src/renderer.cpp
 src/camera.cpp
 src/input.cpp
 src/input_handler.cpp
