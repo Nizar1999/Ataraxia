@@ -23,8 +23,25 @@
 */
 
 #include <actor.h>
+#include <application.h>
 
 namespace ata {
 std::unordered_map<std::string, std::function<std::unique_ptr<Actor>()>>
     g_actorRegistry;
+
+auto Actor::Move(const Vec3 position) -> void {
+  const Vec3 newPos = m_position + position;
+  auto& actors = g_app->m_currentScene->GetActors();
+  bool collided = false;
+
+  for (auto& actor : actors) {
+    if (actor->GetPosition() == newPos) {
+      collided = true;
+      OnCollide(*actor);
+    }
+  }
+  if (!collided) SetPosition(newPos);
 }
+
+auto Actor::OnCollide(Actor& actor) -> void {}
+}  // namespace ata

@@ -34,17 +34,18 @@ class ATA Application {
  public:
   virtual auto Init() -> void = 0;
   virtual auto OnTick() -> void = 0;
-  virtual ~Application();
+  virtual ~Application() = default;
 
   auto PreInit() -> int;
   auto Update() -> void;
+  auto LoadScene(std::string_view scenePath) -> void;
 
-  Input* m_input;
+  std::unique_ptr<Input> m_input;
+  std::unique_ptr<Renderer> m_renderer;
+  std::unique_ptr<Scene> m_currentScene;
 
  protected:
   const char* m_initialScenePath;
-  Scene* m_currentScene;
-  Renderer* m_renderer;
 };
 }  // namespace ata
 

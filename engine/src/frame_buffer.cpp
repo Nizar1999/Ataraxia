@@ -59,7 +59,7 @@ auto FrameBuffer::Write(Rect viewport, IVec2 pos, char symbol) -> void {
   x += viewport.x;
   y += viewport.y;
 
-  if (x >= 0 && x < (viewport.x + viewport.w) && y >= 0 &&
+  if (x >= viewport.x && x < (viewport.x + viewport.w) && y >= viewport.y &&
       y < (viewport.y + viewport.h))
     m_backBuffer[y][x] = symbol;
 }

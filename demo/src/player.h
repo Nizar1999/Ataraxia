@@ -31,6 +31,9 @@ class Player : public ata::Actor {
  public:
   Player();
 
+ protected:
+  virtual auto OnCollide(Actor& actor) -> void override;
+
  private:
   auto OnW() -> void;
   auto OnA() -> void;

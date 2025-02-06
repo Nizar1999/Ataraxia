@@ -44,10 +44,13 @@ class ATA Actor {
   auto SetPosition(Vec3 position) -> void { m_position = position; };
   auto GetPosition() const -> const Vec3 { return m_position; };
   auto GetRenderData() const -> const RenderData { return m_renderData; };
+  auto Move(const Vec3 position) -> void;
 
  protected:
   Vec3 m_position;
   RenderData m_renderData;
+
+  virtual auto OnCollide(Actor& actor) -> void;
 };
 
 using registrationFn = std::function<std::unique_ptr<Actor>()>;

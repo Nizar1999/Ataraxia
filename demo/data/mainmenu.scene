@@ -1,2 +1,2 @@
-Type:Player-Pos:(2,3)
-Type:Enemy-Pos:(10,10)
+Type:Player|Pos:(0,0)
+Type:Enemy|Pos:(10,10)

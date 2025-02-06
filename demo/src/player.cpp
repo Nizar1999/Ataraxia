@@ -29,7 +29,7 @@
 namespace demo {
 Player::Player() {
   m_renderData = {'P'};
-  auto input = g_app->m_input;
+  auto& input = g_app->m_input;
   assert(input != nullptr);
 
   input->BindInputAction<Player>({ata::KeyCode::W}, this, &Player::OnW);
@@ -38,8 +38,15 @@ Player::Player() {
   input->BindInputAction<Player>({ata::KeyCode::D}, this, &Player::OnD);
 }
 
-auto Player::OnW() -> void { m_position += ata::Vec3(0, -1, 0); }
-auto Player::OnA() -> void { m_position += ata::Vec3(-1, 0, 0); }
-auto Player::OnS() -> void { m_position += ata::Vec3(0, 1, 0); }
-auto Player::OnD() -> void { m_position += ata::Vec3(1, 0, 0); }
+auto Player::OnCollide(Actor& actor) -> void {
+  if (actor.GetRenderData().symbol == 'E') {
+    // g_app->LoadScene("test.scene");
+    return;
+  }
+}
+
+auto Player::OnW() -> void { Move({0, -1, 0}); }
+auto Player::OnA() -> void { Move({-1, 0, 0}); }
+auto Player::OnS() -> void { Move({0, 1, 0}); }
+auto Player::OnD() -> void { Move({1, 0, 0}); }
 }  // namespace demo

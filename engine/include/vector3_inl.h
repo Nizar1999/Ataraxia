@@ -27,6 +27,8 @@
 #include <assert.h>
 #include <vector3.h>
 
+#include <compare>
+
 namespace ata {
 // Constructor
 template <typename T>
@@ -77,15 +79,32 @@ auto Tvec3<T>::operator[](std::size_t i) const -> const T& {
 }
 
 template <typename T>
-auto operator-(const Tvec3<T>& v) -> std::remove_reference_t<decltype(v)> {
-  return -1 * v;
+auto Tvec3<T>::operator-() -> Tvec3<T> {
+  return *this * -1;
 }
 
 // Binary Operators
-template <typename T, typename U>
-auto operator+=(Tvec3<T>& v, const Tvec3<U>& u) -> decltype(v) {
-  v = v + u;
-  return v;
+template <typename T>
+template <typename U>
+auto Tvec3<T>::operator<=>(const Tvec3<U>& v) const {
+  if (auto cmp = x <=> static_cast<T>(v.x); cmp != 0) return cmp;
+  if (auto cmp = y <=> static_cast<T>(v.y); cmp != 0) return cmp;
+  return z <=> static_cast<T>(v.z);
+}
+
+template <typename T>
+template <typename U>
+auto Tvec3<T>::operator==(const Tvec3<U>& v) const -> bool {
+  return std::is_eq(x <=> static_cast<T>(v.x)) &&
+         std::is_eq(y <=> static_cast<T>(v.y)) &&
+         std::is_eq(z <=> static_cast<T>(v.z));
+}
+
+template <typename T>
+template <typename U>
+auto Tvec3<T>::operator+=(const Tvec3<U>& u) -> Tvec3<T>& {
+  *this = *this + u;
+  return *this;
 }
 
 template <typename T, typename U>

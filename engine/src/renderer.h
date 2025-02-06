@@ -44,6 +44,7 @@ class ATA Renderer {
   auto Draw(Scene& scene) -> void;
   auto Display() -> void;
   auto SetViewport(Rect bounds) -> void { m_viewport = bounds; }
+  auto GetViewport() const -> const Rect& { return m_viewport; }
 
  private:
   Rect m_viewport;

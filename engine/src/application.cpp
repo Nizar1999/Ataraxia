@@ -26,27 +26,17 @@
 #include <console.h>
 #include <logger.h>
 
-#include <filesystem>
-
 namespace ata {
-Application::~Application() {
-  delete m_currentScene;
-  delete m_renderer;
-  delete m_input;
-}
-
 auto Application::PreInit() -> int {
   if (!m_initialScenePath) {
     logger::Log(logger::LogLevel::FATAL, "Initial scene is not set!");
     return 0;
   }
 
-  m_input = new Input();
-  m_renderer = new Renderer();
-  m_currentScene = new Scene(m_initialScenePath);
-  m_currentScene->Load();
+  m_input = std::make_unique<Input>();
+  m_renderer = std::make_unique<Renderer>();
 
-  console::Clear();  // TEMP UNTIL I ADD NEW WINDOW FOR CONSOLE RENDERING
+  LoadScene(m_initialScenePath);
   return 1;
 }
 
@@ -56,12 +46,11 @@ auto Application::Update() -> void {
 
   OnTick();
 
-  m_renderer->SetViewport({0, 0, 30, 30});
-  m_renderer->Draw(*m_currentScene);
-
-  m_renderer->SetViewport({30, 0, 30, 30});
-  m_renderer->Draw(*m_currentScene);
-
   m_renderer->Display();
+}
+
+auto Application::LoadScene(std::string_view scenePath) -> void {
+  m_currentScene = std::make_unique<Scene>(scenePath);
+  m_currentScene->Load();
 }
 }  // namespace ata

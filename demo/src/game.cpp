@@ -33,8 +33,14 @@ Game::Game() { m_initialScenePath = "mainmenu.scene"; }
 auto Game::Init() -> void {
   auto& cam = m_currentScene->GetActiveCam();
   auto& player = m_currentScene->GetActors()[0];
-  // cam.SetTarget(player.get());
+  cam.SetTarget(player.get());
 }
 
-auto Game::OnTick() -> void {}
+auto Game::OnTick() -> void {
+  m_renderer->SetViewport({0, 0, 30, 30});
+  m_renderer->Draw(*m_currentScene);
+
+  m_renderer->SetViewport({30, 0, 30, 30});
+  m_renderer->Draw(*m_currentScene);
+}
 }  // namespace demo

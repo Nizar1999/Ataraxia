@@ -63,7 +63,7 @@ auto ParseActor(const std::string& actorInfo) -> std::unique_ptr<ata::Actor> {
   std::string property;
   std::unique_ptr<ata::Actor> actor;
 
-  while (std::getline(ss, property, '-')) {
+  while (std::getline(ss, property, '|')) {
     auto [key, value] = ParseProperty(property);
     if (key == "Type") {
       if (!ata::g_actorRegistry.contains(value)) return nullptr;

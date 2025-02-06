@@ -22,6 +22,7 @@
    IN THE SOFTWARE.
 */
 
+#include <application.h>
 #include <camera.h>
 #include <matrix_transform.h>
 
@@ -31,8 +32,8 @@ auto Camera::GetViewMatrix() const -> Mat3 { return Translate(-GetPosition()); }
 auto Camera::GetPosition() const -> Vec2 {
   if (!m_target) return m_position;
   Vec2 pos = m_target->GetPosition();
-  return {pos.x - 30,
-          pos.y - 15};  // TODO(nizar): retrieve these from the application
+  const Rect& viewport = g_app->m_renderer->GetViewport();
+  return {pos.x - (viewport.w >> 1), pos.y - (viewport.h >> 1)};
 }
 
 }  // namespace ata

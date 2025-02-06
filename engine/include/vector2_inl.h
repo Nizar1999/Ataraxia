@@ -27,6 +27,8 @@
 #include <assert.h>
 #include <vector2.h>
 
+#include <compare>
+
 namespace ata {
 // Constructor
 template <typename T>
@@ -72,16 +74,30 @@ auto Tvec2<T>::operator[](std::size_t i) const -> const T& {
 }
 
 template <typename T>
-auto operator-(const Tvec2<T>& v) -> std::remove_reference_t<decltype(v)> {
-  return -1 * v;
+auto Tvec2<T>::operator-() -> Tvec2<T> {
+  return *this * -1;
 }
 
 // Binary Operators
-template <typename T, typename U>
-auto operator+=(Tvec2<T>& v, const Tvec2<U>& u)
-    -> std::remove_reference_t<decltype(v)> {
-  v = v + u;
-  return v;
+template <typename T>
+template <typename U>
+auto Tvec2<T>::operator<=>(const Tvec2<U>& v) const {
+  if (auto cmp = x <=> static_cast<T>(v.x); cmp != 0) return cmp;
+  return y <=> static_cast<T>(v.y);
+}
+
+template <typename T>
+template <typename U>
+auto Tvec2<T>::operator==(const Tvec2<U>& v) const -> bool {
+  return std::is_eq(x <=> static_cast<T>(v.x)) &&
+         std::is_eq(y <=> static_cast<T>(v.y));
+}
+
+template <typename T>
+template <typename U>
+auto Tvec2<T>::operator+=(const Tvec2<U>& u) -> Tvec2<T>& {
+  *this = *this + u;
+  return *this;
 }
 
 template <typename T, typename U>
@@ -101,5 +117,4 @@ auto operator*(U s, const Tvec2<T>& v)
     -> std::remove_reference<decltype(v)>::type {
   return {static_cast<T>(s * v.x), static_cast<T>(s * v.y)};
 }
-
 }  // namespace ata
