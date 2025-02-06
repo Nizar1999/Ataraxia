@@ -24,8 +24,6 @@
 
 #pragma once
 
-#include <config.h>
-
 #include <functional>
 #include <unordered_map>
 #include <vector>

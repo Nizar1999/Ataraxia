@@ -30,6 +30,10 @@
 #include <scene.h>
 
 namespace ata {
+extern ATA Input* g_input;
+extern ATA Renderer* g_renderer;
+extern ATA Scene* g_currentScene;
+
 class ATA Application {
  public:
   virtual auto Init() -> void = 0;
@@ -39,10 +43,6 @@ class ATA Application {
   auto PreInit() -> int;
   auto Update() -> void;
   auto LoadScene(std::string_view scenePath) -> void;
-
-  std::unique_ptr<Input> m_input;
-  std::unique_ptr<Renderer> m_renderer;
-  std::unique_ptr<Scene> m_currentScene;
 
  protected:
   const char* m_initialScenePath;

@@ -54,7 +54,7 @@ auto ParseProperty(std::string property)
 auto ParseVec(std::string_view s) -> ata::Vec2 {
   const std::string removeP = std::string(s.substr(1, s.size() - 2));
   auto v = Split(removeP, ',');
-  ata::Vec2 res(std::stoi(v[0]), std::stoi(v[1]));
+  ata::Vec2 res(std::stof(v[0]), std::stof(v[1]));
   return res;
 }
 

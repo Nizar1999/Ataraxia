@@ -71,7 +71,7 @@ enum class Border {
 auto SetColor(Color color) -> void;
 auto ResetColor() -> void;
 auto MoveCursor(int n, CursorDirection direction) -> void;
-auto SetCursorPosition(int x, int y) -> void;
+auto SetCursorPosition(std::size_t x, std::size_t y) -> void;
 auto SetCursorVisibility(CursorVisibility visibility) -> void;
 auto Clear() -> void;
 auto ResetCursor() -> void;

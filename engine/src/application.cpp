@@ -27,30 +27,31 @@
 #include <logger.h>
 
 namespace ata {
+ATA Input* g_input = nullptr;
+ATA Renderer* g_renderer = nullptr;
+ATA Scene* g_currentScene = nullptr;
+
 auto Application::PreInit() -> int {
   if (!m_initialScenePath) {
     logger::Log(logger::LogLevel::FATAL, "Initial scene is not set!");
     return 0;
   }
 
-  m_input = std::make_unique<Input>();
-  m_renderer = std::make_unique<Renderer>();
-
   LoadScene(m_initialScenePath);
   return 1;
 }
 
 auto Application::Update() -> void {
-  m_renderer->Clear();
-  m_input->PollActions();
+  g_renderer->Clear();
+  g_input->PollActions();
 
   OnTick();
 
-  m_renderer->Display();
+  g_renderer->Display();
 }
 
 auto Application::LoadScene(std::string_view scenePath) -> void {
-  m_currentScene = std::make_unique<Scene>(scenePath);
-  m_currentScene->Load();
+  g_currentScene = new Scene(scenePath);
+  g_currentScene->Load();
 }
 }  // namespace ata

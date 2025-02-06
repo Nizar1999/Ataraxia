@@ -56,8 +56,8 @@ auto FrameBuffer::Draw() -> void {
 
 auto FrameBuffer::Write(Rect viewport, IVec2 pos, char symbol) -> void {
   auto [x, y] = pos;
-  x += viewport.x;
-  y += viewport.y;
+  x += static_cast<int>(viewport.x);
+  y += static_cast<int>(viewport.y);
 
   if (x >= viewport.x && x < (viewport.x + viewport.w) && y >= viewport.y &&
       y < (viewport.y + viewport.h))

@@ -27,6 +27,9 @@
 #include <application.h>
 
 int main() {
+  ata::g_input = new ata::Input();
+  ata::g_renderer = new ata::Renderer();
+
   if (!g_app->PreInit()) return -1;
 
   g_app->Init();

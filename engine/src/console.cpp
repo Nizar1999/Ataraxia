@@ -56,7 +56,7 @@ auto MoveCursor(int n, CursorDirection direction) -> void {
   print(CMD::CSI, n, static_cast<char>(direction));
 }
 
-auto SetCursorPosition(int x, int y) -> void {
+auto SetCursorPosition(std::size_t x, std::size_t y) -> void {
   print(CMD::CSI, y + 1, ';', x + 1, 'H');
 }
 

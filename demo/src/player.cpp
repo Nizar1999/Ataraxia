@@ -29,13 +29,11 @@
 namespace demo {
 Player::Player() {
   m_renderData = {'P'};
-  auto& input = g_app->m_input;
-  assert(input != nullptr);
 
-  input->BindInputAction<Player>({ata::KeyCode::W}, this, &Player::OnW);
-  input->BindInputAction<Player>({ata::KeyCode::A}, this, &Player::OnA);
-  input->BindInputAction<Player>({ata::KeyCode::S}, this, &Player::OnS);
-  input->BindInputAction<Player>({ata::KeyCode::D}, this, &Player::OnD);
+  ata::g_input->BindInputAction<Player>({ata::KeyCode::W}, this, &Player::OnW);
+  ata::g_input->BindInputAction<Player>({ata::KeyCode::A}, this, &Player::OnA);
+  ata::g_input->BindInputAction<Player>({ata::KeyCode::S}, this, &Player::OnS);
+  ata::g_input->BindInputAction<Player>({ata::KeyCode::D}, this, &Player::OnD);
 }
 
 auto Player::OnCollide(Actor& actor) -> void {

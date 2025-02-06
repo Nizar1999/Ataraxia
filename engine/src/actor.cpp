@@ -31,7 +31,7 @@ std::unordered_map<std::string, std::function<std::unique_ptr<Actor>()>>
 
 auto Actor::Move(const Vec3 position) -> void {
   const Vec3 newPos = m_position + position;
-  auto& actors = g_app->m_currentScene->GetActors();
+  auto& actors = g_currentScene->GetActors();
   bool collided = false;
 
   for (auto& actor : actors) {

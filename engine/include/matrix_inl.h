@@ -60,10 +60,10 @@ MAT_T_BINARY_DEC
 auto operator*(Tmat<T, m, n> mat, const Tvec2<U>& v)
     -> std::remove_reference_t<decltype(v)> {
   Tvec2<U> res;
-  res.x = static_cast<U>(mat[0][0] * v.x) + static_cast<U>(mat[0][1] * v.y) +
-          mat[0][2];
-  res.y = static_cast<U>(mat[1][0] * v.x) + static_cast<U>(mat[1][1] * v.y) +
-          mat[1][2];
+  res.x = static_cast<U>(mat[0][0]) * v.x + static_cast<U>(mat[0][1]) * v.y +
+          static_cast<U>(mat[0][2]);
+  res.y = static_cast<U>(mat[1][0]) * v.x + static_cast<U>(mat[1][1]) * v.y +
+          static_cast<U>(mat[1][2]);
   return res;
 }
 }  // namespace ata

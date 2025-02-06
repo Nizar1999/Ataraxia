@@ -75,7 +75,11 @@ auto Log(LogLevel level, std::string_view msg,
   std::stringstream output;
   auto now = std::chrono::system_clock::now();
   auto in_time_t = std::chrono::system_clock::to_time_t(now);
+
+#pragma warning(push)
+#pragma warning(disable : 4996)
   output << std::put_time(std::localtime(&in_time_t), "[%Y-%m-%d %X]");
+#pragma warning(pop)
 
   if (level == LogLevel::ERROR || level == LogLevel::FATAL) {
     output << location.file_name() << '(' << location.line() << ':'

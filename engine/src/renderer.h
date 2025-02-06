@@ -32,19 +32,19 @@
 #include <thread>
 
 namespace ata {
-class ATA Renderer {
+class Renderer {
  public:
-  Renderer();
-  ~Renderer();
+  ATA Renderer();
+  ATA ~Renderer();
 
-  Renderer(const Renderer& other) = delete;
-  auto operator=(const Renderer& other) -> Renderer& = delete;
+  ATA Renderer(const Renderer& other) = delete;
+  ATA auto operator=(const Renderer& other) -> Renderer& = delete;
 
-  auto Clear() -> void;
-  auto Draw(Scene& scene) -> void;
-  auto Display() -> void;
-  auto SetViewport(Rect bounds) -> void { m_viewport = bounds; }
-  auto GetViewport() const -> const Rect& { return m_viewport; }
+  ATA auto Clear() -> void;
+  ATA auto Draw(Scene& scene) -> void;
+  ATA auto Display() -> void;
+  ATA auto SetViewport(Rect bounds) -> void { m_viewport = bounds; }
+  ATA auto GetViewport() const -> const Rect& { return m_viewport; }
 
  private:
   Rect m_viewport;

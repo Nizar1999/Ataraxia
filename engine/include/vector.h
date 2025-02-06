@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <config.h>
 #include <vector2.h>
 #include <vector3.h>
 
@@ -32,4 +33,9 @@ using Vec2 = Tvec2<float>;
 using Vec3 = Tvec3<float>;
 using IVec2 = Tvec2<int>;
 using IVec3 = Tvec3<int>;
+
+template struct ATA Tvec2<float>;
+template struct ATA Tvec3<float>;
+template struct ATA Tvec2<int>;
+template struct ATA Tvec3<int>;
 };  // namespace ata
