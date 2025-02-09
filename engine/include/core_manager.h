@@ -24,16 +24,27 @@
 
 #pragma once
 
-#include <matrix.h>
+#include <config.h>
+#include <input_manager.h>
+#include <memory>
+#include <render_manager.h>
+#include <scene_manager.h>
+#include <singleton.h>
 
 namespace ata
 {
-    template <typename T>
-    auto Translate(const Tvec2<T>& v) -> Tmat<T, 3, 3>
+    //Manages startup and shutdown of core subsystems
+    class CoreManager : public Singleton<CoreManager>
     {
-        Tmat<T, 3, 3> m(1);
-        m[0][2] = v.x;
-        m[1][2] = v.y;
-        return m;
-    }
+    public:
+        std::unique_ptr<InputManager>  m_inputManager;
+        std::unique_ptr<RenderManager> m_renderManager;
+        std::unique_ptr<SceneManager>  m_sceneManager;
+
+        auto ATA Startup() -> void;
+        auto ATA Shutdown() -> void;
+
+    protected:
+        ATA CoreManager();
+    };
 } // namespace ata

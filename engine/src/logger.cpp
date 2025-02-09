@@ -30,71 +30,76 @@
 #include <iostream>
 #include <sstream>
 
-namespace ata::logger {
+namespace ata::logger
+{
 
-constexpr auto GetLevelStr(LogLevel level) -> const char* {
-  switch (level) {
-    case LogLevel::TRACE:
-      return "TRACE";
-    case LogLevel::DEBUG:
-      return "DEBUG";
-    case LogLevel::INFO:
-      return "INFO";
-    case LogLevel::WARN:
-      return "WARN";
-    case LogLevel::ERROR:
-      return "ERROR";
-    case LogLevel::FATAL:
-      return "FATAL";
-    default:
-      return "UNKNOWN";
-  }
-}
+    constexpr auto GetLevelStr(LogLevel level) -> const char*
+    {
+        switch(level)
+        {
+        case LogLevel::TRACE:
+            return "TRACE";
+        case LogLevel::DEBUG:
+            return "DEBUG";
+        case LogLevel::INFO:
+            return "INFO";
+        case LogLevel::WARN:
+            return "WARN";
+        case LogLevel::ERROR:
+            return "ERROR";
+        case LogLevel::FATAL:
+            return "FATAL";
+        default:
+            return "UNKNOWN";
+        }
+    }
 
-constexpr auto GetColor(LogLevel level) -> console::Color {
-  switch (level) {
-    case LogLevel::TRACE:
-      return console::Color::WHITE;
-    case LogLevel::DEBUG:
-      return console::Color::BLUE;
-    case LogLevel::INFO:
-      return console::Color::GREEN;
-    case LogLevel::WARN:
-      return console::Color::YELLOW;
-    case LogLevel::ERROR:
-      return console::Color::RED;
-    case LogLevel::FATAL:
-      return console::Color::MAGENTA;
-    default:
-      return console::Color::RESET;
-  }
-}
+    constexpr auto GetColor(LogLevel level) -> console::Color
+    {
+        switch(level)
+        {
+        case LogLevel::TRACE:
+            return console::Color::WHITE;
+        case LogLevel::DEBUG:
+            return console::Color::BLUE;
+        case LogLevel::INFO:
+            return console::Color::GREEN;
+        case LogLevel::WARN:
+            return console::Color::YELLOW;
+        case LogLevel::ERROR:
+            return console::Color::RED;
+        case LogLevel::FATAL:
+            return console::Color::MAGENTA;
+        default:
+            return console::Color::RESET;
+        }
+    }
 
-auto Log(LogLevel level, std::string_view msg,
-         const std::source_location location) -> void {
-  std::stringstream output;
-  auto now = std::chrono::system_clock::now();
-  auto in_time_t = std::chrono::system_clock::to_time_t(now);
+    auto Log(LogLevel level, std::string_view msg, const std::source_location location) -> void
+    {
+        std::stringstream output;
+        auto              now       = std::chrono::system_clock::now();
+        auto              in_time_t = std::chrono::system_clock::to_time_t(now);
 
 #pragma warning(push)
 #pragma warning(disable : 4996)
-  output << std::put_time(std::localtime(&in_time_t), "[%Y-%m-%d %X]");
+        output << std::put_time(std::localtime(&in_time_t), "[%Y-%m-%d %X]");
 #pragma warning(pop)
 
-  if (level == LogLevel::ERROR || level == LogLevel::FATAL) {
-    output << location.file_name() << '(' << location.line() << ':'
-           << location.column() << ") `" << location.function_name() << "`: ";
-  }
+        if(level == LogLevel::ERROR || level == LogLevel::FATAL)
+        {
+            output << location.file_name() << '(' << location.line() << ':' << location.column() << ") `" << location.function_name() << "`: ";
+        }
 
-  output << "[" << GetLevelStr(level) << "]: " << msg << '\n';
+        output << "[" << GetLevelStr(level) << "]: " << msg << '\n';
 
-  // console::SetColor(GetColor(level));
-  //  std::cout << output.str();
-  // console::ResetColor();
+        // console::SetColor(GetColor(level));
+        //  std::cout << output.str();
+        // console::ResetColor();
 
-  std::ofstream file("log", std::ios::app);
-  file << output.str();
-  file.close();
-}
+        std::ofstream file("log", std::ios::app);
+        file << output.str();
+        file.close();
+    }
 
-}  // namespace ata::logger
+} // namespace ata::logger

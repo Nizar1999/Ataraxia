@@ -24,109 +24,27 @@
 
 #pragma once
 
-#include <functional>
+#include <input_action.h>
+
+#include <mutex>
+#include <thread>
 #include <unordered_map>
-#include <vector>
 
-namespace ata {
-enum class KeyCode : unsigned int {
-  // Printable keys
-  Backspace = 0x08,
-  Tab = 0x09,
-  Enter = 0x0D,
-  Shift = 0x10,
-  Ctrl = 0x11,
-  Alt = 0x12,
-  Pause = 0x13,
-  CapsLock = 0x14,
-  Esc = 0x1B,
-  Space = 0x20,
+namespace ata
+{
+    class Input
+    {
+    public:
+        Input();
+        ~Input();
 
-  // Navigation keys
-  PageUp = 0x21,
-  PageDown = 0x22,
-  End = 0x23,
-  Home = 0x24,
-  LeftArrow = 0x25,
-  UpArrow = 0x26,
-  RightArrow = 0x27,
-  DownArrow = 0x28,
+        auto GetAsyncKeyState(KeyCode key) -> bool;
 
-  // Alphabet keys
-  A = 0x61,
-  B = 0x62,
-  C = 0x63,
-  D = 0x64,
-  E = 0x65,
-  F = 0x66,
-  G = 0x67,
-  H = 0x68,
-  I = 0x69,
-  J = 0x6A,
-  K = 0x6B,
-  L = 0x6C,
-  M = 0x6D,
-  N = 0x6E,
-  O = 0x6F,
-  P = 0x70,
-  Q = 0x71,
-  R = 0x72,
-  S = 0x73,
-  T = 0x74,
-  U = 0x75,
-  V = 0x76,
-  W = 0x77,
-  X = 0x78,
-  Y = 0x79,
-  Z = 0x7A,
+    private:
+        std::thread                            m_Poller;
+        std::mutex                             m_keyStateMtx;
+        std::unordered_map<unsigned int, bool> m_keyStates;
 
-  // Digit keys
-  D0 = 0x30,
-  D1 = 0x31,
-  D2 = 0x32,
-  D3 = 0x33,
-  D4 = 0x34,
-  D5 = 0x35,
-  D6 = 0x36,
-  D7 = 0x37,
-  D8 = 0x38,
-  D9 = 0x39
-};
-
-struct InputAction {
-  struct IAHash {
-    unsigned int operator()(const InputAction& action) const {
-      return static_cast<unsigned int>(action.m_key);
-    }
-  };
-
-  KeyCode m_key;
-  bool operator==(const InputAction& other) const {
-    return m_key == other.m_key;
-  }
-};
-
-using InputActionCallback = std::function<void()>;
-
-template <typename T>
-using InputActionCallbackT = std::function<void(T*)>;
-
-class Input {
- public:
-  auto BindInputAction(InputAction action, InputActionCallback callback)
-      -> void;
-
-  template <typename T>
-  auto BindInputAction(InputAction action, T* object,
-                       InputActionCallbackT<T> callback) -> void {
-    m_callbacks[action].push_back(std::bind(callback, object));
-  }
-  auto PollActions() -> void;
-  auto IsPressed(KeyCode code) -> bool;
-
- private:
-  std::unordered_map<InputAction, std::vector<InputActionCallback>,
-                     InputAction::IAHash>
-      m_callbacks;
-};
-}  // namespace ata
+        auto PollKeyPresses() -> void;
+    };
+} // namespace ata

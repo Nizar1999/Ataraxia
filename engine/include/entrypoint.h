@@ -25,17 +25,35 @@
 #pragma once
 
 #include <application.h>
+#include <core_manager.h>
+#include <logger.h>
 
-int main() {
-  ata::g_input = new ata::Input();
-  ata::g_renderer = new ata::Renderer();
+int main()
+{
+    std::unique_ptr<ata::CoreManager> core = ata::CoreManager::Create();
+    core->Startup();
 
-  if (!g_app->PreInit()) return -1;
+    if(!g_app)
+    {
+        ata::logger::Log(ata::logger::LogLevel::FATAL, "Client did not implement an Application");
+        return -1;
+    }
 
-  g_app->Init();
-  while (true) {
-    g_app->Update();
-  }
+    g_app->v_Startup(core->m_inputManager.get(), core->m_sceneManager.get());
+    while(true)
+    {
+        core->m_renderManager->Clear();
+        core->m_inputManager->PollActions();
 
-  delete g_app;
+        g_app->v_PreFrameRender();
+        core->m_renderManager->Draw(core->m_sceneManager->GetCurrentScene());
+        g_app->v_PostFrameRender();
+
+        core->m_renderManager->Display();
+    }
+
+    g_app->v_Shutdown();
+    delete g_app;
+
+    core->Shutdown();
 }

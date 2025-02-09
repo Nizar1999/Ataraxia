@@ -26,10 +26,12 @@
 
 #include <actor.h>
 
-namespace demo {
-class Enemy : public ata::Actor {
- public:
-  Enemy();
-};
-REGISTER_ACTOR(Enemy)
-};  // namespace demo
+namespace demo
+{
+    class Enemy : public ata::Actor
+    {
+    public:
+        Enemy();
+    };
+    REGISTER_ACTOR(Enemy)
+}; // namespace demo

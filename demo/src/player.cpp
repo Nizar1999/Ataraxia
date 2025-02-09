@@ -26,25 +26,43 @@
 #include <input.h>
 #include <player.h>
 
-namespace demo {
-Player::Player() {
-  m_renderData = {'P'};
+namespace demo
+{
+    Player::Player()
+    {
+        m_renderData = {'P'};
+    }
 
-  ata::g_input->BindInputAction<Player>({ata::KeyCode::W}, this, &Player::OnW);
-  ata::g_input->BindInputAction<Player>({ata::KeyCode::A}, this, &Player::OnA);
-  ata::g_input->BindInputAction<Player>({ata::KeyCode::S}, this, &Player::OnS);
-  ata::g_input->BindInputAction<Player>({ata::KeyCode::D}, this, &Player::OnD);
-}
+    auto Player::v_Startup() -> void
+    {
+        g_app->m_input->BindInputAction<Player>({ata::KeyCode::W}, this, &Player::OnW);
+        g_app->m_input->BindInputAction<Player>({ata::KeyCode::A}, this, &Player::OnA);
+        g_app->m_input->BindInputAction<Player>({ata::KeyCode::S}, this, &Player::OnS);
+        g_app->m_input->BindInputAction<Player>({ata::KeyCode::D}, this, &Player::OnD);
+    }
 
-auto Player::OnCollide(Actor& actor) -> void {
-  if (actor.GetRenderData().symbol == 'E') {
-    // g_app->LoadScene("test.scene");
-    return;
-  }
-}
+    auto Player::OnCollide(Actor& actor) -> void
+    {
+        if(actor.GetRenderData().symbol == 'E')
+        {
+            return;
+        }
+    }
 
-auto Player::OnW() -> void { Move({0, -1, 0}); }
-auto Player::OnA() -> void { Move({-1, 0, 0}); }
-auto Player::OnS() -> void { Move({0, 1, 0}); }
-auto Player::OnD() -> void { Move({1, 0, 0}); }
-}  // namespace demo
+    auto Player::OnW() -> void
+    {
+        SetPosition(m_position + ata::Vec3 {0, -1, 0});
+    }
+    auto Player::OnA() -> void
+    {
+        SetPosition(m_position + ata::Vec3 {-1, 0, 0});
+    }
+    auto Player::OnS() -> void
+    {
+        SetPosition(m_position + ata::Vec3 {0, 1, 0});
+    }
+    auto Player::OnD() -> void
+    {
+        SetPosition(m_position + ata::Vec3 {1, 0, 0});
+    }
+} // namespace demo

@@ -29,24 +29,26 @@
 
 #include <vector>
 
-namespace ata {
+namespace ata
+{
+    class FrameBuffer
+    {
+        using BufferType = std::vector<char>;
 
-class FrameBuffer {
-  using BufferType = std::vector<char>;
+    public:
+        FrameBuffer();
+        FrameBuffer(std::size_t width, std::size_t height);
 
- public:
-  FrameBuffer(std::size_t width, std::size_t height);
+        auto Clear() -> void;
+        auto Write(Rect viewport, IVec2 pos, char symbol) -> void;
+        auto Draw() -> void;
+        auto Swap() -> void;
 
-  auto Clear() -> void;
-  auto Write(Rect viewport, IVec2 pos, char symbol) -> void;
-  auto Draw() -> void;
-  auto Swap() -> void;
+    private:
+        std::size_t m_width;
+        std::size_t m_height;
 
- private:
-  std::size_t m_width;
-  std::size_t m_height;
-
-  std::vector<BufferType> m_backBuffer;
-  std::vector<BufferType> m_frontBuffer;
-};
-}  // namespace ata
+        std::vector<BufferType> m_backBuffer;
+        std::vector<BufferType> m_frontBuffer;
+    };
+} // namespace ata

@@ -24,16 +24,43 @@
 
 #pragma once
 
-#include <matrix.h>
+#include <memory>
+#include <mutex>
 
 namespace ata
 {
     template <typename T>
-    auto Translate(const Tvec2<T>& v) -> Tmat<T, 3, 3>
+    class Singleton
     {
-        Tmat<T, 3, 3> m(1);
-        m[0][2] = v.x;
-        m[1][2] = v.y;
-        return m;
-    }
+    public:
+        template <typename... Args>
+        static auto Create(Args&&... args) -> std::unique_ptr<T>
+        {
+            static std::mutex s_mtx;
+            std::lock_guard   lock(s_mtx);
+
+            if(s_created)
+                throw std::logic_error("The singleton has already been initialized.");
+
+            struct Q : T
+            {
+                using T::T;
+                void __singleton__() override { }
+            };
+
+            auto instance = std::make_unique<Q>(std::forward<Args>(args)...);
+            s_created     = true;
+            return instance;
+        }
+
+    protected:
+        Singleton()                                    = default;
+        Singleton(const Singleton&)                    = delete;
+        auto operator=(const Singleton&) -> Singleton& = delete;
+
+    private:
+        inline static bool s_created = false;
+
+        virtual auto __singleton__() -> void = 0;
+    };
 } // namespace ata

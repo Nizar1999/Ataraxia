@@ -25,28 +25,27 @@
 #pragma once
 
 #include <config.h>
-#include <input.h>
-#include <renderer.h>
-#include <scene.h>
+#include <input_manager.h>
+#include <scene_manager.h>
 
-namespace ata {
-extern ATA Input* g_input;
-extern ATA Renderer* g_renderer;
-extern ATA Scene* g_currentScene;
+namespace ata
+{
+    //Provides callbacks for client code within engine startup, update, and shutdown
+    class ATA Application
+    {
+    public:
+        virtual ~Application() = 0;
 
-class ATA Application {
- public:
-  virtual auto Init() -> void = 0;
-  virtual auto OnTick() -> void = 0;
-  virtual ~Application() = default;
+        virtual auto v_Startup(InputManager* input, SceneManager* scene) -> void { };
+        virtual auto v_Shutdown() -> void { };
+        virtual auto v_PreFrameRender() -> void { };
+        virtual auto v_PostFrameRender() -> void { };
 
-  auto PreInit() -> int;
-  auto Update() -> void;
-  auto LoadScene(std::string_view scenePath) -> void;
+        //TODO: Figure out better way to pass dependencies to actors
+        InputManager* m_input;
+        SceneManager* m_scene;
+    };
 
- protected:
-  const char* m_initialScenePath;
-};
-}  // namespace ata
+} // namespace ata
 
 extern ata::Application* g_app;

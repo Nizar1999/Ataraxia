@@ -2,26 +2,30 @@ project(Engine)
 
 set(SOURCES
 src/logger.cpp
-src/application.cpp
 src/scene.cpp
+src/scene_manager.cpp
 src/actor.cpp
-src/renderer.cpp
+src/render_manager.cpp
 src/camera.cpp
+src/scene_parser.cpp
+src/input_manager.cpp
+src/core_manager.cpp
 src/input.cpp
-src/input_handler.cpp
 src/console.cpp
 src/frame_buffer.cpp
+src/input_action.cpp
+src/application.cpp
 )
 
 if(CMAKE_SYSTEM MATCHES Windows)
 list(APPEND SOURCES
-src/input_handler_windows.cpp
+src/input_windows.cpp
 )
 endif()
 
 if(CMAKE_HOST_SYSTEM MATCHES Linux)
 list(APPEND SOURCES
-src/input_handler_linux.cpp
+src/input_linux.cpp
 )
 endif()
 

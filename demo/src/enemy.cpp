@@ -24,6 +24,10 @@
 
 #include <enemy.h>
 
-namespace demo {
-Enemy::Enemy() { m_renderData = {'E'}; }
-}  // namespace demo
+namespace demo
+{
+    Enemy::Enemy()
+    {
+        m_renderData = {'E'};
+    }
+} // namespace demo

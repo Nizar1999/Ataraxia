@@ -22,18 +22,18 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
-
-#include <matrix.h>
+#include <scene_manager.h>
 
 namespace ata
 {
-    template <typename T>
-    auto Translate(const Tvec2<T>& v) -> Tmat<T, 3, 3>
+    auto SceneManager::Startup(const std::string_view initialScene) -> void
     {
-        Tmat<T, 3, 3> m(1);
-        m[0][2] = v.x;
-        m[1][2] = v.y;
-        return m;
+        LoadScene(initialScene);
+    }
+
+    auto SceneManager::LoadScene(std::filesystem::path path) -> void
+    {
+        m_currentScene = std::make_unique<Scene>(path);
+        m_currentScene->Load();
     }
 } // namespace ata

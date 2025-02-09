@@ -26,60 +26,68 @@
 
 #include <rect.h>
 
-namespace ata::console {
+namespace ata::console
+{
 
-enum class Color {
-  BLACK = 30,
-  RED = 31,
-  GREEN = 32,
-  YELLOW = 33,
-  BLUE = 34,
-  MAGENTA = 35,
-  CYAN = 36,
-  WHITE = 37,
-  RESET = 0,
-};
+    enum class Color
+    {
+        BLACK   = 30,
+        RED     = 31,
+        GREEN   = 32,
+        YELLOW  = 33,
+        BLUE    = 34,
+        MAGENTA = 35,
+        CYAN    = 36,
+        WHITE   = 37,
+        RESET   = 0,
+    };
 
-enum class CursorDirection {
-  UP = 'A',
-  DOWN = 'B',
-  FORWARD = 'C',
-  BACKWARD = 'D',
-  NEXT_LINE = 'E',
-  PREVIOUS_LINE = 'F',
-  HORIZONTAL_POS = 'G',
-  VERTICAL_POS = 'd',
-};
+    enum class CursorDirection
+    {
+        UP             = 'A',
+        DOWN           = 'B',
+        FORWARD        = 'C',
+        BACKWARD       = 'D',
+        NEXT_LINE      = 'E',
+        PREVIOUS_LINE  = 'F',
+        HORIZONTAL_POS = 'G',
+        VERTICAL_POS   = 'd',
+    };
 
-enum class CursorVisibility { SHOW = 'h', HIDE = 'l' };
+    enum class CursorVisibility
+    {
+        SHOW = 'h',
+        HIDE = 'l'
+    };
 
-enum class Border {
-  TopRight = 'k',
-  TopLeft = 'l',
-  BottomRight = 'j',
-  BottomLeft = 'm',
-  Center = 'n',
-  CenterRight = 'u',
-  CenterLeft = 't',
-  CenterTop = 'w',
-  CenterBottom = 'v',
-  Horizontal = 'q',
-  Vertical = 'x',
-};
+    enum class Border
+    {
+        TopRight     = 'k',
+        TopLeft      = 'l',
+        BottomRight  = 'j',
+        BottomLeft   = 'm',
+        Center       = 'n',
+        CenterRight  = 'u',
+        CenterLeft   = 't',
+        CenterTop    = 'w',
+        CenterBottom = 'v',
+        Horizontal   = 'q',
+        Vertical     = 'x',
+    };
 
-// TODO(nizar): Make threading safe
-auto SetColor(Color color) -> void;
-auto ResetColor() -> void;
-auto MoveCursor(int n, CursorDirection direction) -> void;
-auto SetCursorPosition(std::size_t x, std::size_t y) -> void;
-auto SetCursorVisibility(CursorVisibility visibility) -> void;
-auto Clear() -> void;
-auto ResetCursor() -> void;
-auto UseAlternateBuffer() -> void;
-auto RestorePrimaryBuffer() -> void;
-auto EnableLineDrawingMode() -> void;
-auto DisableLineDrawingMode() -> void;
-auto DrawBoxBorders(Rect bounds) -> void;
-auto DrawVerticalLines(Rect bounds) -> void;
-auto DrawHorizontalLines(Rect bounds) -> void;
-}  // namespace ata::console
+    // TODO(nizar): Make threading safe
+    auto SetColor(Color color) -> void;
+    auto ResetColor() -> void;
+    auto MoveCursor(int n, CursorDirection direction) -> void;
+    auto SetCursorPosition(std::size_t x, std::size_t y) -> void;
+    auto SetCursorVisibility(CursorVisibility visibility) -> void;
+    auto Clear() -> void;
+    auto ResetCursor() -> void;
+    auto UseAlternateBuffer() -> void;
+    auto RestorePrimaryBuffer() -> void;
+    auto EnableLineDrawingMode() -> void;
+    auto DisableLineDrawingMode() -> void;
+    auto DrawBoxBorders(Rect bounds) -> void;
+    auto DrawVerticalLines(Rect bounds) -> void;
+    auto DrawHorizontalLines(Rect bounds) -> void;
+} // namespace ata::console

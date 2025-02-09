@@ -22,44 +22,43 @@
    IN THE SOFTWARE.
 */
 
-#include <fcntl.h>
-#include <input_handler.h>
-#include <termios.h>
-#include <unistd.h>
+#pragma once
 
-namespace ata {
-namespace {
-auto PressedKey() -> bool {
-  struct termios oldt, newt;
-  int ch;
-  bool ret = false;
+#include <config.h>
+#include <input.h>
+#include <input_action.h>
+#include <singleton.h>
 
-  tcgetattr(STDIN_FILENO, &oldt);
-  newt = oldt;
-  newt.c_lflag &= ~(ICANON | ECHO);
-  newt.c_cc[VMIN] = 1;
-  newt.c_cc[VTIME] = 0;
-  tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+#include <functional>
+#include <unordered_map>
+#include <vector>
 
-  ch = getchar();
-  if (ch != EOF) {
-    ret = true;
-    ungetc(ch, stdin);
-  }
+namespace ata
+{
+    template <typename T>
+    using InputActionCallbackT = std::function<void(T*)>;
+    using InputActionCallback  = std::function<void()>;
+    using CallbackMapping      = std::unordered_map<InputAction, std::vector<InputActionCallback>, InputAction::Hash>;
 
-  tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-  return ret;
-}
-}  // namespace
+    class InputManager : public Singleton<InputManager>
+    {
+    public:
+        auto ATA PollActions() -> void;
 
-auto InputHandler::PollKeyPresses() -> void {
-  while (true) {
-    if (PressedKey()) {
-      unsigned int ch = getchar();
-      std::lock_guard lk(m_keyStateMtx);
-      m_keyStates[ch] = true;
+        template <typename T>
+        auto BindInputAction(InputAction action, T* object, InputActionCallbackT<T> callback) -> void;
+        auto BindInputAction(InputAction action, InputActionCallback callback) -> void;
+
+    private:
+        CallbackMapping m_callbacks;
+
+        static auto IsPressed(KeyCode code) -> bool;
+    };
+
+    template <typename T>
+    auto InputManager::BindInputAction(InputAction action, T* object, InputActionCallbackT<T> callback) -> void
+    {
+        m_callbacks[action].push_back(std::bind(callback, object));
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  }
-}
-}  // namespace ata
+
+} // namespace ata

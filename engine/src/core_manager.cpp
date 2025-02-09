@@ -22,25 +22,25 @@
    IN THE SOFTWARE.
 */
 
-#include <input_handler.h>
+#include <core_manager.h>
 
-#include <functional>
+namespace ata
+{
+    CoreManager::CoreManager()
+    {
+        m_inputManager  = InputManager::Create();
+        m_sceneManager  = SceneManager::Create();
+        m_renderManager = RenderManager::Create();
+    }
 
-namespace ata {
-InputHandler::InputHandler() {
-  m_Poller = std::thread(std::mem_fn(&InputHandler::PollKeyPresses), this);
-}
+    auto CoreManager::Startup() -> void
+    {
+        m_sceneManager->Startup("mainmenu.scene");
+        m_renderManager->Startup();
+    }
 
-InputHandler::~InputHandler() {
-  if (m_Poller.joinable()) {
-    m_Poller.join();
-  }
-}
-
-auto InputHandler::GetAsyncKeyState(KeyCode key) -> bool {
-  std::lock_guard lk(m_keyStateMtx);
-  bool res = m_keyStates[static_cast<unsigned int>(key)];
-  if (res) m_keyStates[static_cast<unsigned int>(key)] = 0;
-  return res;
-}
-}  // namespace ata
+    auto CoreManager::Shutdown() -> void
+    {
+        m_renderManager->Shutdown();
+    }
+} // namespace ata

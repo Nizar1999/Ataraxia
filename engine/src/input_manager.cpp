@@ -22,18 +22,27 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
-
-#include <matrix.h>
+#include <input.h>
+#include <input_manager.h>
 
 namespace ata
 {
-    template <typename T>
-    auto Translate(const Tvec2<T>& v) -> Tmat<T, 3, 3>
+    auto InputManager::BindInputAction(InputAction action, InputActionCallback callback) -> void
     {
-        Tmat<T, 3, 3> m(1);
-        m[0][2] = v.x;
-        m[1][2] = v.y;
-        return m;
+        m_callbacks[action].push_back(callback);
     }
+
+    auto InputManager::PollActions() -> void
+    {
+        for(auto& [action, callbacks] : m_callbacks)
+            if(IsPressed(action.m_key))
+                for(auto& callback : callbacks)
+                    callback();
+    }
+
+    auto InputManager::IsPressed(KeyCode code) -> bool
+    {
+        static Input input;
+        return input.GetAsyncKeyState(code);
+    };
 } // namespace ata

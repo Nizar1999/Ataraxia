@@ -27,42 +27,57 @@
 
 #include <iostream>
 
-namespace ata {
-FrameBuffer::FrameBuffer(std::size_t width, std::size_t height)
-    : m_width(width),
-      m_height(height),
-      m_frontBuffer(std::vector(m_height, BufferType(m_width))),
-      m_backBuffer(std::vector(m_height, BufferType(m_width))) {
-  console::SetCursorVisibility(console::CursorVisibility::HIDE);
-  Clear();
-}
-
-auto FrameBuffer::Clear() -> void {
-  for (auto& row : m_backBuffer) {
-    std::fill(row.begin(), row.end(), ' ');
-  }
-}
-
-auto FrameBuffer::Draw() -> void {
-  for (std::size_t y = 0; y < m_height; ++y) {
-    console::SetCursorPosition(0, y);
-    for (auto symbol : m_frontBuffer[y]) {
-      std::cout << symbol;
+namespace ata
+{
+    FrameBuffer::FrameBuffer()
+        : FrameBuffer(60, 30)
+    {
     }
-  }
-  std::cout << std::flush;
-  console::ResetCursor();
-}
 
-auto FrameBuffer::Write(Rect viewport, IVec2 pos, char symbol) -> void {
-  auto [x, y] = pos;
-  x += static_cast<int>(viewport.x);
-  y += static_cast<int>(viewport.y);
+    FrameBuffer::FrameBuffer(std::size_t width, std::size_t height)
+        : m_width(width)
+        , m_height(height)
+        , m_frontBuffer(std::vector(m_height, BufferType(m_width)))
+        , m_backBuffer(std::vector(m_height, BufferType(m_width)))
+    {
+        console::SetCursorVisibility(console::CursorVisibility::HIDE);
+        Clear();
+    }
 
-  if (x >= viewport.x && x < (viewport.x + viewport.w) && y >= viewport.y &&
-      y < (viewport.y + viewport.h))
-    m_backBuffer[y][x] = symbol;
-}
+    auto FrameBuffer::Clear() -> void
+    {
+        for(auto& row : m_backBuffer)
+        {
+            std::fill(row.begin(), row.end(), ' ');
+        }
+    }
 
-auto FrameBuffer::Swap() -> void { m_frontBuffer = m_backBuffer; }
-}  // namespace ata
+    auto FrameBuffer::Draw() -> void
+    {
+        for(std::size_t y = 0; y < m_height; ++y)
+        {
+            console::SetCursorPosition(0, y);
+            for(auto symbol : m_frontBuffer[y])
+            {
+                std::cout << symbol;
+            }
+        }
+        std::cout << std::flush;
+        console::ResetCursor();
+    }
+
+    auto FrameBuffer::Write(Rect viewport, IVec2 pos, char symbol) -> void
+    {
+        auto [x, y] = pos;
+        x += static_cast<int>(viewport.x);
+        y += static_cast<int>(viewport.y);
+
+        if(x >= viewport.x && x < (viewport.x + viewport.w) && y >= viewport.y && y < (viewport.y + viewport.h))
+            m_backBuffer[y][x] = symbol;
+    }
+
+    auto FrameBuffer::Swap() -> void
+    {
+        m_frontBuffer = m_backBuffer;
+    }
+} // namespace ata

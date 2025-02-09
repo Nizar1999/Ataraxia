@@ -25,20 +25,25 @@
 #pragma once
 
 #include <actor.h>
+#include <input_manager.h>
 
-namespace demo {
-class Player : public ata::Actor {
- public:
-  Player();
+namespace demo
+{
+    class Player : public ata::Actor
+    {
+    public:
+        Player();
+        auto v_Startup() -> void override;
 
- protected:
-  virtual auto OnCollide(Actor& actor) -> void override;
+    protected:
+        virtual auto OnCollide(Actor& actor) -> void override;
 
- private:
-  auto OnW() -> void;
-  auto OnA() -> void;
-  auto OnS() -> void;
-  auto OnD() -> void;
-};
-REGISTER_ACTOR(Player)
-};  // namespace demo
+    private:
+        auto OnW() -> void;
+        auto OnA() -> void;
+        auto OnS() -> void;
+        auto OnD() -> void;
+    };
+
+    REGISTER_ACTOR(Player)
+}; // namespace demo

@@ -24,16 +24,34 @@
 
 #pragma once
 
-#include <matrix.h>
+#include <config.h>
+#include <frame_buffer.h>
+#include <scene.h>
+#include <singleton.h>
+
+#include <mutex>
+#include <thread>
 
 namespace ata
 {
-    template <typename T>
-    auto Translate(const Tvec2<T>& v) -> Tmat<T, 3, 3>
+    class RenderManager : public Singleton<RenderManager>
     {
-        Tmat<T, 3, 3> m(1);
-        m[0][2] = v.x;
-        m[1][2] = v.y;
-        return m;
-    }
+    public:
+        auto Startup() -> void;
+        auto Shutdown() -> void;
+
+        ATA auto Clear() -> void;
+        ATA auto Draw(Scene& scene) -> void;
+        ATA auto Display() -> void;
+        ATA auto SetViewport(Rect bounds) -> void { m_viewport = bounds; }
+        ATA auto GetViewport() const -> const Rect& { return m_viewport; }
+
+    private:
+        Rect        m_viewport;
+        FrameBuffer m_buffer;
+        std::thread m_displayThread;
+        std::mutex  m_bufferMtx;
+
+        auto DisplayBuffer() -> void;
+    };
 } // namespace ata

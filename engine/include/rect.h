@@ -26,11 +26,13 @@
 
 #include <cstddef>
 
-namespace ata {
-struct Rect {
-  std::size_t x;
-  std::size_t y;
-  std::size_t w;
-  std::size_t h;
-};
-}  // namespace ata
+namespace ata
+{
+    struct Rect
+    {
+        std::size_t x;
+        std::size_t y;
+        std::size_t w;
+        std::size_t h;
+    };
+} // namespace ata

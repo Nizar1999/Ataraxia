@@ -22,26 +22,17 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
+#include <input_action.h>
 
-#include <input.h>
+namespace ata
+{
+    auto InputAction::Hash::operator()(const InputAction& action) const -> unsigned int
+    {
+        return static_cast<unsigned int>(action.m_key);
+    }
 
-#include <mutex>
-#include <thread>
-
-namespace ata {
-class InputHandler {
- public:
-  InputHandler();
-  ~InputHandler();
-
-  auto GetAsyncKeyState(KeyCode key) -> bool;
-
- private:
-  std::thread m_Poller;
-  std::mutex m_keyStateMtx;
-  std::unordered_map<unsigned int, bool> m_keyStates;
-
-  auto PollKeyPresses() -> void;
-};
-}  // namespace ata
+    auto InputAction::operator==(const InputAction& other) const -> bool
+    {
+        return m_key == other.m_key;
+    }
+} // namespace ata

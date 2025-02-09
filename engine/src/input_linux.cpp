@@ -22,42 +22,52 @@
    IN THE SOFTWARE.
 */
 
-#include <renderer.h>
+#include <input.h>
 
-namespace ata {
-Renderer::Renderer() : m_buffer(60, 30), m_viewport(0, 0, 60, 30) {
-  m_displayThread = std::thread(&Renderer::DisplayBuffer, this);
-}
+#include <fcntl.h>
+#include <termios.h>
+#include <unistd.h>
 
-Renderer::~Renderer() {
-  if (m_displayThread.joinable()) m_displayThread.join();
-}
-
-auto Renderer::Clear() -> void { m_buffer.Clear(); }
-
-auto Renderer::Draw(Scene& scene) -> void {
-  Camera& activeCam = scene.GetActiveCam();
-  for (auto& actor : scene.GetActors()) {
-    IVec2 worldPos = actor->GetPosition();
-    IVec2 viewPos = activeCam.GetViewMatrix() * worldPos;
-    m_buffer.Write(m_viewport, viewPos, actor->GetRenderData().symbol);
-  }
-}
-
-auto Renderer::Display() -> void {
-  std::lock_guard<std::mutex> lock(m_bufferMtx);
-  m_buffer.Swap();
-}
-
-auto Renderer::DisplayBuffer() -> void {
-  while (true) {
+namespace ata
+{
+    namespace
     {
-      std::lock_guard<std::mutex> lock(m_bufferMtx);
-      m_buffer.Draw();
+        auto PressedKey() -> bool
+        {
+            struct termios oldt, newt;
+            int            ch;
+            bool           ret = false;
+
+            tcgetattr(STDIN_FILENO, &oldt);
+            newt = oldt;
+            newt.c_lflag &= ~(ICANON | ECHO);
+            newt.c_cc[VMIN]  = 1;
+            newt.c_cc[VTIME] = 0;
+            tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+            ch = getchar();
+            if(ch != EOF)
+            {
+                ret = true;
+                ungetc(ch, stdin);
+            }
+
+            tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+            return ret;
+        }
+    } // namespace
+
+    auto Input::PollKeyPresses() -> void
+    {
+        while(true)
+        {
+            if(PressedKey())
+            {
+                unsigned int    ch = getchar();
+                std::lock_guard lk(m_keyStateMtx);
+                m_keyStates[ch] = true;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
     }
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(33));  //~30Hz
-  }
-}
-
-}  // namespace ata
+} // namespace ata

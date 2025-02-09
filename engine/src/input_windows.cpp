@@ -23,17 +23,21 @@
 */
 
 #include <conio.h>
-#include <input_handler.h>
+#include <input.h>
 
-namespace ata {
-auto InputHandler::PollKeyPresses() -> void {
-  while (true) {
-    if (_kbhit()) {
-      unsigned int ch = _getch();
-      std::lock_guard lk(m_keyStateMtx);
-      m_keyStates[ch] = true;
+namespace ata
+{
+    auto Input::PollKeyPresses() -> void
+    {
+        while(true)
+        {
+            if(_kbhit())
+            {
+                unsigned int    ch = _getch();
+                std::lock_guard lk(m_keyStateMtx);
+                m_keyStates[ch] = true;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  }
-}
-}  // namespace ata
+} // namespace ata

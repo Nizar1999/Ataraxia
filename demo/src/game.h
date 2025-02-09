@@ -27,11 +27,11 @@
 #include <application.h>
 #include <entrypoint.h>
 
-namespace demo {
-class Game : public ata::Application {
- public:
-  Game();
-  auto Init() -> void override;
-  auto OnTick() -> void override;
-};
-}  // namespace demo
+namespace demo
+{
+    class Game : public ata::Application
+    {
+    public:
+        virtual auto v_Startup(ata::InputManager* input, ata::SceneManager* scene) -> void override;
+    };
+} // namespace demo

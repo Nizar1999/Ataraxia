@@ -23,35 +23,8 @@
 */
 
 #include <application.h>
-#include <console.h>
-#include <logger.h>
 
-namespace ata {
-ATA Input* g_input = nullptr;
-ATA Renderer* g_renderer = nullptr;
-ATA Scene* g_currentScene = nullptr;
-
-auto Application::PreInit() -> int {
-  if (!m_initialScenePath) {
-    logger::Log(logger::LogLevel::FATAL, "Initial scene is not set!");
-    return 0;
-  }
-
-  LoadScene(m_initialScenePath);
-  return 1;
+namespace ata
+{
+    Application::~Application() = default;
 }
-
-auto Application::Update() -> void {
-  g_renderer->Clear();
-  g_input->PollActions();
-
-  OnTick();
-
-  g_renderer->Display();
-}
-
-auto Application::LoadScene(std::string_view scenePath) -> void {
-  g_currentScene = new Scene(scenePath);
-  g_currentScene->Load();
-}
-}  // namespace ata

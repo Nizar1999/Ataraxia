@@ -30,11 +30,18 @@
 
 // TODO(nizar): Create shortcuts for level-based logging
 
-namespace ata::logger {
-enum class LogLevel { TRACE, DEBUG, INFO, WARN, ERROR, FATAL };
+namespace ata::logger
+{
+    enum class LogLevel
+    {
+        TRACE,
+        DEBUG,
+        INFO,
+        WARN,
+        ERROR,
+        FATAL
+    };
 
-auto ATA Log(LogLevel level, std::string_view msg,
-             const std::source_location location =
-                 std::source_location::current()) -> void;
+    auto ATA Log(LogLevel level, std::string_view msg, const std::source_location location = std::source_location::current()) -> void;
 
-}  // namespace ata::logger
+} // namespace ata::logger

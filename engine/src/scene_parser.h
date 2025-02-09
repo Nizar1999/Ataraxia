@@ -24,16 +24,19 @@
 
 #pragma once
 
-#include <matrix.h>
+#include <actor.h>
+#include <logger.h>
+#include <vector.h>
 
-namespace ata
+#include <memory>
+#include <string>
+#include <string_view>
+#include <utility>
+
+namespace ata::scene_parser
 {
-    template <typename T>
-    auto Translate(const Tvec2<T>& v) -> Tmat<T, 3, 3>
-    {
-        Tmat<T, 3, 3> m(1);
-        m[0][2] = v.x;
-        m[1][2] = v.y;
-        return m;
-    }
-} // namespace ata
+    auto ParseProperty(std::string property) -> std::pair<std::string, std::string>;
+    auto ParseVec(std::string_view s) -> ata::Vec2;
+    auto ParseActor(const std::string& actorInfo) -> std::unique_ptr<ata::Actor>;
+
+} // namespace ata::scene_parser

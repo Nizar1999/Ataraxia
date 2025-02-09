@@ -32,24 +32,26 @@
 #include <string>
 #include <vector>
 
-namespace ata {
-class Scene {
- public:
-  explicit Scene(std::filesystem::path path);
-  auto Load() -> void;
+namespace ata
+{
+    class Scene
+    {
+    public:
+        using Actors = std::vector<std::unique_ptr<Actor>>;
 
-  // TODO(nizar): handle no cam set
-  auto GetActiveCam() -> Camera& { return m_activeCam; }
-  auto GetActors() const -> const std::vector<std::unique_ptr<Actor>>& {
-    return m_actors;
-  }
+        explicit Scene(std::filesystem::path path);
+        auto Load() -> void;
 
- private:
-  std::string m_name;
-  std::filesystem::path m_path;
+        // TODO: handle no cam set
+        auto GetActiveCam() -> Camera& { return m_activeCam; }
+        auto GetActors() const -> const Actors& { return m_actors; }
 
-  // TODO(nizar): reconcile actors and cameras?
-  std::vector<std::unique_ptr<Actor>> m_actors;
-  Camera m_activeCam;
-};
-}  // namespace ata
+    private:
+        std::string           m_name;
+        std::filesystem::path m_path;
+
+        // TODO: reconcile actors and cameras?
+        Actors m_actors;
+        Camera m_activeCam;
+    };
+} // namespace ata

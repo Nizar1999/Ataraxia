@@ -22,53 +22,55 @@
    IN THE SOFTWARE.
 */
 
-#pragma once
-
-#include <matrix.h>
+#include <render_manager.h>
 
 namespace ata
 {
-
-    MAT_T_DEC
-    Tmat<T, m, n>::Tmat(T val)
+    auto RenderManager::Startup() -> void
     {
-        for(std::size_t i = 0; i < m; ++i)
-            m_mat[i][i] = val;
+        m_viewport      = Rect(0, 0, 60, 30);
+        m_displayThread = std::thread(&RenderManager::DisplayBuffer, this);
     }
 
-    // Unary Operators
-    MAT_T_DEC
-    auto Tmat<T, m, n>::operator[](std::size_t i) const -> const ColType<T, m, n>&
+    auto RenderManager::Shutdown() -> void
     {
-        return m_mat[i];
+        if(m_displayThread.joinable())
+            m_displayThread.join();
     }
 
-    MAT_T_DEC
-    auto Tmat<T, m, n>::operator[](std::size_t i) -> ColType<T, m, n>&
+    auto RenderManager::Clear() -> void
     {
-        return m_mat[i];
+        m_buffer.Clear();
     }
 
-    // Binary Operators
-    MAT_T_BINARY_DEC
-    auto operator*(Tmat<T, m, n> mat, U s) -> std::remove_reference_t<decltype(mat)>
+    auto RenderManager::Draw(Scene& scene) -> void
     {
-        for(auto& row : mat.m_mat)
+        Camera& activeCam = scene.GetActiveCam();
+        for(auto& actor : scene.GetActors())
         {
-            for(auto& ele : row)
-            {
-                ele = static_cast<T>(ele * s);
-            }
+            IVec2 worldPos = actor->GetPosition();
+            IVec2 viewPos  = activeCam.GetViewMatrix() * worldPos;
+            m_buffer.Write(m_viewport, viewPos, actor->GetRenderData().symbol);
         }
-        return mat;
     }
 
-    MAT_T_BINARY_DEC
-    auto operator*(Tmat<T, m, n> mat, const Tvec2<U>& v) -> std::remove_reference_t<decltype(v)>
+    auto RenderManager::Display() -> void
     {
-        Tvec2<U> res;
-        res.x = static_cast<U>(mat[0][0]) * v.x + static_cast<U>(mat[0][1]) * v.y + static_cast<U>(mat[0][2]);
-        res.y = static_cast<U>(mat[1][0]) * v.x + static_cast<U>(mat[1][1]) * v.y + static_cast<U>(mat[1][2]);
-        return res;
+        std::lock_guard<std::mutex> lock(m_bufferMtx);
+        m_buffer.Swap();
     }
+
+    auto RenderManager::DisplayBuffer() -> void
+    {
+        while(true)
+        {
+            {
+                std::lock_guard<std::mutex> lock(m_bufferMtx);
+                m_buffer.Draw();
+            }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(33)); //~30Hz
+        }
+    }
+
 } // namespace ata

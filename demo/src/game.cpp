@@ -26,16 +26,17 @@
 #include <game.h>
 
 ata::Application* g_app = new demo::Game();
-extern "C" auto GetApplication() -> ata::Application* { return g_app; }
 
-namespace demo {
-Game::Game() { m_initialScenePath = "mainmenu.scene"; }
+namespace demo
+{
+    auto Game::v_Startup(ata::InputManager* input, ata::SceneManager* scene) -> void
+    {
+        m_input = input;
+        m_scene = scene;
 
-auto Game::Init() -> void {
-  auto& cam = ata::g_currentScene->GetActiveCam();
-  auto& player = ata::g_currentScene->GetActors()[0];
-  cam.SetTarget(player.get());
-}
+        ata::Scene& currentScene = scene->GetCurrentScene();
 
-auto Game::OnTick() -> void { ata::g_renderer->Draw(*ata::g_currentScene); }
-}  // namespace demo
+        for(auto& actor : currentScene.GetActors())
+            actor->v_Startup();
+    }
+} // namespace demo

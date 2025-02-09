@@ -23,26 +23,30 @@
 */
 
 #include <input.h>
-#include <input_handler.h>
 
-namespace ata {
-auto Input::BindInputAction(InputAction action, InputActionCallback callback)
-    -> void {
-  m_callbacks[action].push_back(callback);
-}
+#include <functional>
 
-auto Input::PollActions() -> void {
-  for (auto& [action, callbacks] : m_callbacks) {
-    if (IsPressed(action.m_key)) {
-      for (auto& callback : callbacks) {
-        callback();
-      }
+namespace ata
+{
+    Input::Input()
+    {
+        m_Poller = std::thread(std::mem_fn(&Input::PollKeyPresses), this);
     }
-  }
-}
 
-auto Input::IsPressed(KeyCode code) -> bool {
-  static InputHandler input;
-  return input.GetAsyncKeyState(code);
-};
-}  // namespace ata
+    Input::~Input()
+    {
+        if(m_Poller.joinable())
+        {
+            m_Poller.join();
+        }
+    }
+
+    auto Input::GetAsyncKeyState(KeyCode key) -> bool
+    {
+        std::lock_guard lk(m_keyStateMtx);
+        bool            res = m_keyStates[static_cast<unsigned int>(key)];
+        if(res)
+            m_keyStates[static_cast<unsigned int>(key)] = 0;
+        return res;
+    }
+} // namespace ata

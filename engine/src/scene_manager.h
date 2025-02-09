@@ -25,33 +25,21 @@
 #pragma once
 
 #include <config.h>
-#include <frame_buffer.h>
 #include <scene.h>
+#include <singleton.h>
 
-#include <mutex>
-#include <thread>
+#include <memory>
 
-namespace ata {
-class Renderer {
- public:
-  ATA Renderer();
-  ATA ~Renderer();
+namespace ata
+{
+    class SceneManager : public Singleton<SceneManager>
+    {
+    public:
+        auto     Startup(const std::string_view initialScene) -> void;
+        auto ATA LoadScene(std::filesystem::path path) -> void;
+        auto ATA GetCurrentScene() -> Scene& { return *m_currentScene; }
 
-  ATA Renderer(const Renderer& other) = delete;
-  ATA auto operator=(const Renderer& other) -> Renderer& = delete;
-
-  ATA auto Clear() -> void;
-  ATA auto Draw(Scene& scene) -> void;
-  ATA auto Display() -> void;
-  ATA auto SetViewport(Rect bounds) -> void { m_viewport = bounds; }
-  ATA auto GetViewport() const -> const Rect& { return m_viewport; }
-
- private:
-  Rect m_viewport;
-  FrameBuffer m_buffer;
-  std::thread m_displayThread;
-  std::mutex m_bufferMtx;
-
-  auto DisplayBuffer() -> void;
-};
-}  // namespace ata
+    private:
+        std::unique_ptr<Scene> m_currentScene;
+    };
+} // namespace ata
