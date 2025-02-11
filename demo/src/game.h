@@ -29,9 +29,8 @@
 
 namespace demo
 {
-    class Game : public ata::Application
+    class Game : public ata::Application<Game>
     {
-    public:
-        virtual auto v_Startup(ata::InputManager* input, ata::SceneManager* scene) -> void override;
+        auto OnStartup() -> void { return; };
     };
 } // namespace demo

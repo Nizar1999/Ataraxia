@@ -25,27 +25,22 @@
 #pragma once
 
 #include <config.h>
-#include <input_manager.h>
-#include <scene_manager.h>
 
 namespace ata
 {
-    //Provides callbacks for client code within engine startup, update, and shutdown
-    class ATA Application
+    template <typename Derived>
+    class Application
     {
     public:
-        virtual ~Application() = 0;
-
-        virtual auto v_Startup(InputManager* input, SceneManager* scene) -> void { };
-        virtual auto v_Shutdown() -> void { };
-        virtual auto v_PreFrameRender() -> void { };
-        virtual auto v_PostFrameRender() -> void { };
-
-        //TODO: Figure out better way to pass dependencies to actors
-        InputManager* m_input;
-        SceneManager* m_scene;
+        auto OnStartup() -> void
+        {
+            if constexpr(requires(Derived& app) { app.OnStartup(); })
+            {
+                static_cast<Derived*>(this)->OnStartup();
+            }
+        }
+        // auto OnShutdown() -> void;
+        // auto OnPreFrameRender() -> void;
+        // auto OnPostFrameRender() -> void;
     };
-
 } // namespace ata
-
-extern ata::Application* g_app;

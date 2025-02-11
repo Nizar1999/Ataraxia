@@ -26,21 +26,14 @@
 
 namespace ata
 {
-    CoreManager::CoreManager()
-    {
-        m_inputManager  = InputManager::Create();
-        m_sceneManager  = SceneManager::Create();
-        m_renderManager = RenderManager::Create();
-    }
-
     auto CoreManager::Startup() -> void
     {
-        m_sceneManager->Startup("mainmenu.scene");
-        m_renderManager->Startup();
+        m_sceneManager.Startup("mainmenu.scene");
+        m_renderManager.Startup();
     }
 
     auto CoreManager::Shutdown() -> void
     {
-        m_renderManager->Shutdown();
+        m_renderManager.Shutdown();
     }
 } // namespace ata

@@ -26,25 +26,20 @@
 
 #include <config.h>
 #include <input_manager.h>
-#include <memory>
 #include <render_manager.h>
 #include <scene_manager.h>
-#include <singleton.h>
 
 namespace ata
 {
     //Manages startup and shutdown of core subsystems
-    class CoreManager : public Singleton<CoreManager>
+    class CoreManager
     {
     public:
-        std::unique_ptr<InputManager>  m_inputManager;
-        std::unique_ptr<RenderManager> m_renderManager;
-        std::unique_ptr<SceneManager>  m_sceneManager;
+        InputManager  m_inputManager;
+        RenderManager m_renderManager;
+        SceneManager  m_sceneManager;
 
         auto ATA Startup() -> void;
         auto ATA Shutdown() -> void;
-
-    protected:
-        ATA CoreManager();
     };
 } // namespace ata

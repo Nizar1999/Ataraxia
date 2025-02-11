@@ -27,7 +27,6 @@
 #include <config.h>
 #include <input.h>
 #include <input_action.h>
-#include <singleton.h>
 
 #include <functional>
 #include <unordered_map>
@@ -40,7 +39,7 @@ namespace ata
     using InputActionCallback  = std::function<void()>;
     using CallbackMapping      = std::unordered_map<InputAction, std::vector<InputActionCallback>, InputAction::Hash>;
 
-    class InputManager : public Singleton<InputManager>
+    class InputManager
     {
     public:
         auto ATA PollActions() -> void;

@@ -26,5 +26,8 @@
 
 namespace ata
 {
-    Application::~Application() = default;
-}
+    auto ATA OnStartup() -> void { };
+    auto ATA OnShutdown() -> void { };
+    auto ATA OnPreFrameRender() -> void { };
+    auto ATA OnPostFrameRender() -> void { };
+} // namespace ata

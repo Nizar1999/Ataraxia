@@ -26,13 +26,12 @@
 
 #include <config.h>
 #include <scene.h>
-#include <singleton.h>
 
 #include <memory>
 
 namespace ata
 {
-    class SceneManager : public Singleton<SceneManager>
+    class SceneManager
     {
     public:
         auto     Startup(const std::string_view initialScene) -> void;

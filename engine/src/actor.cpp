@@ -23,7 +23,6 @@
 */
 
 #include <actor.h>
-#include <application.h>
 
 namespace ata
 {

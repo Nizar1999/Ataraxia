@@ -25,18 +25,9 @@
 #include <actor.h>
 #include <game.h>
 
-ata::Application* g_app = new demo::Game();
-
 namespace demo
 {
-    auto Game::v_Startup(ata::InputManager* input, ata::SceneManager* scene) -> void
+    auto ata::OnStartup() -> void
     {
-        m_input = input;
-        m_scene = scene;
-
-        ata::Scene& currentScene = scene->GetCurrentScene();
-
-        for(auto& actor : currentScene.GetActors())
-            actor->v_Startup();
     }
 } // namespace demo

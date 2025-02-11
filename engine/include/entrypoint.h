@@ -30,30 +30,23 @@
 
 int main()
 {
-    std::unique_ptr<ata::CoreManager> core = ata::CoreManager::Create();
-    core->Startup();
+    ata::CoreManager core;
 
-    if(!g_app)
-    {
-        ata::logger::Log(ata::logger::LogLevel::FATAL, "Client did not implement an Application");
-        return -1;
-    }
+    core.Startup();
+    ata::OnStartup();
 
-    g_app->v_Startup(core->m_inputManager.get(), core->m_sceneManager.get());
     while(true)
     {
-        core->m_renderManager->Clear();
-        core->m_inputManager->PollActions();
+        core.m_renderManager.Clear();
+        core.m_inputManager.PollActions();
 
-        g_app->v_PreFrameRender();
-        core->m_renderManager->Draw(core->m_sceneManager->GetCurrentScene());
-        g_app->v_PostFrameRender();
+        ata::OnPreFrameRender();
+        core.m_renderManager.Draw(core.m_sceneManager.GetCurrentScene());
+        ata::OnPostFrameRender();
 
-        core->m_renderManager->Display();
+        core.m_renderManager.Display();
     }
 
-    g_app->v_Shutdown();
-    delete g_app;
-
-    core->Shutdown();
+    ata::OnShutdown();
+    core.Shutdown();
 }

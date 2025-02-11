@@ -27,14 +27,13 @@
 #include <config.h>
 #include <frame_buffer.h>
 #include <scene.h>
-#include <singleton.h>
 
 #include <mutex>
 #include <thread>
 
 namespace ata
 {
-    class RenderManager : public Singleton<RenderManager>
+    class RenderManager
     {
     public:
         auto Startup() -> void;
