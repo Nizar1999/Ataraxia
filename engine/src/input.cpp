@@ -30,15 +30,7 @@ namespace ata
 {
     Input::Input()
     {
-        m_Poller = std::thread(std::mem_fn(&Input::PollKeyPresses), this);
-    }
-
-    Input::~Input()
-    {
-        if(m_Poller.joinable())
-        {
-            m_Poller.join();
-        }
+        m_Poller = std::jthread(std::mem_fn(&Input::PollKeyPresses), this);
     }
 
     auto Input::GetAsyncKeyState(KeyCode key) -> bool

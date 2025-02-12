@@ -36,12 +36,11 @@ namespace ata
     {
     public:
         Input();
-        ~Input();
 
         auto GetAsyncKeyState(KeyCode key) -> bool;
 
     private:
-        std::thread                            m_Poller;
+        std::jthread                           m_Poller;
         std::mutex                             m_keyStateMtx;
         std::unordered_map<unsigned int, bool> m_keyStates;
 

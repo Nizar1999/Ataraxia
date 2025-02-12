@@ -25,28 +25,38 @@
 #pragma once
 
 #include <application.h>
-#include <core_manager.h>
-#include <logger.h>
+#include <memory.h>
+
+#include <input_manager.h>
+#include <render_manager.h>
+#include <scene_manager.h>
+
+extern auto CreateApplication() -> ata::Application*;
 
 int main()
 {
-    ata::CoreManager core;
+    std::unique_ptr<ata::Application> app;
+    app.reset(CreateApplication());
+    app->v_Startup();
 
-    core.Startup();
-    ata::OnStartup();
+    auto renderManager = std::make_unique<ata::RenderManager>(ata::Rect {.x = 0, .y = 0, .w = 60, .h = 30});
+    auto inputManager  = std::make_unique<ata::InputManager>();
+    auto sceneManager  = std::make_unique<ata::SceneManager>();
+
+    renderManager->Startup();
+    sceneManager->Startup("mainmenu.scene");
 
     while(true)
     {
-        core.m_renderManager.Clear();
-        core.m_inputManager.PollActions();
+        renderManager->Clear();
+        inputManager->PollActions();
 
-        ata::OnPreFrameRender();
-        core.m_renderManager.Draw(core.m_sceneManager.GetCurrentScene());
-        ata::OnPostFrameRender();
+        app->v_PreFrameRender();
+        renderManager->Draw(sceneManager->GetCurrentScene());
+        app->v_PostFrameRender();
 
-        core.m_renderManager.Display();
+        renderManager->Display();
     }
 
-    ata::OnShutdown();
-    core.Shutdown();
+    app->v_Shutdown();
 }

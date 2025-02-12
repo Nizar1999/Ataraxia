@@ -34,7 +34,7 @@ namespace ata
     class SceneManager
     {
     public:
-        auto     Startup(const std::string_view initialScene) -> void;
+        auto ATA Startup(const std::string_view initialScene) -> void;
         auto ATA LoadScene(std::filesystem::path path) -> void;
         auto ATA GetCurrentScene() -> Scene& { return *m_currentScene; }
 

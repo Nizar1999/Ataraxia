@@ -29,8 +29,15 @@
 
 namespace demo
 {
-    class Game : public ata::Application<Game>
+    class Game : public ata::Application
     {
-        auto OnStartup() -> void { return; };
+    public:
+        virtual auto v_Startup() -> void override;
     };
+
 } // namespace demo
+
+ATA auto CreateApplication() -> ata::Application*
+{
+    return new demo::Game();
+}

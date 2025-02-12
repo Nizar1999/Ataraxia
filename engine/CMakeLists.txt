@@ -9,7 +9,6 @@ src/render_manager.cpp
 src/camera.cpp
 src/scene_parser.cpp
 src/input_manager.cpp
-src/core_manager.cpp
 src/input.cpp
 src/console.cpp
 src/frame_buffer.cpp

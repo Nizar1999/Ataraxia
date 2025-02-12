@@ -35,10 +35,10 @@ namespace demo
 
     auto Player::v_Startup() -> void
     {
-        g_app->m_input->BindInputAction<Player>({ata::KeyCode::W}, this, &Player::OnW);
-        g_app->m_input->BindInputAction<Player>({ata::KeyCode::A}, this, &Player::OnA);
-        g_app->m_input->BindInputAction<Player>({ata::KeyCode::S}, this, &Player::OnS);
-        g_app->m_input->BindInputAction<Player>({ata::KeyCode::D}, this, &Player::OnD);
+        // g_app->m_input->BindInputAction<Player>({ata::KeyCode::W}, this, &Player::OnW);
+        // g_app->m_input->BindInputAction<Player>({ata::KeyCode::A}, this, &Player::OnA);
+        // g_app->m_input->BindInputAction<Player>({ata::KeyCode::S}, this, &Player::OnS);
+        // g_app->m_input->BindInputAction<Player>({ata::KeyCode::D}, this, &Player::OnD);
     }
 
     auto Player::OnCollide(Actor& actor) -> void

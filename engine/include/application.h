@@ -28,19 +28,17 @@
 
 namespace ata
 {
-    template <typename Derived>
-    class Application
+    class ATA Application
     {
     public:
-        auto OnStartup() -> void
-        {
-            if constexpr(requires(Derived& app) { app.OnStartup(); })
-            {
-                static_cast<Derived*>(this)->OnStartup();
-            }
-        }
-        // auto OnShutdown() -> void;
-        // auto OnPreFrameRender() -> void;
-        // auto OnPostFrameRender() -> void;
+        virtual ~Application() = default;
+
+        virtual auto v_Startup() -> void { };
+        virtual auto v_Shutdown() -> void { };
+        virtual auto v_PreFrameRender() -> void { };
+        virtual auto v_PostFrameRender() -> void { };
     };
+
 } // namespace ata
+
+ATA auto CreateApplication() -> ata::Application*;

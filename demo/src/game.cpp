@@ -27,7 +27,9 @@
 
 namespace demo
 {
-    auto ata::OnStartup() -> void
+    auto Game::v_Startup() -> void
     {
     }
 } // namespace demo
+
+#include <entrypoint.h>

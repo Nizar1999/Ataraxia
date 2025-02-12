@@ -36,8 +36,10 @@ namespace ata
     class RenderManager
     {
     public:
-        auto Startup() -> void;
-        auto Shutdown() -> void;
+        ATA RenderManager(Rect viewport);
+        ATA ~RenderManager();
+
+        ATA auto Startup() -> void;
 
         ATA auto Clear() -> void;
         ATA auto Draw(Scene& scene) -> void;
@@ -46,10 +48,10 @@ namespace ata
         ATA auto GetViewport() const -> const Rect& { return m_viewport; }
 
     private:
-        Rect        m_viewport;
-        FrameBuffer m_buffer;
-        std::thread m_displayThread;
-        std::mutex  m_bufferMtx;
+        FrameBuffer* m_buffer;
+        Rect         m_viewport;
+        std::thread  m_displayThread;
+        std::mutex   m_bufferMtx;
 
         auto DisplayBuffer() -> void;
     };
