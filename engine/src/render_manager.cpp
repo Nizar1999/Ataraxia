@@ -27,9 +27,9 @@
 namespace ata
 {
     RenderManager::RenderManager(Rect viewport)
-        : m_viewport(viewport)
+        : m_buffer(new FrameBuffer)
+        , m_viewport(viewport)
     {
-        FrameBuffer* m_buffer = new FrameBuffer();
     }
 
     RenderManager::~RenderManager()
