@@ -34,16 +34,16 @@ namespace ata
 {
     class Input
     {
-    public:
+      public:
         Input();
 
         auto GetAsyncKeyState(KeyCode key) -> bool;
 
-    private:
+      private:
         std::jthread                           m_Poller;
         std::mutex                             m_keyStateMtx;
         std::unordered_map<unsigned int, bool> m_keyStates;
 
         auto PollKeyPresses() -> void;
     };
-} // namespace ata
+}   // namespace ata

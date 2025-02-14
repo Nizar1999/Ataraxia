@@ -39,4 +39,4 @@ namespace ata
     template struct ATA Tvec3<float>;
     template struct ATA Tvec2<int>;
     template struct ATA Tvec3<int>;
-}; // namespace ata
+};   // namespace ata

@@ -37,6 +37,6 @@ namespace ata::scene_parser
 {
     auto ParseProperty(std::string property) -> std::pair<std::string, std::string>;
     auto ParseVec(std::string_view s) -> ata::Vec2;
-    auto ParseActor(const std::string& actorInfo) -> std::unique_ptr<ata::Actor>;
+    auto ParseActor(const std::string &actorInfo) -> std::unique_ptr<ata::Actor>;
 
-} // namespace ata::scene_parser
+}   // namespace ata::scene_parser

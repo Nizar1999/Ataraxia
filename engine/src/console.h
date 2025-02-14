@@ -90,4 +90,4 @@ namespace ata::console
     auto DrawBoxBorders(Rect bounds) -> void;
     auto DrawVerticalLines(Rect bounds) -> void;
     auto DrawHorizontalLines(Rect bounds) -> void;
-} // namespace ata::console
+}   // namespace ata::console

@@ -35,4 +35,4 @@ namespace ata
         std::size_t w;
         std::size_t h;
     };
-} // namespace ata
+}   // namespace ata

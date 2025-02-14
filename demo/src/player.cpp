@@ -28,10 +28,7 @@
 
 namespace demo
 {
-    Player::Player()
-    {
-        m_renderData = {'P'};
-    }
+    Player::Player() { m_renderData = { 'P' }; }
 
     auto Player::v_Startup() -> void
     {
@@ -41,28 +38,13 @@ namespace demo
         // g_app->m_input->BindInputAction<Player>({ata::KeyCode::D}, this, &Player::OnD);
     }
 
-    auto Player::OnCollide(Actor& actor) -> void
+    auto Player::OnCollide(Actor &actor) -> void
     {
-        if(actor.GetRenderData().symbol == 'E')
-        {
-            return;
-        }
+        if (actor.GetRenderData().symbol == 'E') { return; }
     }
 
-    auto Player::OnW() -> void
-    {
-        SetPosition(m_position + ata::Vec3 {0, -1, 0});
-    }
-    auto Player::OnA() -> void
-    {
-        SetPosition(m_position + ata::Vec3 {-1, 0, 0});
-    }
-    auto Player::OnS() -> void
-    {
-        SetPosition(m_position + ata::Vec3 {0, 1, 0});
-    }
-    auto Player::OnD() -> void
-    {
-        SetPosition(m_position + ata::Vec3 {1, 0, 0});
-    }
-} // namespace demo
+    auto Player::OnW() -> void { SetPosition(m_position + ata::Vec3 { 0, -1, 0 }); }
+    auto Player::OnA() -> void { SetPosition(m_position + ata::Vec3 { -1, 0, 0 }); }
+    auto Player::OnS() -> void { SetPosition(m_position + ata::Vec3 { 0, 1, 0 }); }
+    auto Player::OnD() -> void { SetPosition(m_position + ata::Vec3 { 1, 0, 0 }); }
+}   // namespace demo

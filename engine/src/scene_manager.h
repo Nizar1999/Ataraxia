@@ -33,12 +33,12 @@ namespace ata
 {
     class SceneManager
     {
-    public:
+      public:
         auto ATA Startup(const std::string_view initialScene) -> void;
         auto ATA LoadScene(std::filesystem::path path) -> void;
-        auto ATA GetCurrentScene() -> Scene& { return *m_currentScene; }
+        auto ATA GetCurrentScene() -> Scene & { return *m_currentScene; }
 
-    private:
+      private:
         std::unique_ptr<Scene> m_currentScene;
     };
-} // namespace ata
+}   // namespace ata

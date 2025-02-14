@@ -30,8 +30,8 @@ namespace demo
 {
     class Enemy : public ata::Actor
     {
-    public:
+      public:
         Enemy();
     };
     REGISTER_ACTOR(Enemy)
-}; // namespace demo
+};   // namespace demo

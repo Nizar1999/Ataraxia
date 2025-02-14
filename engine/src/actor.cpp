@@ -28,11 +28,7 @@ namespace ata
 {
     ActorRegistry g_actorRegistry;
 
-    auto Actor::v_Startup() -> void
-    {
-    }
+    auto Actor::v_Startup() -> void {}
 
-    auto Actor::OnCollide(Actor& actor) -> void
-    {
-    }
-} // namespace ata
+    auto Actor::OnCollide(Actor &actor) -> void {}
+}   // namespace ata

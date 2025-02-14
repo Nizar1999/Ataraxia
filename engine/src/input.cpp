@@ -28,17 +28,13 @@
 
 namespace ata
 {
-    Input::Input()
-    {
-        m_Poller = std::jthread(std::mem_fn(&Input::PollKeyPresses), this);
-    }
+    Input::Input() { m_Poller = std::jthread(std::mem_fn(&Input::PollKeyPresses), this); }
 
     auto Input::GetAsyncKeyState(KeyCode key) -> bool
     {
         std::lock_guard lk(m_keyStateMtx);
         bool            res = m_keyStates[static_cast<unsigned int>(key)];
-        if(res)
-            m_keyStates[static_cast<unsigned int>(key)] = 0;
+        if (res) m_keyStates[static_cast<unsigned int>(key)] = 0;
         return res;
     }
-} // namespace ata
+}   // namespace ata

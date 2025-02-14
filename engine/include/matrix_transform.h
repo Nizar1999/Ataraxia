@@ -28,12 +28,11 @@
 
 namespace ata
 {
-    template <typename T>
-    auto Translate(const Tvec2<T>& v) -> Tmat<T, 3, 3>
+    template<typename T> auto Translate(const Tvec2<T> &v) -> Tmat<T, 3, 3>
     {
         Tmat<T, 3, 3> m(1);
         m[0][2] = v.x;
         m[1][2] = v.y;
         return m;
     }
-} // namespace ata
+}   // namespace ata

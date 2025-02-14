@@ -31,15 +31,12 @@
 
 namespace ata
 {
-    Scene::Scene(std::filesystem::path path)
-        : m_path(path)
-    {
-    }
+    Scene::Scene(std::filesystem::path path) : m_path(path) {}
 
     auto Scene::Load() -> void
     {
         std::ifstream sceneFile(m_path);
-        if(!sceneFile.is_open())
+        if (! sceneFile.is_open())
         {
             ata::logger::Log(ata::logger::LogLevel::ERROR, "Could not read scene file");
             return;
@@ -47,16 +44,13 @@ namespace ata
 
         // Read each actor
         std::string actorInfo;
-        while(std::getline(sceneFile, actorInfo))
+        while (std::getline(sceneFile, actorInfo))
         {
-            if(auto actor = scene_parser::ParseActor(actorInfo))
-            {
-                m_actors.push_back(std::move(actor));
-            }
+            if (auto actor = scene_parser::ParseActor(actorInfo)) { m_actors.push_back(std::move(actor)); }
         }
 
         ata::logger::Log(ata::logger::LogLevel::INFO, "Loaded Actors: " + std::to_string(m_actors.size()));
         sceneFile.close();
     }
 
-} // namespace ata
+}   // namespace ata

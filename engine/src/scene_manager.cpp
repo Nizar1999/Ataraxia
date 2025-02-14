@@ -26,14 +26,11 @@
 
 namespace ata
 {
-    auto SceneManager::Startup(const std::string_view initialScene) -> void
-    {
-        LoadScene(initialScene);
-    }
+    auto SceneManager::Startup(const std::string_view initialScene) -> void { LoadScene(initialScene); }
 
     auto SceneManager::LoadScene(std::filesystem::path path) -> void
     {
         m_currentScene = std::make_unique<Scene>(path);
         m_currentScene->Load();
     }
-} // namespace ata
+}   // namespace ata

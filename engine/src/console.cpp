@@ -32,79 +32,47 @@ namespace ata::console
 {
     struct CMD
     {
-        static constexpr const char* ESC = "\x1b";
-        static constexpr const char* CSI = "\x1b[";
-        static constexpr const char* DEC = "\x1b(";
+        static constexpr const char *ESC = "\x1b";
+        static constexpr const char *CSI = "\x1b[";
+        static constexpr const char *DEC = "\x1b(";
     };
 
     namespace
     {
-        template <typename... Args>
-        auto print(Args&&... args) -> void
+        template<typename... Args> auto print(Args &&...args) -> void
         {
             size_t      repeatCount = sizeof...(args);
             std::string fmt;
-            for(int i = 0; i < repeatCount; ++i)
-                fmt += "{}";
+            for (int i = 0; i < repeatCount; ++i) fmt += "{}";
             std::cout << std::vformat(fmt, std::make_format_args(args...));
             std::cout << std::flush;
         }
-    } // namespace
+    }   // namespace
 
-    auto SetColor(Color color) -> void
-    {
-        print(CMD::CSI, static_cast<int>(color), "m");
-    }
+    auto SetColor(Color color) -> void { print(CMD::CSI, static_cast<int>(color), "m"); }
 
-    auto ResetColor() -> void
-    {
-        SetColor(Color::RESET);
-    }
+    auto ResetColor() -> void { SetColor(Color::RESET); }
 
-    auto MoveCursor(int n, CursorDirection direction) -> void
-    {
-        print(CMD::CSI, n, static_cast<char>(direction));
-    }
+    auto MoveCursor(int n, CursorDirection direction) -> void { print(CMD::CSI, n, static_cast<char>(direction)); }
 
-    auto SetCursorPosition(std::size_t x, std::size_t y) -> void
-    {
-        print(CMD::CSI, y + 1, ';', x + 1, 'H');
-    }
+    auto SetCursorPosition(std::size_t x, std::size_t y) -> void { print(CMD::CSI, y + 1, ';', x + 1, 'H'); }
 
     auto SetCursorVisibility(CursorVisibility visibility) -> void
     {
         print(CMD::CSI, "?25", static_cast<char>(visibility));
     }
 
-    auto Clear() -> void
-    {
-        print(CMD::CSI, "2J", CMD::CSI, "3J");
-    }
+    auto Clear() -> void { print(CMD::CSI, "2J", CMD::CSI, "3J"); }
 
-    auto ResetCursor() -> void
-    {
-        print(CMD::CSI, 'H');
-    }
+    auto ResetCursor() -> void { print(CMD::CSI, 'H'); }
 
-    auto UseAlternateBuffer() -> void
-    {
-        print(CMD::CSI, "?1049h");
-    }
+    auto UseAlternateBuffer() -> void { print(CMD::CSI, "?1049h"); }
 
-    auto RestorePrimaryBuffer() -> void
-    {
-        print(CMD::CSI, "?1049l");
-    }
+    auto RestorePrimaryBuffer() -> void { print(CMD::CSI, "?1049l"); }
 
-    auto EnableLineDrawingMode() -> void
-    {
-        print(CMD::DEC, 0);
-    }
+    auto EnableLineDrawingMode() -> void { print(CMD::DEC, 0); }
 
-    auto DisableLineDrawingMode() -> void
-    {
-        print(CMD::DEC, 'B');
-    }
+    auto DisableLineDrawingMode() -> void { print(CMD::DEC, 'B'); }
 
     namespace
     {
@@ -113,28 +81,22 @@ namespace ata::console
             SetCursorPosition(x, y);
             print(static_cast<char>(border));
         }
-    } // namespace
+    }   // namespace
 
     auto DrawVerticalLines(Rect bounds) -> void
     {
-        for(std::size_t row = bounds.x; row < bounds.x + bounds.h; ++row)
+        for (std::size_t row = bounds.x; row < bounds.x + bounds.h; ++row)
         {
-            if(bounds.y > 0)
-            {
-                DrawBorder(row, bounds.y - 1, Border::Vertical);
-            }
+            if (bounds.y > 0) { DrawBorder(row, bounds.y - 1, Border::Vertical); }
             DrawBorder(row, bounds.y + bounds.w, Border::Vertical);
         }
     }
 
     auto DrawHorizontalLines(Rect bounds) -> void
     {
-        for(std::size_t col = bounds.y; col < bounds.y + bounds.w; ++col)
+        for (std::size_t col = bounds.y; col < bounds.y + bounds.w; ++col)
         {
-            if(bounds.x > 0)
-            {
-                DrawBorder(bounds.x - 1, col, Border::Horizontal);
-            }
+            if (bounds.x > 0) { DrawBorder(bounds.x - 1, col, Border::Horizontal); }
             DrawBorder(bounds.x + bounds.h, col, Border::Horizontal);
         }
     }
@@ -144,22 +106,13 @@ namespace ata::console
         EnableLineDrawingMode();
 
         // Corners
-        if(bounds.x > 0 && bounds.y > 0)
-        {
-            DrawBorder(bounds.x - 1, bounds.y - 1, Border::TopLeft);
-        }
+        if (bounds.x > 0 && bounds.y > 0) { DrawBorder(bounds.x - 1, bounds.y - 1, Border::TopLeft); }
 
         // Condition for y right side?
-        if(bounds.x > 0)
-        {
-            DrawBorder(bounds.x - 1, bounds.y + bounds.w, Border::TopRight);
-        }
+        if (bounds.x > 0) { DrawBorder(bounds.x - 1, bounds.y + bounds.w, Border::TopRight); }
 
         // Condition for x bottom?
-        if(bounds.y > 0)
-        {
-            DrawBorder(bounds.x + bounds.h, bounds.y - 1, Border::BottomLeft);
-        }
+        if (bounds.y > 0) { DrawBorder(bounds.x + bounds.h, bounds.y - 1, Border::BottomLeft); }
 
         DrawBorder(bounds.x + bounds.h, bounds.y + bounds.w, Border::BottomRight);
 
@@ -168,8 +121,5 @@ namespace ata::console
         DisableLineDrawingMode();
     }
 
-    auto Write(std::string_view msg)
-    {
-        std::cout << msg;
-    }
-} // namespace ata::console
+    auto Write(std::string_view msg) { std::cout << msg; }
+}   // namespace ata::console

@@ -26,13 +26,10 @@
 
 namespace ata
 {
-    auto InputAction::Hash::operator()(const InputAction& action) const -> unsigned int
+    auto InputAction::Hash::operator()(const InputAction &action) const -> unsigned int
     {
         return static_cast<unsigned int>(action.m_key);
     }
 
-    auto InputAction::operator==(const InputAction& other) const -> bool
-    {
-        return m_key == other.m_key;
-    }
-} // namespace ata
+    auto InputAction::operator==(const InputAction &other) const -> bool { return m_key == other.m_key; }
+}   // namespace ata

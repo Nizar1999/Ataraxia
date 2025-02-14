@@ -29,16 +29,11 @@
 
 namespace ata
 {
-    FrameBuffer::FrameBuffer()
-        : FrameBuffer(60, 30)
-    {
-    }
+    FrameBuffer::FrameBuffer() : FrameBuffer(60, 30) {}
 
-    FrameBuffer::FrameBuffer(std::size_t width, std::size_t height)
-        : m_width(width)
-        , m_height(height)
-        , m_frontBuffer(std::vector(m_height, BufferType(m_width)))
-        , m_backBuffer(std::vector(m_height, BufferType(m_width)))
+    FrameBuffer::FrameBuffer(std::size_t width, std::size_t height) :
+        m_width(width), m_height(height), m_frontBuffer(std::vector(m_height, BufferType(m_width))),
+        m_backBuffer(std::vector(m_height, BufferType(m_width)))
     {
         console::SetCursorVisibility(console::CursorVisibility::HIDE);
         Clear();
@@ -46,21 +41,15 @@ namespace ata
 
     auto FrameBuffer::Clear() -> void
     {
-        for(auto& row : m_backBuffer)
-        {
-            std::fill(row.begin(), row.end(), ' ');
-        }
+        for (auto &row : m_backBuffer) { std::fill(row.begin(), row.end(), ' '); }
     }
 
     auto FrameBuffer::Draw() -> void
     {
-        for(std::size_t y = 0; y < m_height; ++y)
+        for (std::size_t y = 0; y < m_height; ++y)
         {
             console::SetCursorPosition(0, y);
-            for(auto symbol : m_frontBuffer[y])
-            {
-                std::cout << symbol;
-            }
+            for (auto symbol : m_frontBuffer[y]) { std::cout << symbol; }
         }
         std::cout << std::flush;
         console::ResetCursor();
@@ -72,12 +61,9 @@ namespace ata
         x += static_cast<int>(viewport.x);
         y += static_cast<int>(viewport.y);
 
-        if(x >= viewport.x && x < (viewport.x + viewport.w) && y >= viewport.y && y < (viewport.y + viewport.h))
+        if (x >= viewport.x && x < (viewport.x + viewport.w) && y >= viewport.y && y < (viewport.y + viewport.h))
             m_backBuffer[y][x] = symbol;
     }
 
-    auto FrameBuffer::Swap() -> void
-    {
-        m_frontBuffer = m_backBuffer;
-    }
-} // namespace ata
+    auto FrameBuffer::Swap() -> void { m_frontBuffer = m_backBuffer; }
+}   // namespace ata

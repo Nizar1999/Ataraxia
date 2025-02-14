@@ -27,18 +27,15 @@
 
 namespace ata
 {
-    auto Camera::GetViewMatrix() const -> Mat3
-    {
-        return Translate(-GetPosition());
-    }
+    auto Camera::GetViewMatrix() const -> Mat3 { return Translate(-GetPosition()); }
 
     auto Camera::GetPosition() const -> Vec2
     {
-        //if(!m_target)
+        // if(!m_target)
         return m_position;
         // Vec2        pos      = m_target->GetPosition();
         // const Rect& viewport = g_renderer->GetViewport();
         // return {pos.x - (viewport.w >> 1), pos.y - (viewport.h >> 1)};
     }
 
-} // namespace ata
+}   // namespace ata

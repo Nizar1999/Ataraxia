@@ -26,8 +26,8 @@
 
 namespace ata
 {
-    auto ATA OnStartup() -> void { };
-    auto ATA OnShutdown() -> void { };
-    auto ATA OnPreFrameRender() -> void { };
-    auto ATA OnPostFrameRender() -> void { };
-} // namespace ata
+    auto Application::v_Startup() -> void {};
+    auto Application::v_Shutdown() -> void {};
+    auto Application::v_PreFrameRender() -> void {};
+    auto Application::v_PostFrameRender() -> void {};
+}   // namespace ata

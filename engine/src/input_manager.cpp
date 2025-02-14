@@ -34,10 +34,9 @@ namespace ata
 
     auto InputManager::PollActions() -> void
     {
-        for(auto& [action, callbacks] : m_callbacks)
-            if(IsPressed(action.m_key))
-                for(auto& callback : callbacks)
-                    callback();
+        for (auto &[action, callbacks] : m_callbacks)
+            if (IsPressed(action.m_key))
+                for (auto &callback : callbacks) callback();
     }
 
     auto InputManager::IsPressed(KeyCode code) -> bool
@@ -45,4 +44,4 @@ namespace ata
         static Input input;
         return input.GetAsyncKeyState(code);
     };
-} // namespace ata
+}   // namespace ata

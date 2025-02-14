@@ -27,9 +27,7 @@
 
 namespace demo
 {
-    auto Game::v_Startup() -> void
-    {
-    }
-} // namespace demo
+    auto Game::v_Startup() -> void {}
+}   // namespace demo
 
 #include <entrypoint.h>

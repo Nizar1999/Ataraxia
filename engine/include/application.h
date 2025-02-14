@@ -30,15 +30,15 @@ namespace ata
 {
     class ATA Application
     {
-    public:
+      public:
         virtual ~Application() = default;
 
-        virtual auto v_Startup() -> void { };
-        virtual auto v_Shutdown() -> void { };
-        virtual auto v_PreFrameRender() -> void { };
-        virtual auto v_PostFrameRender() -> void { };
+        virtual auto v_Startup() -> void;
+        virtual auto v_Shutdown() -> void;
+        virtual auto v_PreFrameRender() -> void;
+        virtual auto v_PostFrameRender() -> void;
     };
 
-} // namespace ata
+}   // namespace ata
 
-ATA auto CreateApplication() -> ata::Application*;
+ATA auto CreateApplication() -> ata::Application *;

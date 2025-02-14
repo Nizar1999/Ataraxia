@@ -46,7 +46,7 @@ namespace ata
             tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
             ch = getchar();
-            if(ch != EOF)
+            if (ch != EOF)
             {
                 ret = true;
                 ungetc(ch, stdin);
@@ -55,13 +55,13 @@ namespace ata
             tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
             return ret;
         }
-    } // namespace
+    }   // namespace
 
     auto Input::PollKeyPresses() -> void
     {
-        while(true)
+        while (true)
         {
-            if(PressedKey())
+            if (PressedKey())
             {
                 unsigned int    ch = getchar();
                 std::lock_guard lk(m_keyStateMtx);
@@ -70,4 +70,4 @@ namespace ata
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     }
-} // namespace ata
+}   // namespace ata

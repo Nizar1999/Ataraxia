@@ -25,11 +25,11 @@
 #pragma once
 
 #ifdef _WIN32
-#ifdef ENGINE
-#define ATA __declspec(dllexport)
-#else
-#define ATA __declspec(dllimport)
-#endif
+#    ifdef ENGINE
+#        define ATA __declspec(dllexport)
+#    else
+#        define ATA __declspec(dllimport)
+#    endif
 #elif __linux__
-#define ATA __attribute__((visibility("default")))
+#    define ATA __attribute__((visibility("default")))
 #endif

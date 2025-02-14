@@ -35,7 +35,7 @@ namespace ata
     {
         using BufferType = std::vector<char>;
 
-    public:
+      public:
         FrameBuffer();
         FrameBuffer(std::size_t width, std::size_t height);
 
@@ -44,11 +44,11 @@ namespace ata
         auto Draw() -> void;
         auto Swap() -> void;
 
-    private:
+      private:
         std::size_t m_width;
         std::size_t m_height;
 
         std::vector<BufferType> m_backBuffer;
         std::vector<BufferType> m_frontBuffer;
     };
-} // namespace ata
+}   // namespace ata

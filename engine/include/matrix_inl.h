@@ -32,43 +32,33 @@ namespace ata
     MAT_T_DEC
     Tmat<T, m, n>::Tmat(T val)
     {
-        for(std::size_t i = 0; i < m; ++i)
-            m_mat[i][i] = val;
+        for (std::size_t i = 0; i < m; ++i) m_mat[i][i] = val;
     }
 
     // Unary Operators
     MAT_T_DEC
-    auto Tmat<T, m, n>::operator[](std::size_t i) const -> const ColType<T, m, n>&
-    {
-        return m_mat[i];
-    }
+    auto Tmat<T, m, n>::operator[](std::size_t i) const -> const ColType<T, m, n> & { return m_mat[i]; }
 
     MAT_T_DEC
-    auto Tmat<T, m, n>::operator[](std::size_t i) -> ColType<T, m, n>&
-    {
-        return m_mat[i];
-    }
+    auto Tmat<T, m, n>::operator[](std::size_t i) -> ColType<T, m, n> & { return m_mat[i]; }
 
     // Binary Operators
     MAT_T_BINARY_DEC
     auto operator*(Tmat<T, m, n> mat, U s) -> std::remove_reference_t<decltype(mat)>
     {
-        for(auto& row : mat.m_mat)
+        for (auto &row : mat.m_mat)
         {
-            for(auto& ele : row)
-            {
-                ele = static_cast<T>(ele * s);
-            }
+            for (auto &ele : row) { ele = static_cast<T>(ele * s); }
         }
         return mat;
     }
 
     MAT_T_BINARY_DEC
-    auto operator*(Tmat<T, m, n> mat, const Tvec2<U>& v) -> std::remove_reference_t<decltype(v)>
+    auto operator*(Tmat<T, m, n> mat, const Tvec2<U> &v) -> std::remove_reference_t<decltype(v)>
     {
         Tvec2<U> res;
         res.x = static_cast<U>(mat[0][0]) * v.x + static_cast<U>(mat[0][1]) * v.y + static_cast<U>(mat[0][2]);
         res.y = static_cast<U>(mat[1][0]) * v.x + static_cast<U>(mat[1][1]) * v.y + static_cast<U>(mat[1][2]);
         return res;
     }
-} // namespace ata
+}   // namespace ata

@@ -31,11 +31,11 @@ namespace ata
     enum class KeyCode : unsigned int;
     struct ATA InputAction
     {
-        auto operator==(const InputAction& other) const -> bool;
+        auto operator==(const InputAction &other) const -> bool;
 
         struct ATA Hash
         {
-            auto operator()(const InputAction& action) const -> unsigned int;
+            auto operator()(const InputAction &action) const -> unsigned int;
         };
 
         KeyCode m_key;
@@ -105,4 +105,4 @@ namespace ata
         D8 = 0x38,
         D9 = 0x39
     };
-} // namespace ata
+}   // namespace ata

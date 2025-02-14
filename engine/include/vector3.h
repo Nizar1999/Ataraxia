@@ -27,11 +27,9 @@
 
 namespace ata
 {
-    template <typename T>
-    struct Tvec2;
+    template<typename T> struct Tvec2;
 
-    template <typename T>
-    struct Tvec3
+    template<typename T> struct Tvec3
     {
         T x {};
         T y {};
@@ -41,36 +39,29 @@ namespace ata
         Tvec3() = default;
         Tvec3(T x, T y, T z);
 
-        template <typename U>
-        Tvec3(const Tvec2<U>& v);
+        template<typename U> Tvec3(const Tvec2<U> &v);
 
         // Assignment
-        template <typename U>
-        auto operator=(const Tvec3<U>& v) -> const Tvec3<T>&;
+        template<typename U> auto operator=(const Tvec3<U> &v) -> const Tvec3<T> &;
 
         // Unary Operators
-        auto operator[](std::size_t i) -> T&;
-        auto operator[](std::size_t i) const -> const T&;
+        auto operator[](std::size_t i) -> T &;
+        auto operator[](std::size_t i) const -> const T &;
         auto operator-() -> Tvec3<T>;
 
         // Binary Operators
-        template <typename U>
-        auto operator<=>(const Tvec3<U>& v) const;
-        template <typename U>
-        auto operator==(const Tvec3<U>& v) const -> bool;
-        template <typename U>
-        auto operator+=(const Tvec3<U>& u) -> Tvec3<T>&;
+        template<typename U> auto operator<=>(const Tvec3<U> &v) const;
+        template<typename U> auto operator==(const Tvec3<U> &v) const -> bool;
+        template<typename U> auto operator+=(const Tvec3<U> &u) -> Tvec3<T> &;
     };
 
     // Binary Operators
-    template <typename T, typename U>
-    auto operator+(const Tvec3<T>& v, const Tvec3<U>& u) -> std::remove_reference_t<decltype(v)>;
+    template<typename T, typename U> auto operator+(const Tvec3<T> &v, const Tvec3<U> &u)
+        -> std::remove_reference_t<decltype(v)>;
 
-    template <typename T, typename U>
-    auto operator*(const Tvec3<T>& v, U s) -> std::remove_reference_t<decltype(v)>;
+    template<typename T, typename U> auto operator*(const Tvec3<T> &v, U s) -> std::remove_reference_t<decltype(v)>;
 
-    template <typename T, typename U>
-    auto operator*(U s, const Tvec3<T>& v) -> std::remove_reference_t<decltype(v)>;
-} // namespace ata
+    template<typename T, typename U> auto operator*(U s, const Tvec3<T> &v) -> std::remove_reference_t<decltype(v)>;
+}   // namespace ata
 
 #include <vector3_inl.h>

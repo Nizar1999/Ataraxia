@@ -26,31 +26,18 @@
 
 namespace ata
 {
-    RenderManager::RenderManager(Rect viewport)
-        : m_buffer(new FrameBuffer)
-        , m_viewport(viewport)
-    {
-    }
+    RenderManager::RenderManager(Rect viewport) : m_buffer(new FrameBuffer), m_viewport(viewport) {}
 
-    RenderManager::~RenderManager()
-    {
-        delete m_buffer;
-    }
+    RenderManager::~RenderManager() { delete m_buffer; }
 
-    auto RenderManager::Startup() -> void
-    {
-        m_displayThread = std::thread(&RenderManager::DisplayBuffer, this);
-    }
+    auto RenderManager::Startup() -> void { m_displayThread = std::thread(&RenderManager::DisplayBuffer, this); }
 
-    auto RenderManager::Clear() -> void
-    {
-        m_buffer->Clear();
-    }
+    auto RenderManager::Clear() -> void { m_buffer->Clear(); }
 
-    auto RenderManager::Draw(Scene& scene) -> void
+    auto RenderManager::Draw(Scene &scene) -> void
     {
-        Camera& activeCam = scene.GetActiveCam();
-        for(auto& actor : scene.GetActors())
+        Camera &activeCam = scene.GetActiveCam();
+        for (auto &actor : scene.GetActors())
         {
             IVec2 worldPos = actor->GetPosition();
             IVec2 viewPos  = activeCam.GetViewMatrix() * worldPos;
@@ -66,15 +53,15 @@ namespace ata
 
     auto RenderManager::DisplayBuffer() -> void
     {
-        while(true)
+        while (true)
         {
             {
                 std::lock_guard<std::mutex> lock(m_bufferMtx);
                 m_buffer->Draw();
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(33)); //~30Hz
+            std::this_thread::sleep_for(std::chrono::milliseconds(33));   //~30Hz
         }
     }
 
-} // namespace ata
+}   // namespace ata

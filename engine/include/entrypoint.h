@@ -25,13 +25,13 @@
 #pragma once
 
 #include <application.h>
-#include <memory.h>
-
 #include <input_manager.h>
 #include <render_manager.h>
 #include <scene_manager.h>
 
-extern auto CreateApplication() -> ata::Application*;
+#include <memory>
+
+extern auto CreateApplication() -> ata::Application *;
 
 int main()
 {
@@ -39,14 +39,14 @@ int main()
     app.reset(CreateApplication());
     app->v_Startup();
 
-    auto renderManager = std::make_unique<ata::RenderManager>(ata::Rect {.x = 0, .y = 0, .w = 60, .h = 30});
+    auto renderManager = std::make_unique<ata::RenderManager>(ata::Rect { .x = 0, .y = 0, .w = 60, .h = 30 });
     auto inputManager  = std::make_unique<ata::InputManager>();
     auto sceneManager  = std::make_unique<ata::SceneManager>();
 
     renderManager->Startup();
     sceneManager->Startup("mainmenu.scene");
 
-    while(true)
+    while (true)
     {
         renderManager->Clear();
         inputManager->PollActions();

@@ -41,7 +41,7 @@ namespace ata
 
     class ATA Actor
     {
-    public:
+      public:
         virtual ~Actor() = default;
         virtual auto v_Startup() -> void;
 
@@ -49,11 +49,11 @@ namespace ata
         auto GetPosition() const -> const Vec3 { return m_position; };
         auto GetRenderData() const -> const RenderData { return m_renderData; };
 
-    protected:
+      protected:
         Vec3       m_position;
         RenderData m_renderData;
 
-        virtual auto OnCollide(Actor& actor) -> void;
+        virtual auto OnCollide(Actor &actor) -> void;
     };
 
     using registrationFn = std::function<std::unique_ptr<Actor>()>;
@@ -61,18 +61,19 @@ namespace ata
 
     ATA extern ActorRegistry g_actorRegistry;
 
-    inline auto RegisterClass(const std::string& className, registrationFn fn) -> void
+    inline auto RegisterClass(const std::string &className, registrationFn fn) -> void
     {
         g_actorRegistry[className] = fn;
     }
 
-#define REGISTER_ACTOR(className)                                                                                          \
-    struct className##Registrar                                                                                            \
-    {                                                                                                                      \
-        className##Registrar()                                                                                             \
-        {                                                                                                                  \
-            ata::RegisterClass(#className, []() -> std::unique_ptr<ata::Actor> { return std::make_unique<className>(); }); \
-        }                                                                                                                  \
-    };                                                                                                                     \
+#define REGISTER_ACTOR(className)                                                                                      \
+    struct className##Registrar                                                                                        \
+    {                                                                                                                  \
+        className##Registrar()                                                                                         \
+        {                                                                                                              \
+            ata::RegisterClass(#className,                                                                             \
+                               []() -> std::unique_ptr<ata::Actor> { return std::make_unique<className>(); });         \
+        }                                                                                                              \
+    };                                                                                                                 \
     static className##Registrar g_##className##StaticClass;
-} // namespace ata
+}   // namespace ata

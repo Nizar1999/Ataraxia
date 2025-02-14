@@ -31,13 +31,10 @@ namespace demo
 {
     class Game : public ata::Application
     {
-    public:
+      public:
         virtual auto v_Startup() -> void override;
     };
 
-} // namespace demo
+}   // namespace demo
 
-ATA auto CreateApplication() -> ata::Application*
-{
-    return new demo::Game();
-}
+ATA auto CreateApplication() -> ata::Application * { return new demo::Game(); }

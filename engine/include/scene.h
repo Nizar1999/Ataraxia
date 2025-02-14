@@ -36,17 +36,17 @@ namespace ata
 {
     class Scene
     {
-    public:
+      public:
         using Actors = std::vector<std::unique_ptr<Actor>>;
 
         explicit Scene(std::filesystem::path path);
         auto Load() -> void;
 
         // TODO: handle no cam set
-        auto GetActiveCam() -> Camera& { return m_activeCam; }
-        auto GetActors() const -> const Actors& { return m_actors; }
+        auto GetActiveCam() -> Camera & { return m_activeCam; }
+        auto GetActors() const -> const Actors & { return m_actors; }
 
-    private:
+      private:
         std::string           m_name;
         std::filesystem::path m_path;
 
@@ -54,4 +54,4 @@ namespace ata
         Actors m_actors;
         Camera m_activeCam;
     };
-} // namespace ata
+}   // namespace ata

@@ -34,30 +34,29 @@
 
 namespace ata
 {
-    template <typename T>
-    using InputActionCallbackT = std::function<void(T*)>;
-    using InputActionCallback  = std::function<void()>;
-    using CallbackMapping      = std::unordered_map<InputAction, std::vector<InputActionCallback>, InputAction::Hash>;
+    template<typename T> using InputActionCallbackT = std::function<void(T *)>;
+    using InputActionCallback                       = std::function<void()>;
+    using CallbackMapping = std::unordered_map<InputAction, std::vector<InputActionCallback>, InputAction::Hash>;
 
     class InputManager
     {
-    public:
+      public:
         auto ATA PollActions() -> void;
 
-        template <typename T>
-        auto BindInputAction(InputAction action, T* object, InputActionCallbackT<T> callback) -> void;
+        template<typename T> auto BindInputAction(InputAction action, T *object, InputActionCallbackT<T> callback)
+            -> void;
         auto BindInputAction(InputAction action, InputActionCallback callback) -> void;
 
-    private:
+      private:
         CallbackMapping m_callbacks;
 
         static auto IsPressed(KeyCode code) -> bool;
     };
 
-    template <typename T>
-    auto InputManager::BindInputAction(InputAction action, T* object, InputActionCallbackT<T> callback) -> void
+    template<typename T>
+    auto InputManager::BindInputAction(InputAction action, T *object, InputActionCallbackT<T> callback) -> void
     {
         m_callbacks[action].push_back(std::bind(callback, object));
     }
 
-} // namespace ata
+}   // namespace ata

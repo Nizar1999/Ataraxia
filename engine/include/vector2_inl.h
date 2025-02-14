@@ -32,25 +32,15 @@
 namespace ata
 {
     // Constructor
-    template <typename T>
-    Tvec2<T>::Tvec2(T i, T j)
-        : x(i)
-        , y(j)
-    {
-    }
+    template<typename T> Tvec2<T>::Tvec2(T i, T j) : x(i), y(j) {}
 
-    template <typename T>
-    template <typename U>
-    Tvec2<T>::Tvec2(const Tvec3<U>& v)
-        : x(static_cast<T>(v.x))
-        , y(static_cast<T>(v.y))
+    template<typename T> template<typename U> Tvec2<T>::Tvec2(const Tvec3<U> &v) :
+        x(static_cast<T>(v.x)), y(static_cast<T>(v.y))
     {
     }
 
     // Assignment
-    template <typename T>
-    template <typename U>
-    auto Tvec2<T>::operator=(const Tvec2<U>& v) -> const Tvec2<T>&
+    template<typename T> template<typename U> auto Tvec2<T>::operator=(const Tvec2<U> &v) -> const Tvec2<T> &
     {
         x = static_cast<T>(v.x);
         y = static_cast<T>(v.y);
@@ -58,80 +48,61 @@ namespace ata
     }
 
     // Unary Operators
-    template <typename T>
-    auto Tvec2<T>::operator[](std::size_t i) -> T&
+    template<typename T> auto Tvec2<T>::operator[](std::size_t i) -> T &
     {
         assert(i >= 0 && i < 2);
-        switch(i)
+        switch (i)
         {
         default:
-        case 0:
-            return x;
-        case 1:
-            return y;
+        case 0: return x;
+        case 1: return y;
         }
     }
 
-    template <typename T>
-    auto Tvec2<T>::operator[](std::size_t i) const -> const T&
+    template<typename T> auto Tvec2<T>::operator[](std::size_t i) const -> const T &
     {
         assert(i >= 0 && i < 2);
-        switch(i)
+        switch (i)
         {
         default:
-        case 0:
-            return x;
-        case 1:
-            return y;
+        case 0: return x;
+        case 1: return y;
         }
     }
 
-    template <typename T>
-    auto Tvec2<T>::operator-() -> Tvec2<T>
-    {
-        return *this * -1;
-    }
+    template<typename T> auto Tvec2<T>::operator-() -> Tvec2<T> { return *this * -1; }
 
     // Binary Operators
-    template <typename T>
-    template <typename U>
-    auto Tvec2<T>::operator<=>(const Tvec2<U>& v) const
+    template<typename T> template<typename U> auto Tvec2<T>::operator<=>(const Tvec2<U> &v) const
     {
-        if(auto cmp = x <=> static_cast<T>(v.x); cmp != 0)
-            return cmp;
+        if (auto cmp = x <=> static_cast<T>(v.x); cmp != 0) return cmp;
         return y <=> static_cast<T>(v.y);
     }
 
-    template <typename T>
-    template <typename U>
-    auto Tvec2<T>::operator==(const Tvec2<U>& v) const -> bool
+    template<typename T> template<typename U> auto Tvec2<T>::operator==(const Tvec2<U> &v) const -> bool
     {
         return std::is_eq(x <=> static_cast<T>(v.x)) && std::is_eq(y <=> static_cast<T>(v.y));
     }
 
-    template <typename T>
-    template <typename U>
-    auto Tvec2<T>::operator+=(const Tvec2<U>& u) -> Tvec2<T>&
+    template<typename T> template<typename U> auto Tvec2<T>::operator+=(const Tvec2<U> &u) -> Tvec2<T> &
     {
         *this = *this + u;
         return *this;
     }
 
-    template <typename T, typename U>
-    auto operator+(const Tvec2<T>& v, const Tvec2<U>& u) -> std::remove_reference_t<decltype(v)>
+    template<typename T, typename U> auto operator+(const Tvec2<T> &v, const Tvec2<U> &u)
+        -> std::remove_reference_t<decltype(v)>
     {
-        return {static_cast<T>(u.x + v.x), static_cast<T>(u.y + v.y)};
+        return { static_cast<T>(u.x + v.x), static_cast<T>(u.y + v.y) };
     }
 
-    template <typename T, typename U>
-    auto operator*(const Tvec2<T>& v, U s) -> std::remove_reference<decltype(v)>::type
+    template<typename T, typename U> auto operator*(const Tvec2<T> &v, U s) -> std::remove_reference<decltype(v)>::type
     {
         return s * v;
     }
 
-    template <typename T, typename U>
-    auto operator*(U s, const Tvec2<T>& v) -> std::remove_reference<decltype(v)>::type
+    template<typename T, typename U> auto operator*(U s, const Tvec2<T> &v) -> std::remove_reference<decltype(v)>::type
     {
-        return {static_cast<T>(s * v.x), static_cast<T>(s * v.y)};
+        return { static_cast<T>(s * v.x), static_cast<T>(s * v.y) };
     }
-} // namespace ata
+}   // namespace ata

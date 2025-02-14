@@ -26,8 +26,5 @@
 
 namespace demo
 {
-    Enemy::Enemy()
-    {
-        m_renderData = {'E'};
-    }
-} // namespace demo
+    Enemy::Enemy() { m_renderData = { 'E' }; }
+}   // namespace demo

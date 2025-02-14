@@ -34,27 +34,24 @@
 
 namespace
 {
-    auto Split(const std::string& s, char delim) -> std::vector<std::string>
+    auto Split(const std::string &s, char delim) -> std::vector<std::string>
     {
         std::vector<std::string> result;
         std::stringstream        ss(s);
         std::string              item;
 
-        while(getline(ss, item, delim))
-        {
-            result.push_back(item);
-        }
+        while (getline(ss, item, delim)) { result.push_back(item); }
 
         return result;
     }
-} // namespace
+}   // namespace
 
 namespace ata::scene_parser
 {
     auto ParseProperty(std::string property) -> std::pair<std::string, std::string>
     {
         auto v = Split(property, ':');
-        return {v[0], v[1]};
+        return { v[0], v[1] };
     }
 
     auto ParseVec(std::string_view s) -> ata::Vec2
@@ -65,25 +62,23 @@ namespace ata::scene_parser
         return res;
     }
 
-    auto ParseActor(const std::string& actorInfo) -> std::unique_ptr<ata::Actor>
+    auto ParseActor(const std::string &actorInfo) -> std::unique_ptr<ata::Actor>
     {
         std::stringstream           ss(actorInfo);
         std::string                 property;
         std::unique_ptr<ata::Actor> actor;
 
-        while(std::getline(ss, property, '|'))
+        while (std::getline(ss, property, '|'))
         {
             auto [key, value] = ParseProperty(property);
-            if(key == "Type")
+            if (key == "Type")
             {
-                if(!ata::g_actorRegistry.contains(value))
-                    return nullptr;
+                if (! ata::g_actorRegistry.contains(value)) return nullptr;
                 actor = ata::g_actorRegistry[value]();
             }
-            if(key == "Pos")
+            if (key == "Pos")
             {
-                if(!actor)
-                    ata::logger::Log(ata::logger::LogLevel::ERROR, "Failed to parse Pos, no actor set");
+                if (! actor) ata::logger::Log(ata::logger::LogLevel::ERROR, "Failed to parse Pos, no actor set");
                 ata::Vec2 position = ParseVec(value);
                 actor->SetPosition(position);
             }
@@ -93,4 +88,4 @@ namespace ata::scene_parser
 
         return actor;
     }
-} // namespace ata::scene_parser
+}   // namespace ata::scene_parser

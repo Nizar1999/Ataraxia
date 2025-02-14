@@ -29,9 +29,9 @@ namespace ata
 {
     auto Input::PollKeyPresses() -> void
     {
-        while(true)
+        while (true)
         {
-            if(_kbhit())
+            if (_kbhit())
             {
                 unsigned int    ch = _getch();
                 std::lock_guard lk(m_keyStateMtx);
@@ -40,4 +40,4 @@ namespace ata
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     }
-} // namespace ata
+}   // namespace ata
