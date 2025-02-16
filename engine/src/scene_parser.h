@@ -25,18 +25,16 @@
 #pragma once
 
 #include <actor.h>
-#include <logger.h>
 #include <vector.h>
 
-#include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
-#include <utility>
 
 namespace ata::scene_parser
 {
-    auto ParseProperty(std::string property) -> std::pair<std::string, std::string>;
-    auto ParseVec(std::string_view s) -> ata::Vec2;
-    auto ParseActor(const std::string &actorInfo) -> std::unique_ptr<ata::Actor>;
+    auto ParseProperty(const std::string &property) -> std::pair<std::string, std::string>;
+    auto ParseVec(std::string_view s) -> Vec2;
+    auto ParseActor(const std::string &actorInfo) -> std::optional<ActorDefinition>;
 
 }   // namespace ata::scene_parser

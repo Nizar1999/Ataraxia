@@ -39,6 +39,13 @@ namespace ata
         char symbol;
     };
 
+    struct ActorDefinition
+    {
+        std::string m_type;
+        Vec3        m_position;
+        RenderData  m_renderData;
+    };
+
     class ATA Actor
     {
       public:

@@ -27,20 +27,20 @@
 #include <scene_parser.h>
 #include <vector.h>
 
-#include <memory>
+#include <array>
 #include <sstream>
 #include <string>
-#include <vector>
 
 namespace
 {
-    auto Split(const std::string &s, char delim) -> std::vector<std::string>
+    auto Split(const std::string &s, char delim) -> std::array<std::string, 2>
     {
-        std::vector<std::string> result;
-        std::stringstream        ss(s);
-        std::string              item;
+        std::array<std::string, 2> result;
+        std::stringstream          ss(s);
+        std::string                item;
 
-        while (getline(ss, item, delim)) { result.push_back(item); }
+        int i = 0;
+        while (getline(ss, item, delim)) { result[i++] = item; }
 
         return result;
     }
@@ -48,42 +48,39 @@ namespace
 
 namespace ata::scene_parser
 {
-    auto ParseProperty(std::string property) -> std::pair<std::string, std::string>
+    auto ParseProperty(const std::string &property) -> std::pair<std::string, std::string>
     {
-        auto v = Split(property, ':');
+        std::array<std::string, 2> v = Split(property, ':');
         return { v[0], v[1] };
     }
 
-    auto ParseVec(std::string_view s) -> ata::Vec2
+    auto ParseVec(std::string_view s) -> Vec2
     {
-        const std::string removeP = std::string(s.substr(1, s.size() - 2));
-        auto              v       = Split(removeP, ',');
-        ata::Vec2         res(std::stof(v[0]), std::stof(v[1]));
-        return res;
+        const std::string removeParanthesis = std::string(s.substr(1, s.size() - 2));
+
+        auto v = Split(removeParanthesis, ',');
+        return { std::stof(v[0]), std::stof(v[1]) };
     }
 
-    auto ParseActor(const std::string &actorInfo) -> std::unique_ptr<ata::Actor>
+    auto ParseActor(const std::string &actorInfo) -> std::optional<ActorDefinition>
     {
-        std::stringstream           ss(actorInfo);
-        std::string                 property;
-        std::unique_ptr<ata::Actor> actor;
+        std::stringstream ss(actorInfo);
+        std::string       property;
+        ActorDefinition   actor;
 
         while (std::getline(ss, property, '|'))
         {
             auto [key, value] = ParseProperty(property);
             if (key == "Type")
             {
-                if (! ata::g_actorRegistry.contains(value)) return nullptr;
-                actor = ata::g_actorRegistry[value]();
+                if (! g_actorRegistry.contains(value)) return std::nullopt;
+                actor.m_type = value;
             }
             if (key == "Pos")
             {
-                if (! actor) ata::logger::Log(ata::logger::LogLevel::ERROR, "Failed to parse Pos, no actor set");
-                ata::Vec2 position = ParseVec(value);
-                actor->SetPosition(position);
+                if (actor.m_type.empty()) return std::nullopt;
+                actor.m_position = ParseVec(value);
             }
-            // TODO: Parse additional properties
-            ata::logger::Log(ata::logger::LogLevel::INFO, key + " " + value);
         }
 
         return actor;
